@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>0xdant | Pull the Docker Image from AWS ECR to Kubernetes</title>
+  <meta name="description" content="Easy walkthrough to pull the docker image from AWS ECR to your Kubernetes">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Pull the Docker Image from AWS ECR to Kubernetes">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/posts/pull-docker-image-from-aws-ecr-to-kubernetes">
+  <meta property="og:description" content="Easy walkthrough to pull the docker image from AWS ECR to your Kubernetes">
+  <meta property="og:site_name" content="0xdant">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="/posts/pull-docker-image-from-aws-ecr-to-kubernetes">
+  <meta name="twitter:title" content="Pull the Docker Image from AWS ECR to Kubernetes">
+  <meta name="twitter:description" content="Easy walkthrough to pull the docker image from AWS ECR to your Kubernetes">
+
+  
+    
+      <meta property="og:image" content="/assets/documentation/sample-image-0a264584b152aa8d86f61525d05ae1131787d0a1029aa1cb7e3e4148b5d34755.jpg">
+      <meta name="twitter:image" content="/assets/documentation/sample-image-0a264584b152aa8d86f61525d05ae1131787d0a1029aa1cb7e3e4148b5d34755.jpg">
+    
+  
+
+  <link href="/feed.xml" type="application/rss+xml" rel="alternate" title="0xdant Last 10 blog posts" />
+
+  
+
+  
+
+    
+      <link rel="icon" type="image/x-icon" href="/assets/favicon-dark-11327753546b2135c989eee5cd83497a2734b702928d016839d795f6c706e3d5.ico">
+      <link rel="apple-touch-icon" href="/assets/apple-touch-icon-dark-d161409442b7e523089f24d08d0a55951549ece7504207c376d53b020713494d.png">
+      <link rel="stylesheet" type="text/css" href="/assets/dark-0d386eb4b2ef91e2ccc8e50abc873f3dee7269dc07b8d8bda8e6ad2f6ec9b58e.css">
+    
+
+  
+
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav scrollappear">
+  <a href="/" class="header-logo" title="0xdant">0xdant</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/dtkmn" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-twitter">
+  <use href="/assets/twitter-8842c33965263ad1b03a978406826677a668f94125d5837e70ab83f24b3213a7.svg#icon-twitter" xlink:href="/assets/twitter-8842c33965263ad1b03a978406826677a668f94125d5837e70ab83f24b3213a7.svg#icon-twitter"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/dtkmn" rel="noreferrer noopener" target="_blank" title="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-github">
+  <use href="/assets/github-094f81040819f34343ee6ffff0980f17e2807b08b595eaaf66ae3554934fd78d.svg#icon-github" xlink:href="/assets/github-094f81040819f34343ee6ffff0980f17e2807b08b595eaaf66ae3554934fd78d.svg#icon-github"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="/feed.xml" rel="noreferrer noopener" target="_blank" title="RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-rss">
+  <use href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss" xlink:href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+
+
+        <article class="article scrollappear">
+          <header class="article-header">
+            <h1>Pull the Docker Image from AWS ECR to Kubernetes</h1>
+            <p>Easy walkthrough to pull the docker image from AWS ECR to your Kubernetes</p>
+            <div class="article-list-footer">
+  <span class="article-list-date">
+    November 3, 2020
+  </span>
+  <span class="article-list-divider">-</span>
+  <span class="article-list-minutes">
+    
+    
+      2 minute read
+    
+  </span>
+  <span class="article-list-divider">-</span>
+  <div class="article-list-tags">
+    
+      
+      <a href="/tag/aws" title="See all posts with tag 'AWS'">AWS</a>
+    
+      
+      <a href="/tag/docker" title="See all posts with tag 'Docker'">Docker</a>
+    
+      
+      <a href="/tag/kubernetes" title="See all posts with tag 'Kubernetes'">Kubernetes</a>
+    
+      
+      <a href="/tag/ecr" title="See all posts with tag 'ECR'">ECR</a>
+    
+  </div>
+</div>
+          </header>
+
+          <div class="article-content">
+            <p>Normally when we want to pull the images from AWS ECR to our localhost, we need to log in using the following command to gain access.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">aws ecr get-login-password <span class="nt">--region</span> region | docker login <span class="nt">--username</span> AWS <span class="nt">--password-stdin</span> aws_account_id.dkr.ecr.region.amazonaws.com</code></pre></figure>
+
+<p>Within Kubernetes, we need to configure a few more steps so it can pull the image properly when starting new pods.</p>
+
+<p>Suppose you have gained access to AWS CLI, run the following command to get the login password to ECR registry</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">aws ecr get-login-password <span class="nt">--region</span> region</code></pre></figure>
+
+<p>According to the official documentation from Kubernetes, we have to create new secret which contains the data called ‘.dockerconfigjson’</p>
+
+<p>For example, to support your docker images on Amazon ECR, the quickest way is running the command below with your AWS credentials</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">kubectl create secret docker-registry regcred <span class="nt">--docker-server</span><span class="o">=</span>&lt;your-registry-server&gt; <span class="nt">--docker-username</span><span class="o">=</span>&lt;your-name&gt; <span class="nt">--docker-password</span><span class="o">=</span>&lt;your-pword&gt; <span class="nt">--docker-email</span><span class="o">=</span>&lt;your-email&gt;</code></pre></figure>
+
+<ul>
+  <li><code class="highlighter-rouge">&lt;your-registry-server&gt;</code> would be aws_account_id.dkr.ecr.region.amazonaws.com</li>
+  <li><code class="highlighter-rouge">&lt;your-name&gt;</code> would be AWS</li>
+  <li><code class="highlighter-rouge">&lt;your-pword&gt;</code> would be the login password from the AWS ECR command above</li>
+  <li><code class="highlighter-rouge">&lt;your-email&gt;</code> would be the email of the AWS account</li>
+</ul>
+
+<p>Note: Typing your password on the command line will store them in your history when it is unprotected.
+Once it is done, run the inspect command to check the generated secret</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">kubectl get secret regcred <span class="nt">--output</span><span class="o">=</span>yaml</code></pre></figure>
+
+<p>and it would be similar to the format below.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">apiVersion: v1
+data:
+  .dockerconfigjson: exhsjdfslfisdf89s7df9fs87f6dsfsf65...
+kind: Secret
+metadata:
+  ...
+  name: regcred
+  ...
+<span class="nb">type</span>: kubernetes.io/dockerconfigjson</code></pre></figure>
+
+<p>Finally, under your deployment YAML file, define the secret name within imagePullSecrets</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-name
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-name
+  template:
+    metadata:
+      labels:
+        app: app-name
+    spec:
+      containers:
+        - name: app
+          image: aws_account_id.dkr.ecr.region.amazonaws.com/app_and_version
+          …
+      imagePullSecrets:
+        - name: regcred</code></pre></figure>
+
+<p>And your pods should be able to pull the images from AWS ECR and deploy properly.</p>
+
+          </div>
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=Pull+the+Docker+Image+from+AWS+ECR+to+Kubernetes%20-%20/posts/pull-docker-image-from-aws-ecr-to-kubernetes%20by%20@dtkmn" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=/posts/pull-docker-image-from-aws-ecr-to-kubernetes" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+          </div>
+
+          
+        </article>
+        <footer class="footer scrollappear">
+  <p>
+    Passionate engineer who always looking for new tech and build to contribute society.
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+
+<script src="/assets/vendor-130c9c254effc51f3283620bc635851da7b99c20901216948f11ba72ee13317f.js" type="text/javascript"></script>
+
+
+  <script src="/assets/webfonts-96493456d319d1bf419afdf8701552d4d486fee6afd304897d4fd81eb4e0cc0b.js" type="text/javascript"></script>
+
+
+
+  <script src="/assets/scrollappear-e2da8ea567e418637e31266cc5302126eaa79f62a2273739086358b589a89ee6.js" type="text/javascript"></script>
+
+
+<script src="/assets/application-cfde13ac81ddaf4351b2e739603e2baf688d0fcc9aba613fe62bbb1c7b037fb9.js" type="text/javascript"></script>
+
+
+</body>
+</html>
