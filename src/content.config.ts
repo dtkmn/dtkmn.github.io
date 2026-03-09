@@ -11,7 +11,7 @@ const articles = defineCollection({
     draft: z.boolean().default(false),
     canonicalUrl: z.string().url().optional(),
     mediumUrl: z.string().url().optional(),
-    heroImage: z.string().url().optional(),
+    heroImage: z.string().optional(),
   }),
 });
 
@@ -30,4 +30,3 @@ export const collections = {
   articles,
   notes,
 };
-

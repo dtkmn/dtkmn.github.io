@@ -12,7 +12,10 @@ featured: true
 draft: false
 canonicalUrl: https://medium.com/@danieltse/mcp-the-usb-c-of-ai-integrations-994b77d0d1c8
 mediumUrl: https://medium.com/@danieltse/mcp-the-usb-c-of-ai-integrations-994b77d0d1c8
+heroImage: /images/posts/mcp/hero.webp
 ---
+
+![Model Context Protocol hero image](/images/posts/mcp/hero.webp)
 
 Why MCP? LLMs increasingly need live data and tools. Think chatbots that check your calendar, code assistants reading your repo, or agents that need to search an internal system and then take action.
 
@@ -27,6 +30,8 @@ That shifts the problem from many bespoke integrations to one shared protocol.
 
 In plain terms, MCP gives AI systems a common way to "plug into" data sources and tools. As the documentation puts it, it standardizes how applications provide context to LLMs. The payoff is a growing library of reusable integrations, easier portability across model providers, and better security boundaries than ad hoc tool wiring.
 
+![Before MCP versus after MCP](/images/posts/mcp/before-after.webp)
+
 ## Architecture: hosts, clients, and servers
 
 Under the hood, MCP is a JSON-RPC client-server model.
@@ -34,6 +39,8 @@ Under the hood, MCP is a JSON-RPC client-server model.
 - The **host** is the AI application itself, such as a chat app, IDE assistant, or LLM-based workflow.
 - The **client** is the MCP-aware component inside that host.
 - The **server** exposes capabilities to the client.
+
+![MCP client-server architecture](/images/posts/mcp/client-server.webp)
 
 Each MCP client maintains a 1:1 connection to an MCP server. Servers are lightweight programs that expose specific capabilities. A server might connect to your file system, a database, or an external API and then provide context, tools, and prompts back to the client.
 
@@ -81,6 +88,8 @@ Examples:
 - structure a document summary
 - format an API call
 - output a response as JSON
+
+![MCP tools, resources, and prompts](/images/posts/mcp/building-blocks.webp)
 
 Prompts are chosen by the user or developer before inference and injected into the conversation.
 
