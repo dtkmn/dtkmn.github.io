@@ -1,0 +1,20 @@
+---
+import { slugifyTag } from "@/lib/format";
+
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+
+<ul class="tag-list" aria-label="Topics">
+  {
+    tags.map((tag) => (
+      <li>
+        <a href={`/tag/${slugifyTag(tag)}/`}>{tag}</a>
+      </li>
+    ))
+  }
+</ul>
+

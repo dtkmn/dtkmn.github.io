@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>Daniel Tse</title>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#71d3c6" />
+      <stop offset="100%" stop-color="#b9fff5" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#10151c" />
+  <path d="M18 18h13c8 0 14 6 14 14s-6 14-14 14H18zm9 8v12h4c4 0 7-2.6 7-6s-3-6-7-6z" fill="url(#g)" />
+  <path d="M51 18h-8L29 46h8l14-28z" fill="#f3efe6" />
+</svg>
+

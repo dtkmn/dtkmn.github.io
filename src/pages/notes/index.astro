@@ -1,0 +1,32 @@
+---
+import ArticleCard from "@/components/ArticleCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getPublishedNotes } from "@/lib/content";
+
+const notes = await getPublishedNotes();
+---
+
+<BaseLayout title="Notes" description="Short technical notes and implementation fragments by Daniel Tse.">
+  <section class="page-lead">
+    <p class="eyebrow">Notes</p>
+    <h1>Shorter field notes and implementation fragments.</h1>
+    <p class="page-lead-summary">
+      The structure is ready. Notes will appear here once there is enough signal to publish them.
+    </p>
+  </section>
+
+  {notes.length > 0 ? (
+    <div class="stack-grid">
+      {notes.map((entry) => <ArticleCard entry={entry} />)}
+    </div>
+  ) : (
+    <section class="empty-state">
+      <h2>Notes are coming.</h2>
+      <p>
+        v1 prioritizes the essay archive and the site rebuild. Short-form technical notes are wired
+        in, but intentionally not padded with filler.
+      </p>
+    </section>
+  )}
+</BaseLayout>
+

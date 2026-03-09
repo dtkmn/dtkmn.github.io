@@ -1,0 +1,102 @@
+---
+import ArticleCard from "@/components/ArticleCard.astro";
+import { siteConfig } from "@/config/site";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  getFeaturedArticles,
+  getRecentArticles,
+  getRecentNotes,
+} from "@/lib/content";
+
+const [featuredArticles, recentArticles, recentNotes] = await Promise.all([
+  getFeaturedArticles(),
+  getRecentArticles(6),
+  getRecentNotes(4),
+]);
+
+const showNotes = recentNotes.length >= 2;
+const showProjects = siteConfig.featuredRepos.length >= 2;
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Technical publication</p>
+      <h1>Systems thinking for AI, backend engineering, and cloud delivery.</h1>
+      <p class="hero-summary">
+        I write from the principal-engineer seat: architecture tradeoffs, platform edges,
+        implementation detail, and the operational reality behind the diagrams.
+      </p>
+      <div class="hero-actions">
+        <a class="button button--primary" href="/articles/">Browse articles</a>
+        <a class="button button--ghost" href="/about/">About Daniel</a>
+      </div>
+    </div>
+    <div class="hero-side">
+      <p class="eyebrow">Focus lanes</p>
+      <ul class="topic-lanes">
+        {siteConfig.topicLanes.map((lane) => <li>{lane}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <p class="eyebrow">Featured essays</p>
+      <h2>Anchor pieces worth starting with.</h2>
+    </div>
+    <div class="feature-grid">
+      {featuredArticles.map((entry) => <ArticleCard entry={entry} variant="feature" />)}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading section-heading--inline">
+      <div>
+        <p class="eyebrow">Recent writing</p>
+        <h2>Fresh essays and imported archive pieces.</h2>
+      </div>
+      <a class="section-link" href="/articles/">View all articles</a>
+    </div>
+    <div class="stack-grid">
+      {recentArticles.map((entry) => <ArticleCard entry={entry} />)}
+    </div>
+  </section>
+
+  {showNotes && (
+    <section class="section-block">
+      <div class="section-heading section-heading--inline">
+        <div>
+          <p class="eyebrow">Recent notes</p>
+          <h2>Shorter writeups, experiments, and implementation fragments.</h2>
+        </div>
+        <a class="section-link" href="/notes/">View notes</a>
+      </div>
+      <div class="stack-grid">
+        {recentNotes.map((entry) => <ArticleCard entry={entry} />)}
+      </div>
+    </section>
+  )}
+
+  {showProjects && (
+    <section class="section-block">
+      <div class="section-heading">
+        <p class="eyebrow">Selected projects</p>
+        <h2>Shipped work that informs the writing.</h2>
+      </div>
+      <div class="project-grid">
+        {siteConfig.featuredRepos.map((repo) => (
+          <article class="project-card">
+            <h3>
+              <a href={repo.href} rel="noreferrer noopener" target="_blank">
+                {repo.name}
+              </a>
+            </h3>
+            <p>{repo.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+</BaseLayout>
+

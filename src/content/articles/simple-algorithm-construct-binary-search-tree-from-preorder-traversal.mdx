@@ -1,0 +1,82 @@
+---
+title: Simple Algorithm - Construct Binary Search Tree from Preorder Traversal
+summary: A straightforward way to rebuild a binary search tree from preorder traversal using standard BST insertion rules.
+date: 2020-10-14
+tags:
+  - Algorithms
+  - Java
+  - BST
+featured: false
+draft: false
+canonicalUrl: https://medium.com/@danieltse/simple-algorithm-construct-binary-search-tree-from-preorder-traversal-d7de1e2a34fe
+mediumUrl: https://medium.com/@danieltse/simple-algorithm-construct-binary-search-tree-from-preorder-traversal-d7de1e2a34fe
+heroImage: https://cdn-images-1.medium.com/max/201/1*fbdEEtJG5YApXo7pkVrUxg.png
+---
+
+Tree traversal is one of the classic interview topics, and binary search trees come up repeatedly. This walkthrough focuses on reconstructing a BST when the preorder traversal values are already provided.
+
+Suppose each node looks like this:
+
+```java
+public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
+    }
+}
+```
+
+If the preorder input is:
+
+```java
+int[] preorder = new int[] { 8, 5, 1, 7, 10, 12 };
+```
+
+Then the expected tree is:
+
+![Constructed BST from preorder traversal](https://cdn-images-1.medium.com/max/201/1*fbdEEtJG5YApXo7pkVrUxg.png)
+
+The useful property of preorder traversal is that the first value is always the root:
+
+```java
+TreeNode root = new TreeNode(preorder[0]);
+```
+
+From there, the problem reduces to repeated BST insertion:
+
+- values smaller than the current node go left
+- values larger than the current node go right
+
+That leads to a simple recursive implementation:
+
+```java
+for (int i = 1; i < preorder.length; i++) {
+    buildTree(root, preorder[i]);
+}
+
+public void buildTree(TreeNode node, int value) {
+    if (node == null) {
+        return;
+    }
+
+    if (value < node.val) {
+        if (node.left != null) {
+            buildTree(node.left, value);
+        } else {
+            node.left = new TreeNode(value);
+        }
+    } else {
+        if (node.right != null) {
+            buildTree(node.right, value);
+        } else {
+            node.right = new TreeNode(value);
+        }
+    }
+}
+```
+
+The approach is simple because it leans on the core BST invariant instead of over-optimizing too early. When the resulting tree stays balanced, the repeated insertion behavior resembles binary search and performs well enough for many interview-style inputs.
+

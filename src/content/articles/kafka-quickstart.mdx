@@ -1,0 +1,104 @@
+---
+title: Kafka Quickstart
+summary: A fast local Kafka setup with Docker, a test topic, and an Avro schema flow for producing and consuming messages.
+date: 2022-01-23
+tags:
+  - Kafka
+  - Docker
+  - Avro
+featured: false
+draft: false
+canonicalUrl: https://medium.com/@danieltse/kafka-quickstart-b00340dbceae
+mediumUrl: https://medium.com/@danieltse/kafka-quickstart-b00340dbceae
+heroImage: https://cdn-images-1.medium.com/max/1024/1*_qk2QegVMU0C-LfdWqF-bA.png
+---
+
+This is the fastest local Kafka setup I found for getting a topic running, wiring in an Avro schema, and testing producer and consumer behavior in a few minutes.
+
+## Using Docker
+
+Start a Kafka cluster with Docker using [`fast-data-dev`](https://github.com/lensesio/fast-data-dev):
+
+```yaml
+version: "3"
+
+services:
+  kafka:
+    image: landoop/fast-data-dev
+    ports:
+      - "2181:2181"
+      - "3030:3030"
+      - "8081:8081"
+      - "8082:8082"
+      - "8083:8083"
+      - "9092:9092"
+    environment:
+      ADV_HOST: localhost
+      RUNTESTS: 0
+      FORWARDLOGS: 0
+      DISABLE_JMX: 1
+      SAMPLEDATA: 0
+```
+
+Launch it with:
+
+```bash
+docker-compose up -d
+```
+
+![Kafka cluster running locally](https://cdn-images-1.medium.com/max/1024/1*_qk2QegVMU0C-LfdWqF-bA.png)
+
+## Create a topic
+
+Create a topic named `test-topic-avro`:
+
+```bash
+docker exec -it kafka bash
+
+kafka-topics --create --topic test-topic-avro --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
+```
+
+## Publish a message with an Avro schema
+
+Suppose the schema is:
+
+```json
+{
+  "type": "record",
+  "name": "myrecord",
+  "fields": [
+    {
+      "name": "f1",
+      "type": "string"
+    }
+  ]
+}
+```
+
+Use the Avro console producer:
+
+```bash
+kafka-avro-console-producer \
+  --topic your-topic-avro \
+  --bootstrap-server localhost:9092 \
+  --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
+```
+
+The producer waits for input. Each line is one Avro record:
+
+```json
+{"f1": "value1"}
+```
+
+## Consume the message
+
+In another terminal, run the consumer:
+
+```bash
+docker-compose exec -it kafka bash
+
+kafka-avro-console-consumer --topic my-topic-avro --bootstrap-server localhost:9092
+```
+
+At that point you have a fast local feedback loop: broker, schema-aware producer, and consumer all running with minimal setup.
+

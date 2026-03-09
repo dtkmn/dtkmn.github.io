@@ -1,0 +1,94 @@
+---
+title: Pull the Docker Image from AWS ECR to Kubernetes
+summary: Easy walkthrough to pull a private Docker image from AWS ECR into a Kubernetes deployment.
+date: 2020-11-03
+tags:
+  - AWS
+  - Docker
+  - Kubernetes
+  - ECR
+featured: true
+draft: false
+canonicalUrl: https://medium.com/@danieltse/pull-the-docker-image-from-aws-ecr-in-kubernetes-dc7280d74904
+mediumUrl: https://medium.com/@danieltse/pull-the-docker-image-from-aws-ecr-in-kubernetes-dc7280d74904
+---
+
+Normally when we want to pull images from AWS ECR to localhost, we need to log in first:
+
+```bash
+aws ecr get-login-password --region region | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.region.amazonaws.com
+```
+
+Within Kubernetes, there are a few extra steps so the cluster can pull that image when new pods start.
+
+Suppose you already have access to AWS CLI. Run the following command to get the login password to the ECR registry:
+
+```bash
+aws ecr get-login-password --region region
+```
+
+According to the Kubernetes documentation, we need to create a secret that contains `.dockerconfigjson`.
+
+For Amazon ECR, the quickest way is to create a `docker-registry` secret with your AWS credentials:
+
+```bash
+kubectl create secret docker-registry regcred \
+  --docker-server=<your-registry-server> \
+  --docker-username=<your-name> \
+  --docker-password=<your-pword> \
+  --docker-email=<your-email>
+```
+
+- `<your-registry-server>` would be `aws_account_id.dkr.ecr.region.amazonaws.com`
+- `<your-name>` would be `AWS`
+- `<your-pword>` would be the login password from the AWS ECR command above
+- `<your-email>` would be the email address of the AWS account
+
+Typing the password directly on the command line stores it in shell history if the machine is not protected, so treat that step carefully.
+
+Once it is created, inspect the generated secret:
+
+```bash
+kubectl get secret regcred --output=yaml
+```
+
+It should look roughly like this:
+
+```yaml
+apiVersion: v1
+data:
+  .dockerconfigjson: exhsjdfslfisdf89s7df9fs87f6dsfsf65...
+kind: Secret
+metadata:
+  ...
+  name: regcred
+  ...
+type: kubernetes.io/dockerconfigjson
+```
+
+Finally, reference the secret in your deployment manifest under `imagePullSecrets`:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-name
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-name
+  template:
+    metadata:
+      labels:
+        app: app-name
+    spec:
+      containers:
+        - name: app
+          image: aws_account_id.dkr.ecr.region.amazonaws.com/app_and_version
+      imagePullSecrets:
+        - name: regcred
+```
+
+Once that is in place, your pods should be able to pull the image from AWS ECR and deploy normally.
+

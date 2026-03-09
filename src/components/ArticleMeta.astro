@@ -1,0 +1,23 @@
+---
+import { formatDate } from "@/lib/format";
+
+interface Props {
+  date: Date;
+  mediumUrl?: string;
+}
+
+const { date, mediumUrl } = Astro.props;
+---
+
+<div class="article-meta">
+  <span>{formatDate(date)}</span>
+  {mediumUrl && (
+    <>
+      <span class="article-meta-separator">/</span>
+      <a href={mediumUrl} rel="noreferrer noopener" target="_blank">
+        Originally on Medium
+      </a>
+    </>
+  )}
+</div>
+

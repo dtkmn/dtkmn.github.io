@@ -1,0 +1,69 @@
+---
+title: Generate CA-signed certificate using LetsEncrypt and Certbot
+summary: A production-oriented walkthrough for generating a browser-trusted certificate with Certbot using DNS validation.
+date: 2020-08-07
+tags:
+  - TLS
+  - Certbot
+  - AWS
+featured: false
+draft: false
+canonicalUrl: https://medium.com/@danieltse/generate-ca-signed-certificate-using-letsencrypt-and-certbot-b6be295812b7
+mediumUrl: https://medium.com/@danieltse/generate-ca-signed-certificate-using-letsencrypt-and-certbot-b6be295812b7
+---
+
+When developing websites, browsers complain when a connection is not secured. That usually comes down to either HTTP instead of HTTPS, or a certificate that is not trusted by the client.
+
+In development, self-signed certificates are often enough. In production, you want a certificate signed by a public CA so browsers trust it by default.
+
+The safer practice is to generate the key and certificate away from the application nodes. A separate workstation is fine. In this walkthrough the working machine is a fresh AWS EC2 Ubuntu instance.
+
+I am skipping the EC2 provisioning itself and focusing on the certificate flow. The example environment uses Ubuntu 20.04 on `t2-micro`.
+
+## Prepare the machine
+
+Enable the Ubuntu universe repository and update package metadata:
+
+```bash
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo apt-get update
+```
+
+Install Certbot:
+
+```bash
+sudo apt-get install certbot
+```
+
+## Request the certificate
+
+Use manual DNS validation so you can issue the certificate without depending on a running web server:
+
+```bash
+sudo certbot certonly \
+  --manual \
+  --preferred-challenges=dns \
+  --email yourname@gmail.com \
+  --agree-tos \
+  --config-dir ./config \
+  --logs-dir ./logs \
+  --work-dir ./workdir \
+  -d *.examples.com
+```
+
+Certbot then asks you to create a TXT record similar to:
+
+```text
+_acme-challenge.example.com TXT "psdfSdfZd_Zma5rNBHCTIaFkptclAr_4c4"
+```
+
+Once DNS propagation is visible, the challenge completes in a few seconds and Certbot writes the generated certificate and key under the domain-specific output folder.
+
+From there you can:
+
+- import the certificate into AWS ACM for resources such as Load Balancers or CloudFront
+- import it into a Java keystore for JVM services
+- reuse it anywhere else that needs a browser-trusted certificate chain
+

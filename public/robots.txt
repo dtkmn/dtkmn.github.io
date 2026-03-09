@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hack.danieltse.org/sitemap-index.xml
+

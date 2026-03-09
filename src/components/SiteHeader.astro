@@ -1,0 +1,25 @@
+---
+import { siteConfig } from "@/config/site";
+---
+
+<header class="site-header">
+  <a class="site-mark" href="/">
+    <span class="site-mark-kicker">hack.danieltse.org</span>
+    <span class="site-mark-name">{siteConfig.siteTitle}</span>
+  </a>
+
+  <nav class="site-nav" aria-label="Primary">
+    <a href="/articles/">Articles</a>
+    <a href="/notes/">Notes</a>
+    <a href="/about/">About</a>
+  </nav>
+
+  <div class="site-links" aria-label="External">
+    {siteConfig.socialLinks.slice(0, 3).map((link) => (
+      <a href={link.href} rel="noreferrer noopener" target="_blank">
+        {link.label}
+      </a>
+    ))}
+  </div>
+</header>
+

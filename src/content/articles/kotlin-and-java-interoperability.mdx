@@ -1,0 +1,73 @@
+---
+title: Kotlin and Java Interoperability
+summary: Kotlin and Java can live in the same codebase cleanly, which makes migration and mixed-language projects practical.
+date: 2023-01-03
+tags:
+  - Kotlin
+  - Java
+  - Backend
+featured: true
+draft: false
+canonicalUrl: https://medium.com/@danieltse/kotlin-and-java-interoperability-690fe97dc344
+mediumUrl: https://medium.com/@danieltse/kotlin-and-java-interoperability-690fe97dc344
+---
+
+Kotlin is designed to be fully interoperable with Java. You can use Kotlin code in a Java project and Java code in a Kotlin project, which lets you adopt the strengths of both languages without a rewrite-first strategy.
+
+## Using Kotlin in a Java project
+
+One of the practical benefits of Kotlin's interoperability is that you can introduce it into an existing Java codebase incrementally. This is useful when you want Kotlin's more concise syntax but do not want to rewrite the system in one go.
+
+To use Kotlin code in a Java project, include the Kotlin runtime on the classpath:
+
+```groovy
+implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+```
+
+Once the runtime is available, you can create Kotlin source files and call them from Java like any other class:
+
+```kotlin
+// Kotlin class
+class KotlinClass {
+    fun doSomething() {
+        println("Doing something in Kotlin")
+    }
+}
+```
+
+```java
+// Java code
+KotlinClass kotlinClass = new KotlinClass();
+kotlinClass.doSomething();
+```
+
+## Using Java in a Kotlin project
+
+The reverse also works cleanly. If you already have a Java library or older Java modules, Kotlin can call into them directly.
+
+Include the Java dependency in the project:
+
+```groovy
+implementation "com.example:java-library:1.0"
+```
+
+Then use it from Kotlin:
+
+```java
+// Java class
+public class JavaClass {
+    public void doSomething() {
+        System.out.println("Doing something in Java");
+    }
+}
+```
+
+```kotlin
+// Kotlin code
+val javaClass = JavaClass()
+javaClass.doSomething()
+```
+
+## Conclusion
+
+Kotlin and Java interoperability is what makes mixed-language migration practical. You do not need to choose between a clean-room rewrite and staying put forever. You can move gradually, keep the JVM ecosystem, and introduce Kotlin where its expressiveness improves the code most.

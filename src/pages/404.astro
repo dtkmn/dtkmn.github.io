@@ -1,0 +1,18 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="404" description="Page not found.">
+  <section class="empty-state empty-state--full">
+    <p class="eyebrow">404</p>
+    <h1>That page fell out of the deployment graph.</h1>
+    <p>
+      The URL may have changed during the rebuild. Start from the article index or the homepage.
+    </p>
+    <div class="hero-actions">
+      <a class="button button--primary" href="/">Home</a>
+      <a class="button button--ghost" href="/articles/">Articles</a>
+    </div>
+  </section>
+</BaseLayout>
+

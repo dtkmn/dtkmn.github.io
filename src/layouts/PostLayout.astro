@@ -1,0 +1,87 @@
+---
+import ArticleMeta from "@/components/ArticleMeta.astro";
+import TagList from "@/components/TagList.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/lib/format";
+
+interface Props {
+  title: string;
+  summary: string;
+  date: Date;
+  tags: string[];
+  canonicalUrl?: string;
+  mediumUrl?: string;
+  heroImage?: string;
+  kind: "article" | "note";
+}
+
+const {
+  title,
+  summary,
+  date,
+  tags,
+  canonicalUrl,
+  mediumUrl,
+  heroImage,
+  kind,
+} = Astro.props;
+
+const localCanonical = Astro.url.toString();
+const pageCanonical = canonicalUrl ?? localCanonical;
+const socialImage = heroImage ? (heroImage.startsWith("http") ? heroImage : absoluteUrl(heroImage)) : undefined;
+
+const jsonLd =
+  kind === "article"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description: summary,
+        datePublished: date.toISOString(),
+        dateModified: date.toISOString(),
+        author: {
+          "@type": "Person",
+          name: siteConfig.author.name,
+        },
+        publisher: {
+          "@type": "Person",
+          name: siteConfig.author.name,
+        },
+        mainEntityOfPage: pageCanonical,
+        image: socialImage ? [socialImage] : undefined,
+        keywords: tags.join(", "),
+      }
+    : undefined;
+---
+
+<BaseLayout
+  title={title}
+  description={summary}
+  canonical={pageCanonical}
+  image={heroImage}
+  type="article"
+>
+  {jsonLd && (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  )}
+
+  <article class="post-shell">
+    <div class="post-intro">
+      <p class="post-kicker">{kind === "article" ? "Essay" : "Note"}</p>
+      <h1>{title}</h1>
+      <p class="post-summary">{summary}</p>
+      <ArticleMeta date={date} mediumUrl={mediumUrl} />
+      {canonicalUrl && canonicalUrl !== localCanonical && (
+        <p class="post-canonical-note">
+          This piece is archived here for continuity. The original canonical publication lives on
+          <a href={canonicalUrl} rel="noreferrer noopener" target="_blank"> Medium</a>.
+        </p>
+      )}
+      {tags.length > 0 && <TagList tags={tags} />}
+    </div>
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

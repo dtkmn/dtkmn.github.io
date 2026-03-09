@@ -1,0 +1,163 @@
+---
+title: Why Local LLMs Matter in 2025
+summary: Local models are no longer just a hobbyist niche. In 2025 they are a practical answer to privacy, latency, and cloud-cost pressure.
+date: 2025-04-28
+tags:
+  - LLM
+  - Ollama
+  - AI
+  - Local First
+featured: true
+draft: false
+canonicalUrl: https://medium.com/@danieltse/why-local-llms-matter-in-2025-be0b46eb6f8c
+mediumUrl: https://medium.com/@danieltse/why-local-llms-matter-in-2025-be0b46eb6f8c
+heroImage: https://cdn-images-1.medium.com/max/1024/1*iQfrhEGusZEjETLRCcd5Fw.png
+---
+
+![Why local LLMs matter](https://cdn-images-1.medium.com/max/1024/1*iQfrhEGusZEjETLRCcd5Fw.png)
+
+Large language models running entirely on your own device matter more than ever. Privacy concerns are rising, on-device data processing is becoming more valuable, and cloud inference costs are still unpredictable. A local setup gives you stronger control over where data lives and how it is processed.
+
+In practice that means your chats, documents, and code can stay on your machine while still benefiting from a capable model. Ollama is one of the simplest ways to get there because it wraps model download, runtime management, and local APIs into a workflow that is approachable for developers.
+
+This guide covers the practical case for local models, the hardware expectations, how to install Ollama, and the core workflow for pulling and running a model locally.
+
+## System requirements
+
+Running modern LLMs locally still demands a reasonably capable machine. In 2025, the typical shape is:
+
+- fast NVMe storage
+- 16 GB to 64 GB of RAM
+- ideally a discrete GPU
+- macOS 11+, Linux, or Windows 10/11
+
+The more VRAM you have, the larger the model you can run comfortably. A useful rough rule is:
+
+- 8 GB VRAM gets you started with smaller quantized models
+- 16 GB to 24 GB makes 13B to 30B class models practical
+- CPU-only mode works, but larger models become slow quickly
+
+RAM still matters because the model has to be loaded and managed efficiently. In practice, 16 GB to 32 GB system RAM is common for a workable local setup. Storage also matters because even compressed model weights are large, so an NVMe SSD is strongly recommended.
+
+## Installing Ollama
+
+### macOS
+
+Download the macOS build from [ollama.com/download](https://ollama.com/download/mac). After unzipping the app, move it into `/Applications` and launch it once. That also makes the `ollama` CLI available from Terminal.
+
+### Linux
+
+The quick install path is:
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+After installation, you can start the local runtime with:
+
+```bash
+ollama serve
+```
+
+If you are using an AMD GPU on Linux, Ollama also provides separate packages for ROCm-based acceleration.
+
+### Windows
+
+Download `OllamaSetup.exe` from [ollama.com/download](https://ollama.com/download/windows), run the installer, then launch Ollama from the Start menu or open a new PowerShell session and use the CLI directly.
+
+## What changed in 2025
+
+The local-model story is much stronger than it was even a year earlier.
+
+### Better model availability
+
+Ollama now supports a wide range of open models, including:
+
+- Llama 3 family variants
+- Gemma 3 family variants
+- Mistral models
+- Phi-4
+- DeepSeek-derived models
+- embedding models for retrieval workflows
+
+That matters because local inference is only compelling if the model catalog is current enough to be useful for real tasks, not just demos.
+
+### Multimodal support
+
+Vision-capable models now make local image understanding practical. That means OCR, chart interpretation, and image-grounded chat can happen without sending the asset to an external provider.
+
+### Structured output
+
+Ollama supports schema-constrained JSON output. That closes a major gap between local and hosted models for integration work. If your application needs deterministic structure rather than conversational prose, local models are much easier to wire into production-ish developer workflows.
+
+### Tool calling and API compatibility
+
+Tool or function calling support means a local model can act less like a toy chat interface and more like part of an application runtime. Combined with OpenAI-compatible endpoints, you can often reuse existing client integrations with minimal changes.
+
+### Embeddings and RAG
+
+Embedding models now make it realistic to build local retrieval-augmented systems. The pipeline is familiar:
+
+1. embed the documents
+2. store vectors in a local database
+3. retrieve relevant context
+4. answer with a local model
+
+That is useful for private knowledge bases, local code assistants, and experimental internal tooling where shipping data to a hosted LLM is not acceptable.
+
+## Pulling and running a model
+
+Once Ollama is installed and the runtime is available, the basic workflow is simple.
+
+### Pull a model
+
+```bash
+ollama pull llama3.2-vision
+```
+
+This downloads the model so it can be used offline afterward.
+
+### Run the model
+
+```bash
+ollama run llama3.2-vision
+```
+
+That starts an interactive session where prompts are executed locally on your machine.
+
+For text-only use, the flow is the same. For image-capable models, you can attach an image path to the prompt and ask the model to interpret it.
+
+### Use the local API
+
+Ollama also exposes an HTTP API, which means the local model can be used programmatically:
+
+```bash
+curl -X POST http://localhost:11434/api/generate \
+  -d '{"model":"mistral","prompt":"Once upon a time"}'
+```
+
+The response comes back as JSON, which makes it straightforward to integrate into scripts or applications.
+
+## Why this matters in practice
+
+Local LLMs are not just about cost. They change the engineering constraints:
+
+- sensitive data can remain local
+- latency is predictable and often lower for iterative work
+- experimentation is easier because you control the full stack
+- billing uncertainty is replaced by infrastructure you already own
+
+That combination makes local models especially attractive for:
+
+- code and repo assistants
+- document analysis over private files
+- local prototyping for agent workflows
+- on-device copilots
+- internal tooling that should not depend on outbound model calls
+
+## Closing thought
+
+Running your own model in 2025 is no longer a novelty. It is a credible engineering choice. With tools like Ollama, the setup cost is low enough that more teams should treat local inference as a default option to evaluate, not an exotic alternative.
+
+If the workload is privacy-sensitive, latency-sensitive, or cost-sensitive, local models deserve a serious place in the architecture discussion.
+

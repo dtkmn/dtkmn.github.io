@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ArticleMeta from "@/components/ArticleMeta.astro";
+import TagList from "@/components/TagList.astro";
+
+interface Props {
+  entry: CollectionEntry<"articles"> | CollectionEntry<"notes">;
+  variant?: "feature" | "list";
+}
+
+const { entry, variant = "list" } = Astro.props;
+const href =
+  entry.collection === "articles"
+    ? `/posts/${entry.slug}/`
+    : `/notes/${entry.slug}/`;
+const description = entry.data.summary ?? "";
+---
+
+<article class:list={["article-card", `article-card--${variant}`]}>
+  <a class="article-card-link" href={href}>
+    <p class="article-card-kind">
+      {entry.collection === "articles" ? "Essay" : "Note"}
+    </p>
+    <h3>{entry.data.title}</h3>
+    {description && <p class="article-card-summary">{description}</p>}
+  </a>
+  <ArticleMeta
+    date={entry.data.date}
+    mediumUrl={entry.collection === "articles" ? entry.data.mediumUrl : undefined}
+  />
+  {entry.data.tags.length > 0 && <TagList tags={entry.data.tags} />}
+</article>
+
