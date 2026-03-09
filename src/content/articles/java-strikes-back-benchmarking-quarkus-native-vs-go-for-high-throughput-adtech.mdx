@@ -1,0 +1,121 @@
+---
+title: "Java Strikes Back: Benchmarking Quarkus Native vs. Go for High-Throughput AdTech"
+summary: Quarkus Native closed most of the historical gap with Go in a high-throughput AdTech bid receiver benchmark.
+date: 2025-11-12
+tags:
+  - Java
+  - Quarkus
+  - Golang
+  - Performance
+  - Cloud Native
+featured: true
+draft: false
+canonicalUrl: https://medium.com/@danieltse/java-strikes-back-benchmarking-quarkus-native-vs-go-for-high-throughput-adtech-b2b758554417
+mediumUrl: https://medium.com/@danieltse/java-strikes-back-benchmarking-quarkus-native-vs-go-for-high-throughput-adtech-b2b758554417
+---
+
+Is it time to rewrite your microservices in Go? Maybe not.
+
+For the last decade, the default cloud-native narrative has been simple:
+
+- if you want high throughput, low memory use, and instant startup, use Go
+- if you want a massive ecosystem and enterprise libraries, use Java and pay the "JVM tax"
+
+With Quarkus and GraalVM Native Image, that tradeoff changes. The promise is that teams can keep the developer productivity and ecosystem reach of Java while getting much closer to the operational profile of a native binary.
+
+I wanted to test that in one of the harshest environments possible: AdTech real-time bidding.
+
+## The scenario: the 100ms budget
+
+In AdTech, every page load can trigger an auction. A bid receiver has roughly 100ms to:
+
+1. receive the request
+2. decide whether the user is worth bidding on
+3. send the bid to an auction
+
+If the service is slow, you lose the auction. If it falls over under load, you lose money.
+
+To make the comparison practical, I built two identical microservices to act as the frontline receiver:
+
+1. **The challenger:** Java 17 using Quarkus Native
+2. **The champion:** Go using Gin
+
+Both services had the same job:
+
+- validate a JSON payload
+- apply business filtering
+- push valid bids to Kafka as fast as possible
+
+## The setup: a fair fight
+
+To keep the comparison honest, I ran both services inside the same constrained Docker Desktop environment on a MacBook.
+
+- **Infrastructure:** Confluent Kafka running locally with Docker Compose
+- **Load testing:** `k6` generating 50 concurrent virtual users sending bid payloads
+- **Observability:** Prometheus and Grafana scraping metrics from both apps
+
+## The results
+
+The question was not just "which one is faster?" It was "can Java compete?"
+
+The answer was yes.
+
+| Metric | Go (Gin) | Quarkus Native (Java) | Traditional Spring |
+| --- | --- | --- | --- |
+| Throughput | ~31,000 RPS | ~30,000 RPS | ~14,000 RPS |
+| Avg. latency | 1.57 ms | 1.70 ms | ~8.5 ms |
+| Idle memory | ~15 MB | ~35 MB | ~450 MB |
+| Startup time | Instant | 0.05 s | 10 s+ |
+
+## 1. Throughput: the network bottleneck
+
+Both the Go service and the Quarkus Native service were so fast that they saturated the Docker network stack before hitting their own CPU limits.
+
+Hitting around 30,000 requests per second on a single container is significant. It shows that Quarkus Native removes most of the overhead people still associate with traditional JVM HTTP stacks.
+
+## 2. Memory: the flat line
+
+This was the most impressive result.
+
+In a traditional Java application, you expect the familiar sawtooth graph: memory rises, garbage collection runs, and memory drops again. With Quarkus Native, the Grafana memory graph stayed almost flat even under heavy load.
+
+Go still wins the pure memory-efficiency contest at roughly 15 MB versus 35 MB. But for many teams, the relevant comparison is not 15 MB versus 35 MB. It is 35 MB versus the 500 MB-plus footprint that a conventional JVM service may require.
+
+## 3. Handling backpressure
+
+During the test, both services were pushed hard enough that Kafka became the bottleneck. Once internal buffers filled, both Go and Quarkus responded correctly by triggering backpressure and returning `503` responses.
+
+That result matters because it shows the slowest link was infrastructure, not language runtime. Java was no longer the obvious weak point in the chain.
+
+## Why this matters for engineering teams
+
+If you are a Java shop staring at cloud costs or latency constraints, the usual choice has been uncomfortable:
+
+- retrain teams in Go
+- or keep the JVM model and buy more hardware
+
+Quarkus Native offers a third path.
+
+### 1. Keep your ecosystem
+
+The code still looks like Java. You can keep JAX-RS annotations, Jackson for JSON, and standard dependency injection.
+
+### 2. Keep your talent
+
+You do not need to rebuild the team around another language before you can ship high-performance native services.
+
+### 3. Get the performance
+
+You get near-Go startup behavior, a drastically smaller footprint than traditional Spring-style services, and a runtime profile that is far more credible for serverless or latency-sensitive workloads.
+
+## Conclusion
+
+Go remains an excellent language, especially for infrastructure-heavy and network-centric services. But for business microservices, the old "Java is too heavy" story is no longer reliable.
+
+With Quarkus Native, Java is not just being incrementally optimized. The environments where it can run well are changing.
+
+From serverless functions to high-velocity AdTech bidders, the old JVM tax is no longer a safe default assumption.
+
+The benchmark code and Docker setup are here:
+
+- [quarkus-adtech-demo](https://github.com/dtkmn/quarkus-adtech-demo)

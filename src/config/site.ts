@@ -32,9 +32,9 @@ export const siteConfig = {
     "Cloud platforms, Kubernetes, and delivery tooling",
   ],
   featuredPostSlugs: [
+    "mcp-the-usb-c-of-ai-integrations",
+    "java-strikes-back-benchmarking-quarkus-native-vs-go-for-high-throughput-adtech",
     "why-local-llms-matter-in-2025",
-    "kotlin-and-java-interoperability",
-    "pull-docker-image-from-aws-ecr-to-kubernetes",
   ] as string[],
   featuredRepos: [] as FeaturedRepo[],
 } as const;
