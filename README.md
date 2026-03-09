@@ -1,6 +1,6 @@
-# hack.danieltse.org
+# danieltse.org
 
-Astro source for `hack.danieltse.org`, a technical publication for essays, notes, and selected platform engineering work.
+Astro source for `danieltse.org`, a technical publication for essays, notes, and selected platform engineering work.
 
 ## Commands
 
@@ -16,4 +16,3 @@ Astro source for `hack.danieltse.org`, a technical publication for essays, notes
 - Site settings: `src/config/site.ts`
 
 Historical Medium imports keep their original Medium URL in `canonicalUrl`. New posts should publish site-first and syndicate to Medium afterward.
-

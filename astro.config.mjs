@@ -3,7 +3,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://hack.danieltse.org",
+  site: "https://danieltse.org",
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {
@@ -12,4 +12,3 @@ export default defineConfig({
     },
   },
 });
-

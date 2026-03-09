@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hack.danieltse.org/sitemap-index.xml
-
+Sitemap: https://danieltse.org/sitemap-index.xml

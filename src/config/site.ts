@@ -10,7 +10,7 @@ export type FeaturedRepo = {
 };
 
 export const siteConfig = {
-  siteUrl: "https://hack.danieltse.org",
+  siteUrl: "https://danieltse.org",
   siteTitle: "Daniel Tse",
   siteDescription:
     "Technical essays on AI systems, JVM backend engineering, and cloud platform design from a hands-on principal engineer.",

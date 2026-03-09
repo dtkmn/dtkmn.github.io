@@ -18,6 +18,5 @@ export function slugifyTag(tag: string) {
 }
 
 export function absoluteUrl(path: string) {
-  return new URL(path, "https://hack.danieltse.org").toString();
+  return new URL(path, "https://danieltse.org").toString();
 }
-
