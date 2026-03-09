@@ -30,27 +30,43 @@ const {
 const localCanonical = Astro.url.toString();
 const pageCanonical = canonicalUrl ?? localCanonical;
 const socialImage = heroImage ? (heroImage.startsWith("http") ? heroImage : absoluteUrl(heroImage)) : undefined;
+const authorId = absoluteUrl("/about/#author");
 
 const jsonLd =
   kind === "article"
     ? {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
+        "@id": `${pageCanonical}#article`,
         headline: title,
         description: summary,
+        url: pageCanonical,
         datePublished: date.toISOString(),
         dateModified: date.toISOString(),
+        inLanguage: "en-AU",
+        isPartOf: {
+          "@id": absoluteUrl("/#website"),
+        },
         author: {
           "@type": "Person",
+          "@id": authorId,
           name: siteConfig.author.name,
+          url: siteConfig.author.url,
+          sameAs: siteConfig.author.sameAs,
         },
         publisher: {
           "@type": "Person",
+          "@id": authorId,
           name: siteConfig.author.name,
+          url: siteConfig.author.url,
         },
-        mainEntityOfPage: pageCanonical,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": pageCanonical,
+        },
         image: socialImage ? [socialImage] : undefined,
         keywords: tags.join(", "),
+        isAccessibleForFree: true,
       }
     : undefined;
 ---

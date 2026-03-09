@@ -27,6 +27,30 @@ const socialImage = image
     ? image
     : absoluteUrl(image)
   : undefined;
+const authorId = absoluteUrl("/about/#author");
+const baseStructuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": absoluteUrl("/#website"),
+    url: siteConfig.siteUrl,
+    name: siteConfig.siteTitle,
+    description: siteConfig.siteDescription,
+    inLanguage: "en-AU",
+    author: {
+      "@id": authorId,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": authorId,
+    name: siteConfig.author.name,
+    jobTitle: siteConfig.author.role,
+    url: siteConfig.author.url,
+    sameAs: siteConfig.author.sameAs,
+  },
+];
 const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
 ---
 
@@ -39,6 +63,8 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0d1117" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="googlebot" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:site_name" content={siteConfig.siteTitle} />
@@ -52,6 +78,7 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
     <meta name="twitter:description" content={description} />
     {socialImage && <meta name="twitter:image" content={socialImage} />}
     <link rel="alternate" type="application/rss+xml" title="Daniel Tse RSS" href="/feed.xml" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(baseStructuredData)}></script>
     {goatcounter && (
       <script
         is:inline

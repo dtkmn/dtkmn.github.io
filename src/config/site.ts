@@ -19,6 +19,12 @@ export const siteConfig = {
   author: {
     name: "Daniel Tse",
     role: "Principal Engineer",
+    url: "https://danieltse.org/about/",
+    sameAs: [
+      "https://github.com/dtkmn",
+      "https://medium.com/@danieltse",
+      "https://twitter.com/dtkmn",
+    ],
   },
   socialLinks: [
     { label: "GitHub", href: "https://github.com/dtkmn" },
