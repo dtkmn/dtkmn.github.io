@@ -1,0 +1,67 @@
+---
+title: Quarkus AdTech Demo
+summary: A benchmark-oriented RTB demo that compares Quarkus native against other receiver implementations under the latency and startup constraints that matter in AdTech.
+date: 2025-11-10
+draft: false
+featured: true
+detailPage: true
+tier: flagship
+status: active
+order: 2
+repoUrl: https://github.com/dtkmn/quarkus-adtech-demo
+heroImage: /images/projects/quarkus-adtech-demo-hero.svg
+relatedPosts:
+  - java-strikes-back-benchmarking-quarkus-native-vs-go-for-high-throughput-adtech
+tags:
+  - Quarkus
+  - AdTech
+  - Benchmarking
+  - Kafka
+  - Kubernetes
+stack:
+  - Quarkus Native
+  - Kafka
+  - PostgreSQL
+  - Prometheus
+  - Grafana
+  - Helm
+audience:
+  - JVM engineers evaluating native images under real load
+  - Platform teams comparing language and runtime tradeoffs
+  - AdTech and high-throughput backend engineers
+proofPoints:
+  - README documents startup and throughput claims instead of vague “fast” language.
+  - Includes JVM, native, Go, and Rust receiver variants in the same benchmark story.
+  - Ships observability and Kubernetes deployment assets alongside the code.
+---
+
+## What it is
+
+This project frames a very specific engineering question: when the workload is bursty, latency
+sensitive, and horizontally scaled, how far can modern Java go before another runtime is the better
+tool?
+
+## Why it matters
+
+Most runtime comparisons are too abstract to be useful. They compare hello-world startup times or
+microbenchmarks with no operational story behind them. Here the scenario is concrete: a bid receiver
+for Real-Time Bidding traffic, with Kafka ingestion, observability, and deployment paths that look
+like a real system instead of a slide.
+
+## What makes it credible
+
+The project is interesting because it does not rely on a single flattering number. It brings together:
+
+- startup and throughput claims,
+- side-by-side implementations,
+- load-test setup,
+- observability tooling,
+- a Helm deployment path.
+
+That is the kind of material that lets an article make a defensible argument instead of a rhetorical one.
+
+## How it connects to the writing
+
+The companion article on Quarkus native versus Go argues that the “Java is too slow/heavy” story is
+now incomplete. This project is the proof layer behind that claim, especially for teams that need to
+see concrete receiver architecture and benchmark framing before they take the argument seriously.

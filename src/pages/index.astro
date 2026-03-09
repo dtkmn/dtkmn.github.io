@@ -1,35 +1,38 @@
 ---
+import ProjectCard from "@/components/ProjectCard.astro";
 import ArticleCard from "@/components/ArticleCard.astro";
 import { siteConfig } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import {
   getFeaturedArticles,
+  getFeaturedProjects,
   getRecentArticles,
   getRecentNotes,
 } from "@/lib/content";
 
-const [featuredArticles, recentArticles, recentNotes] = await Promise.all([
+const [featuredArticles, featuredProjects, recentArticles, recentNotes] = await Promise.all([
   getFeaturedArticles(),
+  getFeaturedProjects(3),
   getRecentArticles(6),
   getRecentNotes(4),
 ]);
 
 const showNotes = recentNotes.length >= 2;
-const showProjects = siteConfig.featuredRepos.length >= 2;
+const showProjects = featuredProjects.length >= 1;
 ---
 
 <BaseLayout>
   <section class="hero">
     <div class="hero-copy">
-      <p class="eyebrow">Technical publication</p>
+      <p class="eyebrow">Writing and shipped systems</p>
       <h1>Systems thinking for AI, backend engineering, and cloud delivery.</h1>
       <p class="hero-summary">
-        I write from the principal-engineer seat: architecture tradeoffs, platform edges,
-        implementation detail, and the operational reality behind the diagrams.
+        Essays, project pages, and implementation notes from the principal-engineer seat:
+        architecture tradeoffs, platform edges, and the operational reality behind the diagrams.
       </p>
       <div class="hero-actions">
         <a class="button button--primary" href="/articles/">Browse articles</a>
-        <a class="button button--ghost" href="/about/">About Daniel</a>
+        <a class="button button--ghost" href="/projects/">View projects</a>
       </div>
     </div>
     <div class="hero-side">
@@ -49,6 +52,21 @@ const showProjects = siteConfig.featuredRepos.length >= 2;
       {featuredArticles.map((entry) => <ArticleCard entry={entry} variant="feature" />)}
     </div>
   </section>
+
+  {showProjects && (
+    <section class="section-block">
+      <div class="section-heading section-heading--inline">
+        <div>
+          <p class="eyebrow">Flagship projects</p>
+          <h2>Open-source work with enough substance to earn a page.</h2>
+        </div>
+        <a class="section-link" href="/projects/">View all projects</a>
+      </div>
+      <div class="feature-grid">
+        {featuredProjects.map((project) => <ProjectCard project={project} variant="feature" />)}
+      </div>
+    </section>
+  )}
 
   <section class="section-block">
     <div class="section-heading section-heading--inline">
@@ -78,25 +96,4 @@ const showProjects = siteConfig.featuredRepos.length >= 2;
     </section>
   )}
 
-  {showProjects && (
-    <section class="section-block">
-      <div class="section-heading">
-        <p class="eyebrow">Selected projects</p>
-        <h2>Shipped work that informs the writing.</h2>
-      </div>
-      <div class="project-grid">
-        {siteConfig.featuredRepos.map((repo) => (
-          <article class="project-card">
-            <h3>
-              <a href={repo.href} rel="noreferrer noopener" target="_blank">
-                {repo.name}
-              </a>
-            </h3>
-            <p>{repo.description}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  )}
 </BaseLayout>
-

@@ -1,0 +1,157 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ArticleCard from "@/components/ArticleCard.astro";
+import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/lib/format";
+
+interface Props {
+  title: string;
+  summary: string;
+  date: Date;
+  status: "active" | "maintained" | "experimental";
+  repoUrl: string;
+  docsUrl?: string;
+  demoUrl?: string;
+  heroImage?: string;
+  tags: string[];
+  stack: string[];
+  audience: string[];
+  proofPoints: string[];
+  relatedArticles: CollectionEntry<"articles">[];
+}
+
+const {
+  title,
+  summary,
+  date,
+  status,
+  repoUrl,
+  docsUrl,
+  demoUrl,
+  heroImage,
+  tags,
+  stack,
+  audience,
+  proofPoints,
+  relatedArticles,
+} = Astro.props;
+
+const pageCanonical = Astro.url.toString();
+const authorId = absoluteUrl("/about/#author");
+
+const statusLabel = {
+  active: "Active",
+  maintained: "Maintained",
+  experimental: "Experimental",
+}[status];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "@id": `${pageCanonical}#software`,
+  name: title,
+  description: summary,
+  url: pageCanonical,
+  codeRepository: repoUrl,
+  dateCreated: date.toISOString(),
+  dateModified: date.toISOString(),
+  keywords: tags.join(", "),
+  author: {
+    "@type": "Person",
+    "@id": authorId,
+    name: siteConfig.author.name,
+    url: siteConfig.author.url,
+    sameAs: siteConfig.author.sameAs,
+  },
+  creator: {
+    "@id": authorId,
+  },
+  isAccessibleForFree: true,
+  image: heroImage ? [absoluteUrl(heroImage)] : undefined,
+};
+---
+
+<BaseLayout title={title} description={summary} canonical={pageCanonical} image={heroImage}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+
+  <article class="project-shell">
+    <div class="project-intro">
+      <p class="post-kicker">Project</p>
+      <h1>{title}</h1>
+      <p class="post-summary">{summary}</p>
+
+      <div class="project-meta">
+        <span class:list={["status-pill", `status-pill--${status}`]}>{statusLabel}</span>
+        <span>Curated on danieltse.org</span>
+      </div>
+
+      <div class="project-actions">
+        <a class="button button--primary" href={repoUrl} rel="noreferrer noopener" target="_blank">
+          Repository
+        </a>
+        {docsUrl && (
+          <a class="button button--ghost" href={docsUrl} rel="noreferrer noopener" target="_blank">
+            Documentation
+          </a>
+        )}
+        {demoUrl && (
+          <a class="button button--ghost" href={demoUrl} rel="noreferrer noopener" target="_blank">
+            Demo
+          </a>
+        )}
+      </div>
+    </div>
+
+    {heroImage && (
+      <figure class="project-hero-media">
+        <img src={heroImage} alt={`${title} editorial visual`} loading="eager" />
+      </figure>
+    )}
+
+    <div class="project-facts">
+      {proofPoints.length > 0 && (
+        <section class="project-fact">
+          <h2>Proof</h2>
+          <ul>
+            {proofPoints.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {audience.length > 0 && (
+        <section class="project-fact">
+          <h2>For</h2>
+          <ul>
+            {audience.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {stack.length > 0 && (
+        <section class="project-fact">
+          <h2>Stack</h2>
+          <ul>
+            {stack.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+    </div>
+
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+
+  {relatedArticles.length > 0 && (
+    <section class="section-block">
+      <div class="section-heading">
+        <p class="eyebrow">Related writing</p>
+        <h2>Articles that expand the reasoning behind the project.</h2>
+      </div>
+      <div class="stack-grid">
+        {relatedArticles.map((entry) => <ArticleCard entry={entry} />)}
+      </div>
+    </section>
+  )}
+</BaseLayout>

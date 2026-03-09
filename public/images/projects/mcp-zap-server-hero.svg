@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" role="img" aria-labelledby="title desc">
+  <title id="title">MCP ZAP Server editorial hero</title>
+  <desc id="desc">A technical illustration showing an AI agent, MCP gateway, ZAP engine, and scan findings panels connected in a secure orchestration flow.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1319"/>
+      <stop offset="60%" stop-color="#111a23"/>
+      <stop offset="100%" stop-color="#091017"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientTransform="translate(340 260) rotate(24) scale(520 420)">
+      <stop offset="0%" stop-color="#71d3c6" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#71d3c6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientTransform="translate(1180 220) rotate(-12) scale(420 360)">
+      <stop offset="0%" stop-color="#b9fff5" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#b9fff5" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2430" stop-opacity="0.94"/>
+      <stop offset="100%" stop-color="#0d141c" stop-opacity="0.94"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#71d3c6"/>
+      <stop offset="100%" stop-color="#b9fff5"/>
+    </linearGradient>
+    <linearGradient id="riskHigh" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff6d5e"/>
+      <stop offset="100%" stop-color="#ffb08d"/>
+    </linearGradient>
+    <linearGradient id="riskMed" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffbd5a"/>
+      <stop offset="100%" stop-color="#ffe3a6"/>
+    </linearGradient>
+    <linearGradient id="riskLow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#72d8cb"/>
+      <stop offset="100%" stop-color="#d7fff9"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#030507" flood-opacity="0.42"/>
+    </filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#c7d4cb" stroke-opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1067" fill="url(#bg)"/>
+  <rect width="1600" height="1067" fill="url(#grid)"/>
+  <rect width="1600" height="1067" fill="url(#glowA)"/>
+  <rect width="1600" height="1067" fill="url(#glowB)"/>
+
+  <g opacity="0.45">
+    <path d="M120 900C360 780 420 650 540 570C690 470 860 500 1030 390C1165 302 1254 212 1470 148" fill="none" stroke="#71d3c6" stroke-opacity="0.18" stroke-width="3"/>
+    <path d="M180 946C410 832 530 760 700 640C854 532 980 520 1120 456C1290 378 1372 282 1498 206" fill="none" stroke="#d6fdf7" stroke-opacity="0.09" stroke-width="2"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="120" y="168" width="412" height="620" rx="34" fill="url(#panel)" stroke="#6bd2c5" stroke-opacity="0.22"/>
+    <rect x="574" y="262" width="360" height="470" rx="30" fill="url(#panel)" stroke="#6bd2c5" stroke-opacity="0.22"/>
+    <rect x="988" y="130" width="492" height="334" rx="34" fill="url(#panel)" stroke="#6bd2c5" stroke-opacity="0.18"/>
+    <rect x="988" y="502" width="492" height="254" rx="34" fill="url(#panel)" stroke="#6bd2c5" stroke-opacity="0.18"/>
+  </g>
+
+  <g>
+    <text x="164" y="222" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">AI AGENT</text>
+    <text x="164" y="282" fill="#f8f6f0" font-family="'Newsreader', serif" font-size="62">Security</text>
+    <text x="164" y="338" fill="#f8f6f0" font-family="'Newsreader', serif" font-size="62">orchestration</text>
+    <text x="164" y="388" fill="#d8ddd5" font-family="'IBM Plex Sans', sans-serif" font-size="24">Structured tools over brittle scan scripts.</text>
+
+    <rect x="164" y="448" width="324" height="126" rx="22" fill="#0f1820" stroke="#6bd2c5" stroke-opacity="0.24"/>
+    <circle cx="206" cy="490" r="15" fill="#71d3c6"/>
+    <rect x="238" y="474" width="120" height="12" rx="6" fill="#d7fff9" fill-opacity="0.88"/>
+    <rect x="238" y="500" width="214" height="10" rx="5" fill="#8ea099" fill-opacity="0.42"/>
+    <rect x="238" y="522" width="188" height="10" rx="5" fill="#8ea099" fill-opacity="0.26"/>
+    <rect x="164" y="604" width="324" height="136" rx="22" fill="#0f1820" stroke="#6bd2c5" stroke-opacity="0.18"/>
+    <path d="M206 664h40l26-36 34 76 26-42h118" fill="none" stroke="url(#accent)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="438" cy="664" r="9" fill="#b9fff5"/>
+  </g>
+
+  <g>
+    <text x="618" y="316" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">MCP GATEWAY</text>
+    <rect x="622" y="356" width="264" height="126" rx="24" fill="#0f1820" stroke="#6bd2c5" stroke-opacity="0.22"/>
+    <text x="660" y="426" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="42">MCP</text>
+    <rect x="622" y="516" width="264" height="156" rx="24" fill="#0f1820" stroke="#6bd2c5" stroke-opacity="0.18"/>
+    <circle cx="674" cy="568" r="10" fill="#71d3c6"/>
+    <circle cx="734" cy="568" r="10" fill="#71d3c6" fill-opacity="0.68"/>
+    <circle cx="794" cy="568" r="10" fill="#71d3c6" fill-opacity="0.44"/>
+    <rect x="650" y="606" width="190" height="12" rx="6" fill="#d7fff9" fill-opacity="0.86"/>
+    <rect x="650" y="632" width="154" height="10" rx="5" fill="#8ea099" fill-opacity="0.36"/>
+  </g>
+
+  <g>
+    <text x="1032" y="184" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">OWASP ZAP ENGINE</text>
+    <rect x="1032" y="222" width="404" height="92" rx="22" fill="#0f1820" stroke="#6bd2c5" stroke-opacity="0.18"/>
+    <rect x="1064" y="254" width="90" height="28" rx="14" fill="url(#accent)" fill-opacity="0.9"/>
+    <rect x="1184" y="254" width="104" height="28" rx="14" fill="#d7fff9" fill-opacity="0.24"/>
+    <rect x="1314" y="254" width="84" height="28" rx="14" fill="#d7fff9" fill-opacity="0.14"/>
+
+    <rect x="1032" y="338" width="188" height="92" rx="22" fill="#0f1820" stroke="#6bd2c5" stroke-opacity="0.18"/>
+    <rect x="1058" y="366" width="96" height="18" rx="9" fill="#d7fff9" fill-opacity="0.82"/>
+    <rect x="1058" y="396" width="132" height="12" rx="6" fill="#8ea099" fill-opacity="0.32"/>
+
+    <rect x="1248" y="338" width="188" height="92" rx="22" fill="#0f1820" stroke="#6bd2c5" stroke-opacity="0.18"/>
+    <rect x="1274" y="366" width="116" height="18" rx="9" fill="#d7fff9" fill-opacity="0.82"/>
+    <rect x="1274" y="396" width="144" height="12" rx="6" fill="#8ea099" fill-opacity="0.32"/>
+  </g>
+
+  <g>
+    <text x="1032" y="556" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">FINDINGS SUMMARY</text>
+    <rect x="1032" y="590" width="404" height="44" rx="14" fill="#0f1820" stroke="#6bd2c5" stroke-opacity="0.14"/>
+    <rect x="1058" y="606" width="218" height="12" rx="6" fill="#d7fff9" fill-opacity="0.78"/>
+    <rect x="1032" y="654" width="404" height="34" rx="17" fill="#0f1820"/>
+    <rect x="1032" y="704" width="404" height="34" rx="17" fill="#0f1820"/>
+    <rect x="1032" y="754" width="404" height="34" rx="17" fill="#0f1820"/>
+    <rect x="1058" y="664" width="278" height="14" rx="7" fill="url(#riskHigh)"/>
+    <rect x="1058" y="714" width="210" height="14" rx="7" fill="url(#riskMed)"/>
+    <rect x="1058" y="764" width="144" height="14" rx="7" fill="url(#riskLow)"/>
+  </g>
+
+  <g opacity="0.9">
+    <path d="M532 478C566 478 572 472 598 442C628 406 648 404 674 404" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M934 480C974 480 986 462 1018 402C1044 352 1068 326 1098 326" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M934 544C988 544 1004 576 1038 618C1062 648 1086 660 1112 660" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="532" cy="478" r="9" fill="#71d3c6"/>
+    <circle cx="934" cy="480" r="9" fill="#71d3c6"/>
+    <circle cx="934" cy="544" r="9" fill="#71d3c6"/>
+    <circle cx="1112" cy="660" r="9" fill="#b9fff5"/>
+    <circle cx="1098" cy="326" r="9" fill="#b9fff5"/>
+  </g>
+</svg>

@@ -4,9 +4,18 @@ import { slugifyTag } from "@/lib/format";
 
 type ArticleEntry = CollectionEntry<"articles">;
 type NoteEntry = CollectionEntry<"notes">;
+type ProjectEntry = CollectionEntry<"projects">;
 
 function byNewest<T extends { data: { date: Date } }>(a: T, b: T) {
   return b.data.date.getTime() - a.data.date.getTime();
+}
+
+function byProjectPriority(a: ProjectEntry, b: ProjectEntry) {
+  return (
+    a.data.order - b.data.order ||
+    Number(b.data.featured) - Number(a.data.featured) ||
+    b.data.date.getTime() - a.data.date.getTime()
+  );
 }
 
 export async function getPublishedArticles() {
@@ -17,6 +26,11 @@ export async function getPublishedArticles() {
 export async function getPublishedNotes() {
   const notes = await getCollection("notes", ({ data }) => !data.draft);
   return notes.sort(byNewest);
+}
+
+export async function getPublishedProjects() {
+  const projects = await getCollection("projects", ({ data }) => !data.draft);
+  return projects.sort(byProjectPriority);
 }
 
 export async function getFeaturedArticles() {
@@ -38,6 +52,34 @@ export async function getRecentArticles(limit = 6) {
 export async function getRecentNotes(limit = 4) {
   const notes = await getPublishedNotes();
   return notes.slice(0, limit);
+}
+
+export async function getFeaturedProjects(limit = 3) {
+  const projects = await getPublishedProjects();
+  return projects.filter((entry) => entry.data.featured && entry.data.detailPage).slice(0, limit);
+}
+
+export async function getFlagshipProjects() {
+  const projects = await getPublishedProjects();
+  return projects.filter((entry) => entry.data.tier === "flagship" && entry.data.detailPage);
+}
+
+export async function getSupportingProjects() {
+  const projects = await getPublishedProjects();
+  return projects.filter((entry) => entry.data.tier === "supporting");
+}
+
+export async function getArticlesBySlugs(slugs: string[]) {
+  if (slugs.length === 0) {
+    return [];
+  }
+
+  const articles = await getPublishedArticles();
+  const articleBySlug = new Map(articles.map((entry) => [entry.slug, entry]));
+
+  return slugs
+    .map((slug) => articleBySlug.get(slug))
+    .filter((entry): entry is ArticleEntry => Boolean(entry));
 }
 
 export async function getTagIndex() {

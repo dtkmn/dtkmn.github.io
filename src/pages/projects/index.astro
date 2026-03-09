@@ -1,0 +1,47 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { getFlagshipProjects, getSupportingProjects } from "@/lib/content";
+
+const [flagshipProjects, supportingProjects] = await Promise.all([
+  getFlagshipProjects(),
+  getSupportingProjects(),
+]);
+---
+
+<BaseLayout
+  title="Projects"
+  description="Curated open-source projects by Daniel Tse across AI systems, JVM backend engineering, and cloud delivery."
+>
+  <section class="page-lead">
+    <p class="eyebrow">Projects</p>
+    <h1>Curated OSS work, not a mirror of GitHub.</h1>
+    <p class="page-lead-summary">
+      Full pages exist only for projects with a clear problem, enough implementation detail to say
+      something original, and evidence that the work matters. Everything else stays as a supporting
+      card or lives only on <a href="https://github.com/dtkmn" rel="noreferrer noopener" target="_blank">GitHub</a>.
+    </p>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <p class="eyebrow">Flagship work</p>
+      <h2>Projects that strengthen the core positioning.</h2>
+    </div>
+    <div class="feature-grid">
+      {flagshipProjects.map((project) => <ProjectCard project={project} variant="feature" />)}
+    </div>
+  </section>
+
+  {supportingProjects.length > 0 && (
+    <section class="section-block">
+      <div class="section-heading">
+        <p class="eyebrow">Supporting projects</p>
+        <h2>Useful experiments, templates, and adjacent work.</h2>
+      </div>
+      <div class="project-grid">
+        {supportingProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
+  )}
+</BaseLayout>

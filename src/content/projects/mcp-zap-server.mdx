@@ -1,0 +1,68 @@
+---
+title: MCP ZAP Server
+summary: Secure OWASP ZAP scanning exposed as an MCP server for AI agents, with real deployment paths, documentation, and production-oriented auth.
+date: 2025-04-20
+draft: false
+featured: true
+detailPage: true
+tier: flagship
+status: active
+order: 1
+repoUrl: https://github.com/dtkmn/mcp-zap-server
+docsUrl: https://dtkmn.github.io/mcp-zap-server/
+demoUrl: https://dtkmn.github.io/mcp-zap-server/demo.html
+heroImage: /images/projects/mcp-zap-server-hero.svg
+relatedPosts:
+  - mcp-the-usb-c-of-ai-integrations
+tags:
+  - AI systems
+  - MCP
+  - Spring Boot
+  - OWASP ZAP
+  - Security tooling
+stack:
+  - Java 25
+  - Spring Boot 4
+  - MCP
+  - OWASP ZAP
+  - Docker Compose
+  - Helm
+audience:
+  - AppSec teams that want AI-assisted scanning workflows
+  - Platform engineers integrating security checks into developer tooling
+  - Teams evaluating MCP beyond toy demos
+proofPoints:
+  - 37 GitHub stars and 5 forks as of March 9, 2026.
+  - Separate docs site, release notes, and demo flow instead of a README-only repo.
+  - Supports API-key and JWT authentication modes plus URL validation and scan limits.
+---
+
+## What it is
+
+This project turns OWASP ZAP into an MCP-accessible tool so an AI agent can drive scanning,
+import OpenAPI specs, and pull structured findings without falling back to brittle shell scripts.
+
+## Why it matters
+
+Many MCP demos stop at convenience. This one is stronger because it sits on a real operational seam:
+security automation. The interesting question is not whether an agent can call a tool. It is whether
+that tool can be exposed in a way that is safe enough, observable enough, and packaged well enough to
+fit into actual engineering workflows.
+
+## What makes it credible
+
+The repository has enough surface area to show that it has moved past novelty:
+
+- a documentation site with security and deployment guides,
+- a demo path that shows the workflow end to end,
+- release notes and changelog discipline,
+- deployment material for containerized and Kubernetes-based setups.
+
+That combination is exactly why it deserves a page here. The repository handles setup and usage. This
+page explains why the project matters in the first place.
+
+## How it connects to the writing
+
+This is the practical counterpart to the argument in [MCP: the USB-C of AI integrations](/posts/mcp-the-usb-c-of-ai-integrations/).
+The article explains why a common integration layer matters. The project shows what that looks like
+when the tool on the other side has real security and operational constraints.

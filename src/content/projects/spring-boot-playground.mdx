@@ -1,0 +1,57 @@
+---
+title: Spring Boot Playground
+summary: An opinionated Spring service starter that turns “how should we begin?” into a reusable contract across service creation, deployment, and release discipline.
+date: 2023-11-11
+draft: false
+featured: true
+detailPage: true
+tier: flagship
+status: maintained
+order: 3
+repoUrl: https://github.com/dtkmn/spring-boot-playground
+tags:
+  - Spring Boot
+  - Platform engineering
+  - Service templates
+  - Kubernetes
+  - JVM
+stack:
+  - Java 21
+  - Spring Boot 3
+  - PostgreSQL
+  - Flyway
+  - Docker Compose
+  - Helm
+audience:
+  - Teams standardizing how internal services are started
+  - Platform engineers who need a starter with governance, not just code scaffolding
+  - JVM teams deciding when to stay with MVC versus move to reactive variants
+proofPoints:
+  - Defines a starter contract instead of leaving service shape to convention drift.
+  - Includes CI workflow, release process, ADRs, and Helm support in the repository itself.
+  - Separates default and advanced variants rather than pretending one stack fits every service.
+---
+
+## What it is
+
+This repository is less about “sample code” and more about institutionalizing good defaults. The
+core value is not the generated service itself. It is the contract around how new services begin,
+what they ship with, and what gets treated as optional instead of mandatory.
+
+## Why it matters
+
+Many starter repositories are honest time savers but weak platform assets. They generate code once
+and then disappear from the engineering conversation. This one is more useful because it pushes into
+governance: release readiness, CI, Helm, support expectations, and architectural decision records.
+
+## What makes it credible
+
+The strong signal here is the explicit split between the default `mvc-jpa` path and the supported
+advanced `webflux-r2dbc` variant. That is the kind of design decision platform teams usually avoid
+writing down. Making it explicit is what turns the repo from template clutter into engineering
+positioning.
+
+## Where it fits
+
+This project supports the part of my work that is less visible than a benchmark or an AI integration:
+creating service standards that keep teams moving without locking them into accidental complexity.

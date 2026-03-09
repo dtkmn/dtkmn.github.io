@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" role="img" aria-labelledby="title desc">
+  <title id="title">Quarkus AdTech Demo editorial hero</title>
+  <desc id="desc">A technical illustration of a low-latency bid receiver architecture with traffic entering runtime lanes, Kafka, observability, and performance metrics.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0e1319"/>
+      <stop offset="50%" stop-color="#121c26"/>
+      <stop offset="100%" stop-color="#091017"/>
+    </linearGradient>
+    <radialGradient id="glowBlue" cx="0" cy="0" r="1" gradientTransform="translate(290 250) rotate(18) scale(460 360)">
+      <stop offset="0%" stop-color="#6db4ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#6db4ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowTeal" cx="0" cy="0" r="1" gradientTransform="translate(1080 420) rotate(-10) scale(560 420)">
+      <stop offset="0%" stop-color="#71d3c6" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#71d3c6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#18222c" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0d141c" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="accentBlue" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6db4ff"/>
+      <stop offset="100%" stop-color="#b8d8ff"/>
+    </linearGradient>
+    <linearGradient id="accentTeal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#71d3c6"/>
+      <stop offset="100%" stop-color="#d7fff9"/>
+    </linearGradient>
+    <linearGradient id="accentAmber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffb04f"/>
+      <stop offset="100%" stop-color="#ffe2af"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#030507" flood-opacity="0.42"/>
+    </filter>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0H0V44" fill="none" stroke="#d7fff9" stroke-opacity="0.04"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1067" fill="url(#bg)"/>
+  <rect width="1600" height="1067" fill="url(#grid)"/>
+  <rect width="1600" height="1067" fill="url(#glowBlue)"/>
+  <rect width="1600" height="1067" fill="url(#glowTeal)"/>
+
+  <g opacity="0.4">
+    <path d="M90 796C234 756 392 724 580 690C722 664 862 630 1032 558C1170 500 1322 382 1520 198" fill="none" stroke="#6db4ff" stroke-opacity="0.18" stroke-width="3"/>
+    <path d="M72 862C304 778 456 746 640 700C790 662 928 620 1078 554C1254 476 1386 344 1528 224" fill="none" stroke="#71d3c6" stroke-opacity="0.12" stroke-width="2"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="164" width="430" height="690" rx="34" fill="url(#panel)" stroke="#6db4ff" stroke-opacity="0.16"/>
+    <rect x="590" y="228" width="326" height="564" rx="32" fill="url(#panel)" stroke="#71d3c6" stroke-opacity="0.18"/>
+    <rect x="964" y="146" width="520" height="300" rx="34" fill="url(#panel)" stroke="#71d3c6" stroke-opacity="0.16"/>
+    <rect x="964" y="488" width="520" height="366" rx="34" fill="url(#panel)" stroke="#6db4ff" stroke-opacity="0.14"/>
+  </g>
+
+  <g>
+    <text x="154" y="220" fill="#6db4ff" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">BURST TRAFFIC</text>
+    <text x="154" y="284" fill="#f8f6f0" font-family="'Newsreader', serif" font-size="60">Low-latency</text>
+    <text x="154" y="338" fill="#f8f6f0" font-family="'Newsreader', serif" font-size="60">runtime study</text>
+    <text x="154" y="388" fill="#d8ddd5" font-family="'IBM Plex Sans', sans-serif" font-size="24">Bid requests, instant startup, sustained throughput.</text>
+
+    <g transform="translate(154 454)">
+      <rect width="342" height="72" rx="18" fill="#101822" stroke="#6db4ff" stroke-opacity="0.22"/>
+      <rect x="24" y="24" width="82" height="24" rx="12" fill="url(#accentBlue)"/>
+      <rect x="132" y="24" width="88" height="24" rx="12" fill="#d7fff9" fill-opacity="0.22"/>
+      <rect x="246" y="24" width="72" height="24" rx="12" fill="#d7fff9" fill-opacity="0.12"/>
+    </g>
+
+    <g transform="translate(154 560)">
+      <rect width="342" height="228" rx="24" fill="#101822" stroke="#6db4ff" stroke-opacity="0.16"/>
+      <rect x="26" y="26" width="120" height="18" rx="9" fill="#d7fff9" fill-opacity="0.84"/>
+      <rect x="26" y="68" width="288" height="18" rx="9" fill="url(#accentBlue)"/>
+      <rect x="26" y="106" width="258" height="18" rx="9" fill="url(#accentTeal)"/>
+      <rect x="26" y="144" width="318" height="18" rx="9" fill="url(#accentAmber)"/>
+      <rect x="26" y="182" width="204" height="18" rx="9" fill="#d7fff9" fill-opacity="0.22"/>
+    </g>
+  </g>
+
+  <g>
+    <text x="632" y="282" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">RECEIVER LAYERS</text>
+    <g transform="translate(632 332)">
+      <rect width="240" height="82" rx="22" fill="#101822" stroke="#71d3c6" stroke-opacity="0.18"/>
+      <text x="26" y="48" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="28">JVM</text>
+      <rect x="122" y="30" width="86" height="20" rx="10" fill="url(#accentBlue)"/>
+    </g>
+    <g transform="translate(632 436)">
+      <rect width="240" height="82" rx="22" fill="#101822" stroke="#71d3c6" stroke-opacity="0.18"/>
+      <text x="26" y="48" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="28">NATIVE</text>
+      <rect x="122" y="30" width="92" height="20" rx="10" fill="url(#accentTeal)"/>
+    </g>
+    <g transform="translate(632 540)">
+      <rect width="240" height="82" rx="22" fill="#101822" stroke="#71d3c6" stroke-opacity="0.18"/>
+      <text x="26" y="48" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="28">GO</text>
+      <rect x="122" y="30" width="100" height="20" rx="10" fill="url(#accentAmber)"/>
+    </g>
+    <g transform="translate(632 644)">
+      <rect width="240" height="82" rx="22" fill="#101822" stroke="#71d3c6" stroke-opacity="0.18"/>
+      <text x="26" y="48" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="28">RUST</text>
+      <rect x="122" y="30" width="78" height="20" rx="10" fill="#d7fff9" fill-opacity="0.22"/>
+    </g>
+  </g>
+
+  <g>
+    <text x="1008" y="200" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">EVENT BACKBONE</text>
+    <rect x="1008" y="232" width="432" height="84" rx="22" fill="#101822" stroke="#71d3c6" stroke-opacity="0.16"/>
+    <text x="1040" y="284" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="36">KAFKA</text>
+    <path d="M1184 274h190" fill="none" stroke="url(#accentTeal)" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="1388" cy="274" r="9" fill="#d7fff9"/>
+
+    <rect x="1008" y="338" width="202" height="78" rx="20" fill="#101822" stroke="#71d3c6" stroke-opacity="0.14"/>
+    <rect x="1238" y="338" width="202" height="78" rx="20" fill="#101822" stroke="#71d3c6" stroke-opacity="0.14"/>
+    <rect x="1038" y="368" width="112" height="14" rx="7" fill="url(#accentBlue)"/>
+    <rect x="1268" y="368" width="122" height="14" rx="7" fill="url(#accentAmber)"/>
+  </g>
+
+  <g>
+    <text x="1008" y="544" fill="#6db4ff" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">OBSERVABILITY</text>
+    <rect x="1008" y="578" width="432" height="236" rx="28" fill="#101822" stroke="#6db4ff" stroke-opacity="0.14"/>
+    <path d="M1058 760h332" fill="none" stroke="#203040" stroke-width="2"/>
+    <path d="M1058 720h332" fill="none" stroke="#203040" stroke-width="2"/>
+    <path d="M1058 680h332" fill="none" stroke="#203040" stroke-width="2"/>
+    <path d="M1058 640h332" fill="none" stroke="#203040" stroke-width="2"/>
+    <path d="M1070 742c28-36 56-42 82-86c16-26 28-66 56-66c30 0 34 62 62 62c30 0 38-54 72-90" fill="none" stroke="url(#accentTeal)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M1070 712c22-16 48-20 76-52c26-30 38-62 66-62c28 0 42 38 72 38c28 0 46-30 98-82" fill="none" stroke="url(#accentBlue)" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+    <g transform="translate(1062 606)">
+      <rect width="132" height="14" rx="7" fill="#d7fff9" fill-opacity="0.76"/>
+      <rect x="0" y="28" width="102" height="10" rx="5" fill="#8ea099" fill-opacity="0.28"/>
+    </g>
+  </g>
+
+  <g opacity="0.95">
+    <path d="M540 508C576 508 588 508 612 488" fill="none" stroke="url(#accentBlue)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M540 612C584 612 594 612 620 592" fill="none" stroke="url(#accentTeal)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M540 716C584 716 594 716 620 696" fill="none" stroke="url(#accentAmber)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M916 512C960 512 980 420 1030 316" fill="none" stroke="url(#accentTeal)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M916 612C980 612 1000 646 1048 690" fill="none" stroke="url(#accentBlue)" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="540" cy="508" r="9" fill="#6db4ff"/>
+    <circle cx="540" cy="612" r="9" fill="#71d3c6"/>
+    <circle cx="540" cy="716" r="9" fill="#ffb04f"/>
+    <circle cx="916" cy="512" r="9" fill="#71d3c6"/>
+    <circle cx="916" cy="612" r="9" fill="#6db4ff"/>
+  </g>
+</svg>

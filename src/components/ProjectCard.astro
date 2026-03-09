@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  variant?: "feature" | "list";
+}
+
+const { project, variant = "list" } = Astro.props;
+const href = project.data.detailPage ? `/projects/${project.slug}/` : project.data.repoUrl;
+const external = !project.data.detailPage;
+
+const statusLabel = {
+  active: "Active",
+  maintained: "Maintained",
+  experimental: "Experimental",
+}[project.data.status];
+---
+
+<article class:list={["article-card", "project-card", `article-card--${variant}`]}>
+  <a
+    class="article-card-link"
+    href={href}
+    rel={external ? "noreferrer noopener" : undefined}
+    target={external ? "_blank" : undefined}
+  >
+    <p class="article-card-kind">
+      {project.data.tier === "flagship" ? "Flagship project" : "Supporting project"}
+    </p>
+    <h3>{project.data.title}</h3>
+    <p class="article-card-summary">{project.data.summary}</p>
+  </a>
+
+  <div class="project-card-footer">
+    <div class="project-card-meta">
+      <span class:list={["status-pill", `status-pill--${project.data.status}`]}>{statusLabel}</span>
+      {external && <span>Repository link</span>}
+    </div>
+    {project.data.stack.length > 0 && (
+      <p class="project-card-stack">{project.data.stack.slice(0, 3).join(" / ")}</p>
+    )}
+  </div>
+</article>
