@@ -16,12 +16,14 @@ export const siteConfig = {
     url: "https://danieltse.org/about/",
     sameAs: [
       "https://github.com/dtkmn",
+      "https://www.linkedin.com/in/danieltse/",
       "https://medium.com/@danieltse",
       "https://twitter.com/dtkmn",
     ],
   },
   socialLinks: [
     { label: "GitHub", href: "https://github.com/dtkmn" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/danieltse/" },
     { label: "Medium", href: "https://medium.com/@danieltse" },
     { label: "X", href: "https://twitter.com/dtkmn" },
     { label: "RSS", href: "/feed.xml" },
@@ -33,7 +35,7 @@ export const siteConfig = {
   ],
   featuredPostSlugs: [
     "mcp-the-usb-c-of-ai-integrations",
-    "java-strikes-back-benchmarking-quarkus-native-vs-go-for-high-throughput-adtech",
+    "what-microservice-benchmarks-actually-measure-in-2026",
     "why-local-llms-matter-in-2025",
   ] as string[],
 } as const;

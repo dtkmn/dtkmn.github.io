@@ -1,0 +1,151 @@
+---
+title: "What Microservice Benchmarks Actually Measure in 2026"
+summary: "Expanding an AdTech benchmark from a Quarkus-vs-Go experiment into a multi-runtime harness changed the lesson: benchmark mode, bottleneck, and fairness controls matter more than language tribalism."
+date: 2026-03-12
+tags:
+  - Benchmarking
+  - Microservices
+  - Quarkus
+  - Java
+  - Golang
+  - Python
+  - Rust
+  - Node.js
+  - Kafka
+featured: true
+draft: false
+---
+
+In November 2025, I published [Java Strikes Back: Benchmarking Quarkus Native vs. Go for High-Throughput AdTech](/posts/java-strikes-back-benchmarking-quarkus-native-vs-go-for-high-throughput-adtech/).
+
+That article was directionally useful, but it described an early snapshot of the project. As the benchmark harness matured, the more important lesson stopped being "which language won?" and became "what exactly did this benchmark measure?"
+
+That is the question worth carrying into 2026.
+
+## The repo grew up
+
+The original comparison was narrow by design: Quarkus Native, Go, and a traditional Spring baseline in a Kafka-backed receiver scenario.
+
+The current benchmark foundation is broader and more honest about tradeoffs. The harness now covers:
+
+- Quarkus JVM
+- Quarkus Native
+- Go
+- Rust
+- Python with FastAPI
+- Spring Boot 4
+- Node.js with Fastify
+
+Just as importantly, it no longer presents one path as if it explains everything. The benchmark separates multiple delivery modes so we can ask different questions on purpose.
+
+## Three modes, three different questions
+
+### 1. `http-only`
+
+This isolates HTTP handling, JSON parsing, validation, and in-process filtering.
+
+If you want to understand framework and runtime overhead, this is the mode that matters most.
+
+### 2. `enqueue`
+
+This measures the path where the service accepts the request and hands work off quickly, without waiting for delivery confirmation.
+
+If you care about an ingress layer designed around buffering and decoupling, this mode is useful.
+
+### 3. `confirm`
+
+This keeps Kafka in the request path and waits for broker confirmation before returning.
+
+If you care about a more conservative, end-to-end ingress path, this is the mode that matters.
+
+Those are not interchangeable benchmarks. They answer different engineering questions.
+
+## Why rankings can move so much
+
+This is the part that surprises people the first time they see it.
+
+A service can look dominant in `http-only` and merely competitive in `confirm`. Another service can look unimpressive in pure HTTP handling but surprisingly strong once Kafka is involved.
+
+That is not a contradiction. It is a change in bottleneck.
+
+In `http-only`, most of the request time is spent inside the process: parsing, validating, filtering, and writing a response.
+
+In `confirm`, the request often spends much more of its lifetime waiting on external I/O:
+
+- serializing for the producer
+- batching and producer queueing
+- network transfer to Kafka
+- broker append and leader ack
+- waking the handler and returning the HTTP response
+
+Once that external wait becomes a large part of the request, the pure framework advantage gets diluted.
+
+The mental model is simple:
+
+- Service A spends `3 ms` inside the process.
+- Service B spends `10 ms` inside the process.
+- Add `10 ms` of Kafka wait to both.
+
+Now Service A is at `13 ms` and Service B is at `20 ms`.
+
+Service A is still better, but the gap is much smaller than it was in `http-only`. That is exactly why benchmark charts can reorder once the slowest part of the path moves outside the web framework.
+
+## What changed in the benchmark discipline
+
+The repo is more credible now because it is less flattering.
+
+The harness now standardizes more of the conditions that can quietly bias a result:
+
+- same workload shape and payload semantics across services
+- explicit CPU and memory budgets
+- explicit worker and concurrency settings instead of framework defaults
+- aligned Kafka producer settings where the client libraries allow it
+- run metadata for hardware, build, and benchmark knobs
+- separate summaries for raw throughput and normalized efficiency
+- matched `http-only` versus Kafka-mode deltas so the added latency is visible instead of guessed
+
+That last point matters a lot. A benchmark is far easier to misread when it only shows a winner table. It becomes more useful when it shows what changed and why.
+
+## The lesson is bigger than Quarkus versus Go
+
+The original article argued that "Java is too heavy" was becoming an outdated simplification. I still think that was directionally right.
+
+But the updated lesson is better:
+
+**language arguments are usually less useful than path arguments.**
+
+Before debating Java versus Go versus Python, ask:
+
+- Is this endpoint mostly CPU-bound or mostly waiting on I/O?
+- Are we measuring framework overhead or end-to-end delivery confirmation?
+- Do we care about startup time, steady-state throughput, memory, or developer leverage?
+- Are we optimizing for the hot path, or for the whole operating model around it?
+
+Those questions produce better decisions than tribal benchmark takes.
+
+## What I would tell an engineering team
+
+If I were advising a team on stack choice from this benchmark, I would keep the guidance simple:
+
+- Use `http-only` results to understand framework and runtime cost.
+- Use `confirm` results to understand realistic ingress behavior when external systems stay in the request path.
+- Use startup and memory data separately instead of pretending they are the same dimension as steady-state req/s.
+- Avoid choosing a stack from a single chart, especially if the chart mixes very different bottlenecks.
+
+That advice is also why the expanded benchmark is more useful than the original article.
+
+It does not just make one framework look good. It makes the tradeoffs harder to misread.
+
+## Conclusion
+
+The 2025 story was "Quarkus Native can compete with Go."
+
+The 2026 story is stronger:
+
+**fair microservice benchmarking needs multiple modes, explicit constraints, and enough breadth to show where conclusions stop generalizing.**
+
+That is a better foundation for architecture decisions, and it is the direction this project is now built to support.
+
+The code and benchmark harness are here:
+
+- [quarkus-adtech-demo](https://github.com/dtkmn/quarkus-adtech-demo)
