@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" role="img" aria-labelledby="title desc">
-  <title id="title">Quarkus AdTech Demo editorial hero</title>
+  <title id="title">RTB Ingress Benchmark editorial hero</title>
   <desc id="desc">A technical illustration of a low-latency bid receiver architecture with traffic entering runtime lanes, Kafka, observability, and performance metrics.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
