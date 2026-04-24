@@ -47,6 +47,56 @@ const projects = defineCollection({
     stack: z.array(z.string()).default([]),
     audience: z.array(z.string()).default([]),
     proofPoints: z.array(z.string()).default([]),
+    evidenceStats: z
+      .array(
+        z.object({
+          label: z.string(),
+          value: z.string(),
+          detail: z.string().optional(),
+          icon: z
+            .enum([
+              "archive",
+              "book-open",
+              "calendar",
+              "check-circle",
+              "cloud",
+              "file-text",
+              "flask",
+              "gauge",
+              "github",
+              "layers",
+              "rocket",
+              "server",
+              "shield",
+              "spark",
+              "terminal",
+            ])
+            .optional(),
+        }),
+      )
+      .default([]),
+    evidenceAssets: z
+      .array(
+        z.object({
+          type: z.enum([
+            "automation",
+            "benchmark",
+            "demo",
+            "deployment",
+            "docs",
+            "governance",
+            "repository",
+            "security",
+            "template",
+          ]),
+          label: z.string(),
+          title: z.string(),
+          detail: z.string(),
+          href: z.string().url().optional(),
+          hrefLabel: z.string().optional(),
+        }),
+      )
+      .default([]),
   }),
 });
 
