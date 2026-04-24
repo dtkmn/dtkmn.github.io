@@ -34,6 +34,46 @@ proofPoints:
   - Documents benchmark modes and fairness controls instead of relying on a single flattering throughput chart.
   - Includes Quarkus JVM/native, Go, Rust, Python, Spring, and Node receiver variants in one harness.
   - Ships observability, deployment assets, and repeatable load-test automation alongside the code.
+evidenceStats:
+  - label: Runtime groups
+    value: "6"
+    detail: Quarkus JVM/native, Go, Rust, Python, Spring, and Node are represented in one harness.
+    icon: layers
+  - label: Benchmark modes
+    value: "2"
+    detail: HTTP-only and Kafka-backed modes keep the bottleneck question honest.
+    icon: gauge
+  - label: Ops surfaces
+    value: "3"
+    detail: Observability, deployment assets, and load-test automation ship alongside the code.
+    icon: server
+  - label: Judgment rule
+    value: Fairness
+    detail: The project documents controls before claiming a winner.
+    icon: check-circle
+evidenceAssets:
+  - type: benchmark
+    label: Benchmark design
+    title: Modes and controls are part of the artifact
+    detail: The benchmark is framed around what is being measured, not just which runtime wins one chart.
+    href: https://github.com/dtkmn/rtb-ingress-benchmark
+    hrefLabel: Inspect harness
+  - type: repository
+    label: Runtime coverage
+    title: One repo, multiple receiver implementations
+    detail: Keeping the implementations together makes comparison less hand-wavy and easier to audit.
+    href: https://github.com/dtkmn/rtb-ingress-benchmark
+    hrefLabel: View variants
+  - type: deployment
+    label: Delivery surface
+    title: Observability and deployment assets are included
+    detail: Prometheus, Grafana, Helm, and Kafka-backed paths move the project closer to operational reality.
+    href: https://github.com/dtkmn/rtb-ingress-benchmark
+    hrefLabel: Review deployment
+  - type: automation
+    label: Repeatability
+    title: Load-test automation is treated as first-class
+    detail: The project is stronger because the test path is part of the system, not a one-off manual claim.
 ---
 
 ## What it is

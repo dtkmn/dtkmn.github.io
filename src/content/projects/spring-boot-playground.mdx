@@ -9,6 +9,7 @@ tier: flagship
 status: maintained
 order: 3
 repoUrl: https://github.com/dtkmn/spring-boot-playground
+heroImage: /images/projects/spring-boot-playground-hero.svg
 tags:
   - Spring Boot
   - Platform engineering
@@ -30,6 +31,46 @@ proofPoints:
   - Defines a starter contract instead of leaving service shape to convention drift.
   - Includes CI workflow, release process, ADRs, and Helm support in the repository itself.
   - Separates default and advanced variants rather than pretending one stack fits every service.
+evidenceStats:
+  - label: Service lanes
+    value: "2"
+    detail: Default MVC/JPA and advanced WebFlux/R2DBC variants are separated on purpose.
+    icon: layers
+  - label: Platform artifacts
+    value: "4"
+    detail: CI workflow, release process, ADRs, and Helm support are part of the repo.
+    icon: check-circle
+  - label: JVM baseline
+    value: Java 21
+    detail: The starter is anchored to a modern long-term JVM baseline.
+    icon: terminal
+  - label: Operating mode
+    value: Maintained
+    detail: The page presents this as a durable platform standard, not a novelty project.
+    icon: archive
+evidenceAssets:
+  - type: template
+    label: Starter contract
+    title: Service shape is made explicit
+    detail: The project turns service creation into a reusable standard rather than a loose pile of examples.
+    href: https://github.com/dtkmn/spring-boot-playground
+    hrefLabel: Inspect starter
+  - type: governance
+    label: Governance surface
+    title: CI, release process, and ADRs are included
+    detail: These are the parts that make a starter useful to a team, not just convenient for one repo.
+    href: https://github.com/dtkmn/spring-boot-playground
+    hrefLabel: Review process
+  - type: deployment
+    label: Deployment path
+    title: Helm support connects code to delivery
+    detail: The repo is positioned around service readiness, so deployment material belongs in the proof.
+    href: https://github.com/dtkmn/spring-boot-playground
+    hrefLabel: View deployment
+  - type: repository
+    label: Variant decision
+    title: Default and advanced paths stay separate
+    detail: Splitting MVC/JPA from WebFlux/R2DBC is a concrete architectural opinion, not vague starter boilerplate.
 ---
 
 ## What it is

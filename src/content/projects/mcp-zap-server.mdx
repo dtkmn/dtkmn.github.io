@@ -35,6 +35,46 @@ proofPoints:
   - 37 GitHub stars and 5 forks as of March 9, 2026.
   - Separate docs site, release notes, and demo flow instead of a README-only repo.
   - Supports API-key and JWT authentication modes plus URL validation and scan limits.
+evidenceStats:
+  - label: Public traction
+    value: 37 stars
+    detail: GitHub stars as recorded on March 9, 2026.
+    icon: github
+  - label: Auth modes
+    value: "2"
+    detail: API-key and JWT paths are called out as operational controls.
+    icon: shield
+  - label: Delivery paths
+    value: "3"
+    detail: Repository, documentation site, and hosted demo are all linked.
+    icon: rocket
+  - label: Guardrails
+    value: URL limits
+    detail: URL validation and scan limits keep the agent boundary visible.
+    icon: check-circle
+evidenceAssets:
+  - type: repository
+    label: Repository signal
+    title: Public code with visible adoption
+    detail: The repo has public traction plus enough structure to inspect beyond a README headline.
+    href: https://github.com/dtkmn/mcp-zap-server
+    hrefLabel: Inspect repository
+  - type: docs
+    label: Docs surface
+    title: Separate documentation and release discipline
+    detail: The project has a docs site, release notes, and setup paths, which makes it easier to judge as software rather than a demo.
+    href: https://dtkmn.github.io/mcp-zap-server/
+    hrefLabel: Read docs
+  - type: demo
+    label: Demo path
+    title: Agent-to-scanner flow is visible
+    detail: The hosted demo gives the project a concrete interaction path instead of asking visitors to imagine the workflow.
+    href: https://dtkmn.github.io/mcp-zap-server/demo.html
+    hrefLabel: Open demo
+  - type: security
+    label: Operational guardrails
+    title: Auth, URL validation, and scan limits
+    detail: This is the proof that the project is thinking about operator risk, not just successful tool calls.
 ---
 
 ## What it is
