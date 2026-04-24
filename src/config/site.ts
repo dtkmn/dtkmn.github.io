@@ -7,9 +7,9 @@ export const siteConfig = {
   siteUrl: "https://danieltse.org",
   siteTitle: "Daniel Tse",
   siteDescription:
-    "Technical essays and project case studies on AI systems, JVM backend engineering, and cloud platform design from a hands-on principal engineer.",
+    "Case studies, benchmarks, and technical essays on AI systems, integration protocols, JVM backend engineering, and cloud delivery from a hands-on principal engineer.",
   tagline:
-    "Principal-engineer writing and shipped systems across AI, backend architecture, and cloud delivery.",
+    "Benchmarks and shipped systems for AI tooling, JVM services, and cloud delivery.",
   author: {
     name: "Daniel Tse",
     role: "Principal Engineer",
@@ -24,14 +24,14 @@ export const siteConfig = {
   socialLinks: [
     { label: "GitHub", href: "https://github.com/dtkmn" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/danieltse/" },
+    { label: "RSS", href: "/feed.xml" },
     { label: "Medium", href: "https://medium.com/@danieltse" },
     { label: "X", href: "https://twitter.com/dtkmn" },
-    { label: "RSS", href: "/feed.xml" },
   ] satisfies SocialLink[],
   topicLanes: [
-    "AI systems and local LLM workflows",
-    "JVM, Kotlin, and backend architecture",
-    "Cloud platforms, Kubernetes, and delivery tooling",
+    "Protocol design, local agents, and AI system boundaries",
+    "JVM, Kotlin, and backend architecture under production load",
+    "Cloud platforms, Kubernetes, and delivery paths after launch day",
   ],
   featuredPostSlugs: [
     "mcp-the-usb-c-of-ai-integrations",
