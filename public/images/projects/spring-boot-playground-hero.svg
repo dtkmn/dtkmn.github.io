@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" role="img" aria-labelledby="title desc">
+  <title id="title">Spring Boot Playground editorial hero</title>
+  <desc id="desc">A technical illustration showing a Spring service starter blueprint with default and advanced service lanes, governance artifacts, database migrations, CI, and deployment material.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d141b"/>
+      <stop offset="56%" stop-color="#111d25"/>
+      <stop offset="100%" stop-color="#081018"/>
+    </linearGradient>
+    <radialGradient id="glowGreen" cx="0" cy="0" r="1" gradientTransform="translate(340 260) rotate(18) scale(520 390)">
+      <stop offset="0%" stop-color="#71d3c6" stop-opacity="0.24"/>
+      <stop offset="100%" stop-color="#71d3c6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowWarm" cx="0" cy="0" r="1" gradientTransform="translate(1180 360) rotate(-14) scale(520 420)">
+      <stop offset="0%" stop-color="#f2d4a4" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#f2d4a4" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#18232c" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0d141c" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#71d3c6"/>
+      <stop offset="100%" stop-color="#d7fff9"/>
+    </linearGradient>
+    <linearGradient id="warm" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f2d4a4"/>
+      <stop offset="100%" stop-color="#fff0c9"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#030507" flood-opacity="0.42"/>
+    </filter>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#d7fff9" stroke-opacity="0.045"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1067" fill="url(#bg)"/>
+  <rect width="1600" height="1067" fill="url(#grid)"/>
+  <rect width="1600" height="1067" fill="url(#glowGreen)"/>
+  <rect width="1600" height="1067" fill="url(#glowWarm)"/>
+
+  <g opacity="0.4">
+    <path d="M96 872C310 780 450 736 614 642C802 534 926 504 1092 408C1232 326 1370 224 1508 158" fill="none" stroke="#71d3c6" stroke-opacity="0.18" stroke-width="3"/>
+    <path d="M150 930C374 830 514 788 690 694C872 596 990 560 1178 454C1324 372 1418 278 1518 226" fill="none" stroke="#f2d4a4" stroke-opacity="0.11" stroke-width="2"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="176" width="430" height="676" rx="34" fill="url(#panel)" stroke="#71d3c6" stroke-opacity="0.18"/>
+    <rect x="590" y="142" width="420" height="748" rx="36" fill="url(#panel)" stroke="#71d3c6" stroke-opacity="0.2"/>
+    <rect x="1060" y="196" width="430" height="288" rx="34" fill="url(#panel)" stroke="#f2d4a4" stroke-opacity="0.16"/>
+    <rect x="1060" y="528" width="430" height="292" rx="34" fill="url(#panel)" stroke="#71d3c6" stroke-opacity="0.16"/>
+  </g>
+
+  <g>
+    <text x="154" y="234" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">SERVICE STANDARD</text>
+    <text x="154" y="300" fill="#f8f6f0" font-family="'Newsreader', serif" font-size="62">Starter as</text>
+    <text x="154" y="356" fill="#f8f6f0" font-family="'Newsreader', serif" font-size="62">contract</text>
+    <text x="154" y="406" fill="#d8ddd5" font-family="'IBM Plex Sans', sans-serif" font-size="24">A reusable service shape with explicit defaults.</text>
+
+    <rect x="154" y="470" width="332" height="72" rx="18" fill="#101822" stroke="#71d3c6" stroke-opacity="0.22"/>
+    <rect x="184" y="496" width="92" height="20" rx="10" fill="url(#accent)"/>
+    <rect x="304" y="496" width="140" height="20" rx="10" fill="#d7fff9" fill-opacity="0.22"/>
+
+    <rect x="154" y="582" width="332" height="214" rx="24" fill="#101822" stroke="#71d3c6" stroke-opacity="0.16"/>
+    <text x="186" y="636" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="30">mvc-jpa</text>
+    <rect x="186" y="670" width="250" height="14" rx="7" fill="url(#accent)"/>
+    <rect x="186" y="706" width="190" height="14" rx="7" fill="#d7fff9" fill-opacity="0.26"/>
+    <rect x="186" y="742" width="222" height="14" rx="7" fill="#d7fff9" fill-opacity="0.18"/>
+  </g>
+
+  <g>
+    <text x="634" y="204" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">BLUEPRINT LANES</text>
+
+    <g transform="translate(640 256)">
+      <rect width="320" height="136" rx="26" fill="#101822" stroke="#71d3c6" stroke-opacity="0.2"/>
+      <text x="34" y="58" fill="#f8f6f0" font-family="'Newsreader', serif" font-size="44">Default</text>
+      <text x="34" y="96" fill="#d8ddd5" font-family="'IBM Plex Mono', monospace" font-size="24">Spring MVC / JPA</text>
+      <rect x="214" y="52" width="70" height="22" rx="11" fill="url(#accent)"/>
+    </g>
+
+    <g transform="translate(640 438)">
+      <rect width="320" height="136" rx="26" fill="#101822" stroke="#f2d4a4" stroke-opacity="0.2"/>
+      <text x="34" y="58" fill="#f8f6f0" font-family="'Newsreader', serif" font-size="44">Advanced</text>
+      <text x="34" y="96" fill="#d8ddd5" font-family="'IBM Plex Mono', monospace" font-size="24">WebFlux / R2DBC</text>
+      <rect x="214" y="52" width="70" height="22" rx="11" fill="url(#warm)"/>
+    </g>
+
+    <g transform="translate(640 622)">
+      <rect width="320" height="196" rx="26" fill="#101822" stroke="#71d3c6" stroke-opacity="0.16"/>
+      <text x="34" y="58" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">SHARED FLOOR</text>
+      <rect x="34" y="92" width="112" height="18" rx="9" fill="#d7fff9" fill-opacity="0.82"/>
+      <rect x="34" y="128" width="180" height="18" rx="9" fill="#d7fff9" fill-opacity="0.28"/>
+      <rect x="34" y="164" width="238" height="18" rx="9" fill="#d7fff9" fill-opacity="0.18"/>
+    </g>
+  </g>
+
+  <g>
+    <text x="1104" y="252" fill="#f2d4a4" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">GOVERNANCE</text>
+    <rect x="1104" y="292" width="338" height="54" rx="17" fill="#101822" stroke="#f2d4a4" stroke-opacity="0.15"/>
+    <rect x="1132" y="312" width="108" height="14" rx="7" fill="url(#warm)"/>
+    <text x="1260" y="328" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="22">CI</text>
+
+    <rect x="1104" y="368" width="338" height="54" rx="17" fill="#101822" stroke="#f2d4a4" stroke-opacity="0.15"/>
+    <rect x="1132" y="388" width="164" height="14" rx="7" fill="#fff0c9" fill-opacity="0.68"/>
+    <text x="1314" y="404" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="22">ADR</text>
+  </g>
+
+  <g>
+    <text x="1104" y="584" fill="#71d3c6" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">DELIVERY PATH</text>
+    <rect x="1104" y="626" width="156" height="118" rx="24" fill="#101822" stroke="#71d3c6" stroke-opacity="0.16"/>
+    <text x="1132" y="688" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="24">Flyway</text>
+    <rect x="1104" y="770" width="156" height="118" rx="24" fill="#101822" stroke="#71d3c6" stroke-opacity="0.16"/>
+    <text x="1132" y="832" fill="#f8f6f0" font-family="'IBM Plex Mono', monospace" font-size="24">Helm</text>
+
+    <rect x="1290" y="626" width="152" height="262" rx="24" fill="#101822" stroke="#71d3c6" stroke-opacity="0.16"/>
+    <rect x="1322" y="668" width="88" height="18" rx="9" fill="url(#accent)"/>
+    <rect x="1322" y="718" width="72" height="18" rx="9" fill="#d7fff9" fill-opacity="0.38"/>
+    <rect x="1322" y="768" width="96" height="18" rx="9" fill="#d7fff9" fill-opacity="0.24"/>
+    <rect x="1322" y="818" width="58" height="18" rx="9" fill="#d7fff9" fill-opacity="0.2"/>
+  </g>
+
+  <g opacity="0.95">
+    <path d="M540 646C586 646 598 534 640 324" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M960 324C1012 324 1038 324 1104 320" fill="none" stroke="url(#warm)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M960 506C1014 506 1038 624 1104 686" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="540" cy="646" r="9" fill="#71d3c6"/>
+    <circle cx="960" cy="324" r="9" fill="#f2d4a4"/>
+    <circle cx="960" cy="506" r="9" fill="#71d3c6"/>
+    <circle cx="1104" cy="320" r="9" fill="#fff0c9"/>
+    <circle cx="1104" cy="686" r="9" fill="#d7fff9"/>
+  </g>
+</svg>
