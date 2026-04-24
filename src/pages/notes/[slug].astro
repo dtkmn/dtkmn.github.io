@@ -11,7 +11,8 @@ export async function getStaticPaths() {
 }
 
 const { note } = Astro.props;
-const { Content } = await render(note);
+const { Content, headings } = await render(note);
+const readingTime = Math.max(1, Math.round(note.body.split(/\s+/u).filter(Boolean).length / 220));
 ---
 
 <PostLayout
@@ -19,8 +20,9 @@ const { Content } = await render(note);
   summary={note.data.summary ?? "Technical note"}
   date={note.data.date}
   tags={note.data.tags}
+  headings={headings}
+  readingTime={readingTime}
   kind="note"
 >
   <Content />
 </PostLayout>
-

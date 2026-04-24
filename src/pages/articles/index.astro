@@ -9,10 +9,10 @@ const articles = await getPublishedArticles();
 <BaseLayout title="Articles" description="Essays and archived technical writing by Daniel Tse.">
   <section class="page-lead">
     <p class="eyebrow">Articles</p>
-    <h1>Essays, walkthroughs, and archived platform writeups.</h1>
+    <h1>Arguments, benchmarks, and older writeups with context.</h1>
     <p class="page-lead-summary">
-      Long-form writing across AI systems, backend engineering, platform operations, and the older
-      archive that shaped the current point of view.
+      Long-form writing across AI systems, backend engineering, platform operations, and the archive
+      that shaped the current point of view.
     </p>
   </section>
 
@@ -20,4 +20,3 @@ const articles = await getPublishedArticles();
     {articles.map((entry) => <ArticleCard entry={entry} />)}
   </div>
 </BaseLayout>
-

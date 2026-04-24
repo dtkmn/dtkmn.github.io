@@ -1,52 +1,210 @@
 ---
+import HomeSignalGraphic from "@/components/HomeSignalGraphic.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import ArticleCard from "@/components/ArticleCard.astro";
-import { siteConfig } from "@/config/site";
+import UiIcon from "@/components/UiIcon.astro";
+import { formatDate } from "@/lib/format";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import {
   getFeaturedArticles,
   getFeaturedProjects,
+  getPublishedArticles,
+  getPublishedNotes,
   getRecentArticles,
   getRecentNotes,
 } from "@/lib/content";
 
-const [featuredArticles, featuredProjects, recentArticles, recentNotes] = await Promise.all([
+const [
+  publishedArticles,
+  publishedNotes,
+  featuredArticles,
+  featuredProjects,
+  recentArticles,
+  recentNotes,
+] = await Promise.all([
+  getPublishedArticles(),
+  getPublishedNotes(),
   getFeaturedArticles(),
   getFeaturedProjects(3),
-  getRecentArticles(6),
+  getRecentArticles(4),
   getRecentNotes(4),
 ]);
 
 const showNotes = recentNotes.length >= 2;
 const showProjects = featuredProjects.length >= 1;
+const archiveStartYear = publishedArticles.at(-1)?.data.date.getFullYear();
+const latestDate = [publishedArticles[0]?.data.date, publishedNotes[0]?.data.date]
+  .filter((date): date is Date => Boolean(date))
+  .sort((a, b) => b.getTime() - a.getTime())[0];
+const proofStats = [
+  { label: "Flagship systems", value: String(featuredProjects.length), icon: "rocket" },
+  { label: "Technical essays", value: String(publishedArticles.length), icon: "book-open" },
+  {
+    label: publishedNotes.length > 0 ? "Working notes" : "Archive from",
+    value: publishedNotes.length > 0
+      ? String(publishedNotes.length)
+      : String(archiveStartYear ?? new Date().getFullYear()),
+    icon: publishedNotes.length > 0 ? "notes" : "archive",
+  },
+  { label: "Last update", value: latestDate ? formatDate(latestDate) : "In flight", icon: "calendar" },
+] as const;
+const proofIconBySlug = {
+  "mcp-zap-server": "shield",
+  "rtb-ingress-benchmark": "gauge",
+  "spring-boot-playground": "layers",
+} as const;
+const proofLedger = featuredProjects.map((project) => ({
+  title: project.data.title,
+  href: `/projects/${project.slug}/`,
+  proof: project.data.proofPoints[0] ?? "Curated because the project has enough surface area to prove the point.",
+  stack: project.data.stack.slice(0, 3).join(" / "),
+  icon: proofIconBySlug[project.slug as keyof typeof proofIconBySlug] ?? "terminal",
+}));
+const operatingPrinciples = [
+  {
+    kicker: "Benchmarking",
+    title: "Fairness controls before winner tables.",
+    body: "The useful result is not the runtime that wins one graph. It is knowing what the test actually measured.",
+    icon: "gauge",
+  },
+  {
+    kicker: "Agent systems",
+    title: "Tool boundaries before agent theater.",
+    body: "If an AI integration cannot survive auth, limits, packaging, and operator review, it is still a demo.",
+    icon: "shield",
+  },
+  {
+    kicker: "Platform work",
+    title: "Standards that teams can actually reuse.",
+    body: "Good engineering leadership shows up in defaults, release paths, and decisions that stop drifting.",
+    icon: "layers",
+  },
+] as const;
+const signalAreas = [
+  {
+    label: "MCP security",
+    detail: "Agent tools with operational guardrails",
+    icon: "shield",
+  },
+  {
+    label: "Runtime evidence",
+    detail: "JVM, Go, Rust, Python, Node under load",
+    icon: "gauge",
+  },
+  {
+    label: "Platform defaults",
+    detail: "Service templates and deployment paths",
+    icon: "cloud",
+  },
+] as const;
+const currentWriting = recentArticles.filter((entry) => entry.data.date.getFullYear() >= 2025);
+const archiveWriting = recentArticles
+  .filter((entry) => entry.data.date.getFullYear() < 2025)
+  .slice(0, 3);
 ---
 
 <BaseLayout>
-  <section class="hero">
+  <section class="hero hero--home">
     <div class="hero-copy">
-      <p class="eyebrow">Writing and shipped systems</p>
-      <h1>Systems thinking for AI, backend engineering, and cloud delivery.</h1>
+      <p class="eyebrow">Principal-engineer evidence lab</p>
+      <h1>I test architecture claims with real systems.</h1>
       <p class="hero-summary">
-        Essays, project pages, and implementation notes from the principal-engineer seat:
-        architecture tradeoffs, platform edges, and the operational reality behind the diagrams.
+        Case studies, benchmark harnesses, and AI-tooling projects from the layer where diagrams
+        become code, deployment paths, limits, and tradeoffs.
       </p>
       <div class="hero-actions">
-        <a class="button button--primary" href="/articles/">Browse articles</a>
-        <a class="button button--ghost" href="/projects/">View projects</a>
+        <a class="button button--primary" href="/projects/">
+          <UiIcon name="rocket" class="button-icon" />
+          <span>Inspect the proof</span>
+        </a>
+        <a class="button button--ghost" href="/articles/">
+          <UiIcon name="book-open" class="button-icon" />
+          <span>Read the arguments</span>
+        </a>
       </div>
+      <dl class="hero-proof-grid">
+        {proofStats.map((stat) => (
+          <div>
+            <dt>
+              <UiIcon name={stat.icon} class="stat-icon" />
+              <span>{stat.label}</span>
+            </dt>
+            <dd>{stat.value}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
     <div class="hero-side">
-      <p class="eyebrow">Focus lanes</p>
-      <ul class="topic-lanes">
-        {siteConfig.topicLanes.map((lane) => <li>{lane}</li>)}
-      </ul>
+      <HomeSignalGraphic />
+      <div class="signal-legend">
+        {signalAreas.map((area) => (
+          <article class="signal-pill">
+            <UiIcon name={area.icon} class="signal-pill-icon" />
+            <p>{area.label}</p>
+            <strong>{area.detail}</strong>
+          </article>
+        ))}
+      </div>
+      <div class="signal-note">
+        <p class="eyebrow">Positioning rule</p>
+        <p>
+          If it cannot point to code, a benchmark, a deployment path, or a hard tradeoff, it stays
+          off the homepage.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block section-block--accent">
+    <div class="section-heading">
+      <p class="eyebrow">Proof ledger</p>
+      <h2>The work has to carry the claim.</h2>
+      <p class="section-summary">
+        This is the part most personal technical sites avoid. Assertions are cheap. These projects
+        are here because they have enough implementation surface to be judged.
+      </p>
+    </div>
+    <div class="proof-ledger">
+      {proofLedger.map((item) => (
+        <a class="proof-card" href={item.href}>
+          <span class="proof-card-icon">
+            <UiIcon name={item.icon} />
+          </span>
+          <span class="proof-card-stack">{item.stack}</span>
+          <h3>{item.title}</h3>
+          <p>{item.proof}</p>
+          <span class="proof-card-link">
+            <span>Inspect case</span>
+            <UiIcon name="arrow-right" />
+          </span>
+        </a>
+      ))}
     </div>
   </section>
 
   <section class="section-block">
     <div class="section-heading">
-      <p class="eyebrow">Featured essays</p>
-      <h2>Anchor pieces worth starting with.</h2>
+      <p class="eyebrow">Operating thesis</p>
+      <h2>Less commentary. More receipts.</h2>
+    </div>
+    <div class="principles-grid">
+      {operatingPrinciples.map((principle) => (
+        <article class="principle-card">
+          <div class="principle-card-head">
+            <UiIcon name={principle.icon} class="principle-icon" />
+            <p class="eyebrow">{principle.kicker}</p>
+          </div>
+          <h3>{principle.title}</h3>
+          <p>{principle.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <p class="eyebrow">Start here</p>
+      <h2>The essays that explain the judgment behind the work.</h2>
     </div>
     <div class="feature-grid">
       {featuredArticles.map((entry) => <ArticleCard entry={entry} variant="feature" />)}
@@ -58,9 +216,12 @@ const showProjects = featuredProjects.length >= 1;
       <div class="section-heading section-heading--inline">
         <div>
           <p class="eyebrow">Flagship projects</p>
-          <h2>Open-source work with enough substance to earn a page.</h2>
+          <h2>Projects with enough surface area to inspect.</h2>
         </div>
-        <a class="section-link" href="/projects/">View all projects</a>
+        <a class="section-link" href="/projects/">
+          <span>View all projects</span>
+          <UiIcon name="arrow-right" class="section-link-icon" />
+        </a>
       </div>
       <div class="feature-grid">
         {featuredProjects.map((project) => <ProjectCard project={project} variant="feature" />)}
@@ -71,24 +232,50 @@ const showProjects = featuredProjects.length >= 1;
   <section class="section-block">
     <div class="section-heading section-heading--inline">
       <div>
-        <p class="eyebrow">Recent writing</p>
-        <h2>Fresh essays and imported archive pieces.</h2>
+        <p class="eyebrow">Current writing</p>
+        <h2>Recent pieces that still match the positioning.</h2>
       </div>
-      <a class="section-link" href="/articles/">View all articles</a>
+      <a class="section-link" href="/articles/">
+        <span>View all articles</span>
+        <UiIcon name="arrow-right" class="section-link-icon" />
+      </a>
     </div>
     <div class="stack-grid">
-      {recentArticles.map((entry) => <ArticleCard entry={entry} />)}
+      {(currentWriting.length > 0 ? currentWriting : recentArticles.slice(0, 2)).map((entry) => (
+        <ArticleCard entry={entry} />
+      ))}
     </div>
   </section>
+
+  {archiveWriting.length > 0 && (
+    <section class="section-block section-block--quiet">
+      <div class="section-heading section-heading--inline">
+        <div>
+          <p class="eyebrow">Archive</p>
+          <h2>Older writeups kept for continuity, not pretending to be current.</h2>
+        </div>
+        <a class="section-link" href="/articles/">
+          <span>Browse archive</span>
+          <UiIcon name="arrow-right" class="section-link-icon" />
+        </a>
+      </div>
+      <div class="stack-grid">
+        {archiveWriting.map((entry) => <ArticleCard entry={entry} />)}
+      </div>
+    </section>
+  )}
 
   {showNotes && (
     <section class="section-block">
       <div class="section-heading section-heading--inline">
         <div>
           <p class="eyebrow">Recent notes</p>
-          <h2>Shorter writeups, experiments, and implementation fragments.</h2>
+          <h2>Shorter experiments, fragments, and tactical observations.</h2>
         </div>
-        <a class="section-link" href="/notes/">View notes</a>
+        <a class="section-link" href="/notes/">
+          <span>View notes</span>
+          <UiIcon name="arrow-right" class="section-link-icon" />
+        </a>
       </div>
       <div class="stack-grid">
         {recentNotes.map((entry) => <ArticleCard entry={entry} />)}

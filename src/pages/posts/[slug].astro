@@ -11,7 +11,8 @@ export async function getStaticPaths() {
 }
 
 const { article } = Astro.props;
-const { Content } = await render(article);
+const { Content, headings } = await render(article);
+const readingTime = Math.max(1, Math.round(article.body.split(/\s+/u).filter(Boolean).length / 220));
 ---
 
 <PostLayout
@@ -22,8 +23,9 @@ const { Content } = await render(article);
   canonicalUrl={article.data.canonicalUrl}
   mediumUrl={article.data.mediumUrl}
   heroImage={article.data.heroImage}
+  headings={headings}
+  readingTime={readingTime}
   kind="article"
 >
   <Content />
 </PostLayout>
-

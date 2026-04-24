@@ -15,7 +15,7 @@ const [flagshipProjects, supportingProjects] = await Promise.all([
 >
   <section class="page-lead">
     <p class="eyebrow">Projects</p>
-    <h1>Curated OSS work, not a mirror of GitHub.</h1>
+    <h1>Curated OSS work with enough substance to inspect.</h1>
     <p class="page-lead-summary">
       Full pages exist only for projects with a clear problem, enough implementation detail to say
       something original, and evidence that the work matters. Everything else stays as a supporting
@@ -26,7 +26,7 @@ const [flagshipProjects, supportingProjects] = await Promise.all([
   <section class="section-block">
     <div class="section-heading">
       <p class="eyebrow">Flagship work</p>
-      <h2>Projects that strengthen the core positioning.</h2>
+      <h2>The systems that carry the public claims.</h2>
     </div>
     <div class="feature-grid">
       {flagshipProjects.map((project) => <ProjectCard project={project} variant="feature" />)}
