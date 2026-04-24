@@ -89,11 +89,12 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
     )}
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="page-shell">
       <div class="page-noise" aria-hidden="true"></div>
       <div class="page-grid">
         <SiteHeader />
-        <main class="page-main">
+        <main id="main-content" class="page-main">
           <slot />
         </main>
         <SiteFooter />

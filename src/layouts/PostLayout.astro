@@ -13,6 +13,8 @@ interface Props {
   canonicalUrl?: string;
   mediumUrl?: string;
   heroImage?: string;
+  headings?: { depth: number; slug: string; text: string }[];
+  readingTime?: number;
   kind: "article" | "note";
 }
 
@@ -24,6 +26,8 @@ const {
   canonicalUrl,
   mediumUrl,
   heroImage,
+  headings = [],
+  readingTime = 1,
   kind,
 } = Astro.props;
 
@@ -31,6 +35,9 @@ const localCanonical = Astro.url.toString();
 const pageCanonical = canonicalUrl ?? localCanonical;
 const socialImage = heroImage ? (heroImage.startsWith("http") ? heroImage : absoluteUrl(heroImage)) : undefined;
 const authorId = absoluteUrl("/about/#author");
+const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const sectionCount = headings.filter((heading) => heading.depth === 2).length;
+const readingMode = kind === "article" ? "Deep dive" : "Tactical note";
 
 const jsonLd =
   kind === "article"
@@ -96,8 +103,52 @@ const jsonLd =
       )}
       {tags.length > 0 && <TagList tags={tags} />}
     </div>
-    <div class="prose">
-      <slot />
+    <div class="post-body">
+      <aside class="post-sidebar">
+        <div class="reading-panel">
+          <p class="eyebrow">Reading guide</p>
+          <ul class="reading-panel-list">
+            <li>
+              <span>Estimated read</span>
+              <strong>{readingTime} min</strong>
+            </li>
+            <li>
+              <span>Structure</span>
+              <strong>{sectionCount > 0 ? `${sectionCount} sections` : "Short brief"}</strong>
+            </li>
+            <li>
+              <span>Mode</span>
+              <strong>{readingMode}</strong>
+            </li>
+            {tags.length > 0 && (
+              <li>
+                <span>Topics</span>
+                <strong>{tags.slice(0, 3).join(" / ")}</strong>
+              </li>
+            )}
+          </ul>
+        </div>
+
+        {tocItems.length > 0 && (
+          <nav class="reading-panel" aria-label="Table of contents">
+            <p class="eyebrow">On this page</p>
+            <div class="post-toc">
+              {tocItems.map((heading) => (
+                <a
+                  class:list={["post-toc-link", heading.depth === 3 && "post-toc-link--nested"]}
+                  href={`#${heading.slug}`}
+                >
+                  {heading.text}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
+      </aside>
+
+      <div class="prose">
+        <slot />
+      </div>
     </div>
   </article>
 </BaseLayout>

@@ -2,10 +2,59 @@
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ArticleCard from "@/components/ArticleCard.astro";
+import ProjectProofVisual from "@/components/ProjectProofVisual.astro";
+import UiIcon from "@/components/UiIcon.astro";
 import { siteConfig } from "@/config/site";
-import { absoluteUrl } from "@/lib/format";
+import { absoluteUrl, formatDate } from "@/lib/format";
+
+type IconName =
+  | "archive"
+  | "arrow-right"
+  | "book-open"
+  | "calendar"
+  | "check-circle"
+  | "cloud"
+  | "external"
+  | "file-text"
+  | "flask"
+  | "gauge"
+  | "github"
+  | "layers"
+  | "rocket"
+  | "server"
+  | "shield"
+  | "spark"
+  | "terminal";
+
+type EvidenceType =
+  | "automation"
+  | "benchmark"
+  | "demo"
+  | "deployment"
+  | "docs"
+  | "governance"
+  | "repository"
+  | "security"
+  | "template";
+
+interface EvidenceStat {
+  label: string;
+  value: string;
+  detail?: string;
+  icon?: IconName;
+}
+
+interface EvidenceAsset {
+  type: EvidenceType;
+  label: string;
+  title: string;
+  detail: string;
+  href?: string;
+  hrefLabel?: string;
+}
 
 interface Props {
+  slug: string;
   title: string;
   summary: string;
   date: Date;
@@ -18,10 +67,15 @@ interface Props {
   stack: string[];
   audience: string[];
   proofPoints: string[];
+  evidenceStats: EvidenceStat[];
+  evidenceAssets: EvidenceAsset[];
   relatedArticles: CollectionEntry<"articles">[];
+  headings?: { depth: number; slug: string; text: string }[];
+  readingTime?: number;
 }
 
 const {
+  slug,
   title,
   summary,
   date,
@@ -34,11 +88,40 @@ const {
   stack,
   audience,
   proofPoints,
+  evidenceStats,
+  evidenceAssets,
   relatedArticles,
+  headings = [],
+  readingTime = 1,
 } = Astro.props;
 
 const pageCanonical = Astro.url.toString();
 const authorId = absoluteUrl("/about/#author");
+const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const sectionCount = headings.filter((heading) => heading.depth === 2).length;
+const projectResources = [
+  { label: "Repository", href: repoUrl, icon: "github" as IconName },
+  docsUrl ? { label: "Documentation", href: docsUrl, icon: "book-open" as IconName } : undefined,
+  demoUrl ? { label: "Demo", href: demoUrl, icon: "rocket" as IconName } : undefined,
+].filter((resource): resource is { label: string; href: string; icon: IconName } => Boolean(resource));
+const projectSignals = [
+  { label: "Estimated read", value: `${readingTime} min`, icon: "book-open" as IconName },
+  { label: "Sections", value: sectionCount > 0 ? `${sectionCount}` : "Brief", icon: "layers" as IconName },
+  { label: "Proof points", value: String(proofPoints.length), icon: "check-circle" as IconName },
+  { label: "Evidence assets", value: String(evidenceAssets.length), icon: "spark" as IconName },
+];
+
+const evidenceIconByType: Record<EvidenceType, IconName> = {
+  automation: "terminal",
+  benchmark: "gauge",
+  demo: "rocket",
+  deployment: "cloud",
+  docs: "book-open",
+  governance: "check-circle",
+  repository: "github",
+  security: "shield",
+  template: "layers",
+};
 
 const statusLabel = {
   active: "Active",
@@ -77,6 +160,10 @@ const jsonLd = {
 
   <article class="project-shell">
     <div class="project-intro">
+      <a class="project-back-link" href="/projects/">
+        <UiIcon name="arrow-right" class="project-back-link-icon" />
+        <span>Back to all projects</span>
+      </a>
       <p class="post-kicker">Project</p>
       <h1>{title}</h1>
       <p class="post-summary">{summary}</p>
@@ -88,20 +175,35 @@ const jsonLd = {
 
       <div class="project-actions">
         <a class="button button--primary" href={repoUrl} rel="noreferrer noopener" target="_blank">
-          Repository
+          <UiIcon name="github" class="button-icon" />
+          <span>Repository</span>
         </a>
         {docsUrl && (
           <a class="button button--ghost" href={docsUrl} rel="noreferrer noopener" target="_blank">
-            Documentation
+            <UiIcon name="book-open" class="button-icon" />
+            <span>Documentation</span>
           </a>
         )}
         {demoUrl && (
           <a class="button button--ghost" href={demoUrl} rel="noreferrer noopener" target="_blank">
-            Demo
+            <UiIcon name="rocket" class="button-icon" />
+            <span>Demo</span>
           </a>
         )}
       </div>
     </div>
+
+    <dl class="project-signal-grid">
+      {projectSignals.map((signal) => (
+        <div>
+          <dt>
+            <UiIcon name={signal.icon} class="project-signal-icon" />
+            <span>{signal.label}</span>
+          </dt>
+          <dd>{signal.value}</dd>
+        </div>
+      ))}
+    </dl>
 
     {heroImage && (
       <figure class="project-hero-media">
@@ -109,37 +211,161 @@ const jsonLd = {
       </figure>
     )}
 
-    <div class="project-facts">
-      {proofPoints.length > 0 && (
-        <section class="project-fact">
-          <h2>Proof</h2>
-          <ul>
-            {proofPoints.map((item) => <li>{item}</li>)}
-          </ul>
-        </section>
-      )}
+    {(evidenceStats.length > 0 || evidenceAssets.length > 0) && (
+      <section class="project-evidence-lab" aria-labelledby="project-evidence-heading">
+        <div class="section-heading section-heading--inline">
+          <div>
+            <p class="eyebrow">Evidence lab</p>
+            <h2 id="project-evidence-heading">Proof assets, not portfolio filler.</h2>
+          </div>
+          <p>
+            The page should make the project easier to judge: what exists, what can be inspected,
+            and which claims have actual artifacts behind them.
+          </p>
+        </div>
 
-      {audience.length > 0 && (
-        <section class="project-fact">
-          <h2>For</h2>
-          <ul>
-            {audience.map((item) => <li>{item}</li>)}
-          </ul>
-        </section>
-      )}
+        <div class="project-evidence-layout">
+          <ProjectProofVisual variant={slug} title={title} stack={stack} />
 
-      {stack.length > 0 && (
-        <section class="project-fact">
-          <h2>Stack</h2>
-          <ul>
-            {stack.map((item) => <li>{item}</li>)}
-          </ul>
-        </section>
-      )}
-    </div>
+          <div class="project-evidence-side">
+            {evidenceStats.length > 0 && (
+              <dl class="project-proof-stats">
+                {evidenceStats.map((stat) => (
+                  <div>
+                    <dt>
+                      <UiIcon name={stat.icon ?? "spark"} class="project-proof-stat-icon" />
+                      <span>{stat.label}</span>
+                    </dt>
+                    <dd>{stat.value}</dd>
+                    {stat.detail && <p>{stat.detail}</p>}
+                  </div>
+                ))}
+              </dl>
+            )}
 
-    <div class="prose">
-      <slot />
+            {evidenceAssets.length > 0 && (
+              <div class="project-evidence-cards" aria-label="Inspectable project evidence">
+                {evidenceAssets.map((asset) => (
+                  <article class="project-evidence-card">
+                    <div class="project-evidence-card-head">
+                      <span class="project-evidence-card-icon">
+                        <UiIcon name={evidenceIconByType[asset.type]} />
+                      </span>
+                      <span>{asset.label}</span>
+                    </div>
+                    <h3>{asset.title}</h3>
+                    <p>{asset.detail}</p>
+                    {asset.href && (
+                      <a
+                        class="project-evidence-card-link"
+                        href={asset.href}
+                        rel="noreferrer noopener"
+                        target="_blank"
+                      >
+                        <span>{asset.hrefLabel ?? "Inspect artifact"}</span>
+                        <UiIcon name="arrow-right" />
+                      </a>
+                    )}
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <div class="project-body">
+      <aside class="project-sidebar">
+        <div class="reading-panel">
+          <p class="eyebrow">Project snapshot</p>
+          <ul class="reading-panel-list">
+            <li>
+              <span>Status</span>
+              <strong>{statusLabel}</strong>
+            </li>
+            <li>
+              <span>Published</span>
+              <strong>{formatDate(date)}</strong>
+            </li>
+            {tags.length > 0 && (
+              <li>
+                <span>Topics</span>
+                <strong>{tags.slice(0, 3).join(" / ")}</strong>
+              </li>
+            )}
+            <li>
+              <span>Materials</span>
+              <strong>{projectResources.map((resource) => resource.label).join(" / ")}</strong>
+            </li>
+          </ul>
+        </div>
+
+        {projectResources.length > 0 && (
+          <div class="reading-panel">
+            <p class="eyebrow">Project links</p>
+            <div class="project-rail-links">
+              {projectResources.map((resource) => (
+                <a class="project-rail-link" href={resource.href} rel="noreferrer noopener" target="_blank">
+                  <UiIcon name={resource.icon} class="project-rail-link-icon" />
+                  <span>{resource.label}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {tocItems.length > 0 && (
+          <nav class="reading-panel" aria-label="Project sections">
+            <p class="eyebrow">On this page</p>
+            <div class="post-toc">
+              {tocItems.map((heading) => (
+                <a
+                  class:list={["post-toc-link", heading.depth === 3 && "post-toc-link--nested"]}
+                  href={`#${heading.slug}`}
+                >
+                  {heading.text}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
+      </aside>
+
+      <div class="project-main">
+        <div class="project-facts">
+          {proofPoints.length > 0 && (
+            <section class:list={["project-fact", "project-fact--proof"]}>
+              <h2>Proof</h2>
+              <ul>
+                {proofPoints.map((item) => <li>{item}</li>)}
+              </ul>
+            </section>
+          )}
+
+          {audience.length > 0 && (
+            <section class="project-fact">
+              <h2>For</h2>
+              <ul>
+                {audience.map((item) => <li>{item}</li>)}
+              </ul>
+            </section>
+          )}
+
+          {stack.length > 0 && (
+            <section class="project-fact">
+              <h2>Stack</h2>
+              <ul>
+                {stack.map((item) => <li>{item}</li>)}
+              </ul>
+            </section>
+          )}
+        </div>
+
+        <div class="prose">
+          <slot />
+        </div>
+      </div>
     </div>
   </article>
 
