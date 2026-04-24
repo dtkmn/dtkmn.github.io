@@ -1,15 +1,24 @@
 ---
+import { siteConfig } from "@/config/site";
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div>
-    <p class="site-footer-title">Built for durable writing, not a starter theme.</p>
+  <div class="site-footer-copy">
+    <p class="site-footer-title">Benchmarks, systems, and technical writing with proof attached.</p>
     <p>
-      Site-first publishing. Medium for syndication. Hand-authored essays, notes,
-      and archived platform writeups.
+      Site-first publishing. Repositories, docs, demos, and syndication branch out from here.
     </p>
   </div>
-  <p class="site-footer-meta">© {year} Daniel Tse</p>
+  <div class="site-footer-links">
+    {siteConfig.socialLinks
+      .filter((link) => ["GitHub", "LinkedIn", "Medium", "RSS"].includes(link.label))
+      .map((link) => (
+        <a href={link.href} rel="noreferrer noopener" target={link.href.startsWith("http") ? "_blank" : undefined}>
+          {link.label}
+        </a>
+      ))}
+  </div>
+  <p class="site-footer-meta">© {year} {siteConfig.siteTitle}</p>
 </footer>
-

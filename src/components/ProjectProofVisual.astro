@@ -1,0 +1,186 @@
+---
+import UiIcon from "@/components/UiIcon.astro";
+
+type IconName =
+  | "archive"
+  | "book-open"
+  | "check-circle"
+  | "cloud"
+  | "flask"
+  | "gauge"
+  | "github"
+  | "layers"
+  | "rocket"
+  | "server"
+  | "shield"
+  | "spark"
+  | "terminal";
+
+type ProjectKey = "mcp-zap-server" | "rtb-ingress-benchmark" | "spring-boot-playground" | "default";
+
+interface Props {
+  variant: string;
+  title: string;
+  stack: string[];
+}
+
+const { variant, title, stack } = Astro.props;
+const projectKey: ProjectKey =
+  variant === "mcp-zap-server" ||
+  variant === "rtb-ingress-benchmark" ||
+  variant === "spring-boot-playground"
+    ? variant
+    : "default";
+
+const visualMeta: Record<
+  ProjectKey,
+  {
+    icon: IconName;
+    kicker: string;
+    title: string;
+    summary: string;
+    badge: string;
+  }
+> = {
+  "mcp-zap-server": {
+    icon: "shield",
+    kicker: "Security flow",
+    title: "Agent scanning with hard boundaries.",
+    summary:
+      "The useful proof is not that an agent can call a scanner. It is that auth, URL validation, limits, docs, and a demo path exist around the call.",
+    badge: "Auth + limits",
+  },
+  "rtb-ingress-benchmark": {
+    icon: "gauge",
+    kicker: "Benchmark surface",
+    title: "The comparison is only useful when the controls are visible.",
+    summary:
+      "The harness frames runtime comparison around mode, workload, observability, and bottleneck separation instead of one flattering chart.",
+    badge: "Modes + controls",
+  },
+  "spring-boot-playground": {
+    icon: "layers",
+    kicker: "Platform contract",
+    title: "A starter is valuable only when it encodes decisions.",
+    summary:
+      "The proof is the explicit service shape: default and advanced lanes, CI, ADRs, release process, Flyway, and deployment material.",
+    badge: "Defaults + governance",
+  },
+  default: {
+    icon: "terminal",
+    kicker: "Proof map",
+    title: `${title} has inspection surface.`,
+    summary: "The project is framed around code, delivery material, and technical decisions that can be inspected.",
+    badge: "Inspectable",
+  },
+};
+
+const meta = visualMeta[projectKey];
+
+const mcpNodes = [
+  { icon: "spark" as IconName, label: "AI agent", detail: "Requests a scan through structured tools." },
+  { icon: "server" as IconName, label: "MCP server", detail: "Mediates tool calls and scanner actions." },
+  { icon: "shield" as IconName, label: "ZAP engine", detail: "Runs the security workflow behind controls." },
+  { icon: "check-circle" as IconName, label: "Findings", detail: "Returns structured output for review." },
+];
+
+const mcpGuardrails = ["API key / JWT", "URL validation", "Scan limits", "Docs + demo"];
+
+const runtimeLanes = [
+  { label: "Quarkus JVM", modes: "HTTP / Kafka" },
+  { label: "Quarkus native", modes: "HTTP / Kafka" },
+  { label: "Go", modes: "HTTP / Kafka" },
+  { label: "Rust", modes: "HTTP / Kafka" },
+  { label: "Python / Node", modes: "Receiver variants" },
+];
+
+const benchmarkControls = ["Mode isolation", "Load shape", "Resource controls", "Observability"];
+
+const starterLayers = [
+  { icon: "server" as IconName, label: "Service core", detail: "MVC/JPA default lane" },
+  { icon: "flask" as IconName, label: "Advanced lane", detail: "WebFlux/R2DBC path" },
+  { icon: "check-circle" as IconName, label: "Governance", detail: "CI, release, ADRs" },
+  { icon: "cloud" as IconName, label: "Delivery", detail: "Docker Compose + Helm" },
+];
+---
+
+<figure class:list={["project-proof-visual", `project-proof-visual--${projectKey}`]}>
+  <div class="project-proof-visual-head">
+    <p class="project-proof-visual-kicker">
+      <UiIcon name={meta.icon} class="project-proof-visual-kicker-icon" />
+      <span>{meta.kicker}</span>
+    </p>
+    <span class="project-proof-visual-badge">{meta.badge}</span>
+  </div>
+
+  <figcaption>
+    <p class="project-proof-visual-title">{meta.title}</p>
+    <p class="project-proof-visual-summary">{meta.summary}</p>
+  </figcaption>
+
+  {projectKey === "mcp-zap-server" && (
+    <div class="proof-flow proof-flow--mcp" aria-label="MCP ZAP Server proof flow">
+      <div class="proof-flow-nodes">
+        {mcpNodes.map((node) => (
+          <div class="proof-flow-node">
+            <span class="proof-flow-node-icon">
+              <UiIcon name={node.icon} />
+            </span>
+            <span class="proof-flow-node-copy">
+              <strong>{node.label}</strong>
+              <span>{node.detail}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+      <div class="proof-guardrails">
+        {mcpGuardrails.map((guardrail) => (
+          <span>{guardrail}</span>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {projectKey === "rtb-ingress-benchmark" && (
+    <div class="benchmark-board" aria-label="RTB Ingress Benchmark proof surface">
+      <div class="benchmark-lanes">
+        {runtimeLanes.map((lane) => (
+          <div class="benchmark-lane">
+            <span>{lane.label}</span>
+            <strong>{lane.modes}</strong>
+          </div>
+        ))}
+      </div>
+      <div class="benchmark-controls">
+        <p>Fairness controls</p>
+        {benchmarkControls.map((control) => (
+          <span>{control}</span>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {projectKey === "spring-boot-playground" && (
+    <div class="starter-blueprint" aria-label="Spring Boot Playground proof blueprint">
+      {starterLayers.map((layer) => (
+        <div class="starter-layer">
+          <span class="starter-layer-icon">
+            <UiIcon name={layer.icon} />
+          </span>
+          <span>
+            <strong>{layer.label}</strong>
+            <em>{layer.detail}</em>
+          </span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {projectKey === "default" && (
+    <div class="proof-stack-preview" aria-label={`${title} stack preview`}>
+      {stack.slice(0, 6).map((item) => (
+        <span>{item}</span>
+      ))}
+    </div>
+  )}
+</figure>

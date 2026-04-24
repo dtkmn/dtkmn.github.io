@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import UiIcon from "@/components/UiIcon.astro";
 
 interface Props {
   project: CollectionEntry<"projects">;
@@ -15,6 +16,7 @@ const statusLabel = {
   maintained: "Maintained",
   experimental: "Experimental",
 }[project.data.status];
+const tierIcon = project.data.tier === "flagship" ? "rocket" : "flask";
 ---
 
 <article class:list={["article-card", "project-card", `article-card--${variant}`]}>
@@ -24,17 +26,30 @@ const statusLabel = {
     rel={external ? "noreferrer noopener" : undefined}
     target={external ? "_blank" : undefined}
   >
-    <p class="article-card-kind">
-      {project.data.tier === "flagship" ? "Flagship project" : "Supporting project"}
-    </p>
-    <h3>{project.data.title}</h3>
-    <p class="article-card-summary">{project.data.summary}</p>
+    {variant === "feature" && project.data.heroImage && (
+      <figure class="project-card-media">
+        <img src={project.data.heroImage} alt={`${project.data.title} visual`} loading="lazy" />
+      </figure>
+    )}
+    <div class="article-card-copy">
+      <p class="article-card-kind">
+        <UiIcon name={tierIcon} class="article-card-kind-icon" />
+        <span>{project.data.tier === "flagship" ? "Flagship project" : "Supporting project"}</span>
+      </p>
+      <h3>{project.data.title}</h3>
+      <p class="article-card-summary">{project.data.summary}</p>
+    </div>
   </a>
 
   <div class="project-card-footer">
     <div class="project-card-meta">
       <span class:list={["status-pill", `status-pill--${project.data.status}`]}>{statusLabel}</span>
-      {external && <span>Repository link</span>}
+      {external && (
+        <span class="project-card-external">
+          <UiIcon name="external" class="project-card-external-icon" />
+          <span>Repository link</span>
+        </span>
+      )}
     </div>
     {project.data.stack.length > 0 && (
       <p class="project-card-stack">{project.data.stack.slice(0, 3).join(" / ")}</p>

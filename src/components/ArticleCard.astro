@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import ArticleMeta from "@/components/ArticleMeta.astro";
 import TagList from "@/components/TagList.astro";
+import UiIcon from "@/components/UiIcon.astro";
 
 interface Props {
   entry: CollectionEntry<"articles"> | CollectionEntry<"notes">;
@@ -14,15 +15,19 @@ const href =
     ? `/posts/${entry.slug}/`
     : `/notes/${entry.slug}/`;
 const description = entry.data.summary ?? "";
+const kindIcon = entry.collection === "articles" ? "file-text" : "notes";
 ---
 
 <article class:list={["article-card", `article-card--${variant}`]}>
   <a class="article-card-link" href={href}>
-    <p class="article-card-kind">
-      {entry.collection === "articles" ? "Essay" : "Note"}
-    </p>
-    <h3>{entry.data.title}</h3>
-    {description && <p class="article-card-summary">{description}</p>}
+    <div class="article-card-copy">
+      <p class="article-card-kind">
+        <UiIcon name={kindIcon} class="article-card-kind-icon" />
+        <span>{entry.collection === "articles" ? "Essay" : "Note"}</span>
+      </p>
+      <h3>{entry.data.title}</h3>
+      {description && <p class="article-card-summary">{description}</p>}
+    </div>
   </a>
   <ArticleMeta
     date={entry.data.date}
@@ -30,4 +35,3 @@ const description = entry.data.summary ?? "";
   />
   {entry.data.tags.length > 0 && <TagList tags={entry.data.tags} />}
 </article>
-

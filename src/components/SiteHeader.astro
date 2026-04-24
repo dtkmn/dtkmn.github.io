@@ -1,25 +1,87 @@
 ---
 import { siteConfig } from "@/config/site";
+import UiIcon from "@/components/UiIcon.astro";
+
+const pathname = Astro.url.pathname;
+const navLinks = [
+  { href: "/articles/", label: "Articles", icon: "articles" },
+  { href: "/projects/", label: "Projects", icon: "projects" },
+  { href: "/notes/", label: "Notes", icon: "notes" },
+  { href: "/about/", label: "About", icon: "about" },
+ ] as const;
+
+const externalIconByLabel = {
+  GitHub: "github",
+  LinkedIn: "linkedin",
+  RSS: "rss",
+} as const;
+
+const externalLinks = siteConfig.socialLinks
+  .filter((link) => ["GitHub", "LinkedIn", "RSS"].includes(link.label))
+  .map((link) => ({
+    ...link,
+    icon: externalIconByLabel[link.label as keyof typeof externalIconByLabel],
+  }));
+
+function isActive(href: string) {
+  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+}
 ---
 
 <header class="site-header">
-  <a class="site-mark" href="/">
-    <span class="site-mark-kicker">danieltse.org</span>
-    <span class="site-mark-name">{siteConfig.siteTitle}</span>
-  </a>
+  <div class="site-header-main">
+    <a class="site-mark" href="/">
+      <span class="site-mark-kicker">danieltse.org</span>
+      <span class="site-mark-name">{siteConfig.siteTitle}</span>
+    </a>
+    <p class="site-header-note">Evidence-backed writing on AI tooling, backend systems, and cloud delivery.</p>
+  </div>
 
-  <nav class="site-nav" aria-label="Primary">
-    <a href="/articles/">Articles</a>
-    <a href="/projects/">Projects</a>
-    <a href="/notes/">Notes</a>
-    <a href="/about/">About</a>
+  <nav class="site-nav site-nav--desktop" aria-label="Primary">
+    {navLinks.map((link) => (
+      <a href={link.href} aria-current={isActive(link.href) ? "page" : undefined}>
+        <UiIcon name={link.icon} class="site-nav-icon" />
+        <span>{link.label}</span>
+      </a>
+    ))}
   </nav>
 
-  <div class="site-links" aria-label="External">
-    {siteConfig.socialLinks.slice(0, 3).map((link) => (
-      <a href={link.href} rel="noreferrer noopener" target="_blank">
-        {link.label}
+  <div class="site-links site-links--desktop" aria-label="External">
+    <span class="site-links-label">Elsewhere</span>
+    {externalLinks.map((link) => (
+      <a href={link.href} rel="noreferrer noopener" target="_blank" aria-label={link.label} title={link.label}>
+        <UiIcon name={link.icon} class="site-link-icon" />
       </a>
     ))}
   </div>
+
+  <details class="site-menu">
+    <summary class="site-menu-toggle">
+      <UiIcon name="menu" class="site-menu-toggle-icon" />
+      <span>Menu</span>
+    </summary>
+
+    <div class="site-menu-panel">
+      <nav class="site-nav site-nav--menu" aria-label="Mobile primary">
+        {navLinks.map((link) => (
+          <a href={link.href} aria-current={isActive(link.href) ? "page" : undefined}>
+            <UiIcon name={link.icon} class="site-nav-icon" />
+            <span>{link.label}</span>
+          </a>
+        ))}
+      </nav>
+
+      <div class="site-links site-links--menu" aria-label="Mobile external">
+        <span class="site-links-label">Elsewhere</span>
+        <div class="site-links-grid">
+          {externalLinks.map((link) => (
+            <a href={link.href} rel="noreferrer noopener" target="_blank">
+              <UiIcon name={link.icon} class="site-link-icon" />
+              <span>{link.label}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </details>
 </header>
