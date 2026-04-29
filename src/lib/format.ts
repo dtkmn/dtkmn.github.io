@@ -20,3 +20,11 @@ export function slugifyTag(tag: string) {
 export function absoluteUrl(path: string) {
   return new URL(path, "https://danieltse.org").toString();
 }
+
+export function canonicalUrl(pathOrUrl: string) {
+  const url = new URL(pathOrUrl, "https://danieltse.org");
+  url.hash = "";
+  url.search = "";
+
+  return url.toString();
+}
