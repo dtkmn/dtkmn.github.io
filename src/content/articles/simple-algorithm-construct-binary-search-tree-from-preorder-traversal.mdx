@@ -8,7 +8,6 @@ tags:
   - BST
 featured: false
 draft: false
-canonicalUrl: https://medium.com/@danieltse/simple-algorithm-construct-binary-search-tree-from-preorder-traversal-d7de1e2a34fe
 mediumUrl: https://medium.com/@danieltse/simple-algorithm-construct-binary-search-tree-from-preorder-traversal-d7de1e2a34fe
 heroImage: https://cdn-images-1.medium.com/max/201/1*fbdEEtJG5YApXo7pkVrUxg.png
 ---
@@ -79,4 +78,3 @@ public void buildTree(TreeNode node, int value) {
 ```
 
 The approach is simple because it leans on the core BST invariant instead of over-optimizing too early. When the resulting tree stays balanced, the repeated insertion behavior resembles binary search and performs well enough for many interview-style inputs.
-
