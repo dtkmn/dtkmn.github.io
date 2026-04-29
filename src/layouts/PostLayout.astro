@@ -2,8 +2,7 @@
 import ArticleMeta from "@/components/ArticleMeta.astro";
 import TagList from "@/components/TagList.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { siteConfig } from "@/config/site";
-import { absoluteUrl } from "@/lib/format";
+import { absoluteUrl, canonicalUrl as normalizeCanonicalUrl } from "@/lib/format";
 
 interface Props {
   title: string;
@@ -31,51 +30,41 @@ const {
   kind,
 } = Astro.props;
 
-const localCanonical = Astro.url.toString();
-const pageCanonical = canonicalUrl ?? localCanonical;
+const localCanonical = normalizeCanonicalUrl(Astro.url.pathname);
+const pageCanonical = canonicalUrl ? normalizeCanonicalUrl(canonicalUrl) : localCanonical;
 const socialImage = heroImage ? (heroImage.startsWith("http") ? heroImage : absoluteUrl(heroImage)) : undefined;
 const authorId = absoluteUrl("/about/#author");
 const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const sectionCount = headings.filter((heading) => heading.depth === 2).length;
 const readingMode = kind === "article" ? "Deep dive" : "Tactical note";
 
-const jsonLd =
-  kind === "article"
-    ? {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "@id": `${pageCanonical}#article`,
-        headline: title,
-        description: summary,
-        url: pageCanonical,
-        datePublished: date.toISOString(),
-        dateModified: date.toISOString(),
-        inLanguage: "en-AU",
-        isPartOf: {
-          "@id": absoluteUrl("/#website"),
-        },
-        author: {
-          "@type": "Person",
-          "@id": authorId,
-          name: siteConfig.author.name,
-          url: siteConfig.author.url,
-          sameAs: siteConfig.author.sameAs,
-        },
-        publisher: {
-          "@type": "Person",
-          "@id": authorId,
-          name: siteConfig.author.name,
-          url: siteConfig.author.url,
-        },
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": pageCanonical,
-        },
-        image: socialImage ? [socialImage] : undefined,
-        keywords: tags.join(", "),
-        isAccessibleForFree: true,
-      }
-    : undefined;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": `${pageCanonical}#article`,
+  headline: title,
+  description: summary,
+  url: pageCanonical,
+  datePublished: date.toISOString(),
+  dateModified: date.toISOString(),
+  inLanguage: "en-AU",
+  articleSection: kind === "article" ? "Articles" : "Notes",
+  isPartOf: {
+    "@id": absoluteUrl("/#website"),
+  },
+  author: {
+    "@id": authorId,
+  },
+  publisher: {
+    "@id": authorId,
+  },
+  mainEntityOfPage: {
+    "@id": `${pageCanonical}#webpage`,
+  },
+  image: socialImage ? [socialImage] : undefined,
+  keywords: tags.join(", "),
+  isAccessibleForFree: true,
+};
 ---
 
 <BaseLayout
@@ -84,10 +73,11 @@ const jsonLd =
   canonical={pageCanonical}
   image={heroImage}
   type="article"
+  publishedTime={date}
+  modifiedTime={date}
+  tags={tags}
 >
-  {jsonLd && (
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
-  )}
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
 
   <article class="post-shell">
     <div class="post-intro">
@@ -95,10 +85,10 @@ const jsonLd =
       <h1>{title}</h1>
       <p class="post-summary">{summary}</p>
       <ArticleMeta date={date} mediumUrl={mediumUrl} />
-      {canonicalUrl && canonicalUrl !== localCanonical && (
+      {canonicalUrl && pageCanonical !== localCanonical && (
         <p class="post-canonical-note">
           This piece is archived here for continuity. The original canonical publication lives on
-          <a href={canonicalUrl} rel="noreferrer noopener" target="_blank"> Medium</a>.
+          <a href={pageCanonical} rel="noreferrer noopener" target="_blank"> Medium</a>.
         </p>
       )}
       {tags.length > 0 && <TagList tags={tags} />}

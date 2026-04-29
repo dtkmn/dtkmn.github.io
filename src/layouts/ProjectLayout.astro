@@ -5,7 +5,7 @@ import ArticleCard from "@/components/ArticleCard.astro";
 import ProjectProofVisual from "@/components/ProjectProofVisual.astro";
 import UiIcon from "@/components/UiIcon.astro";
 import { siteConfig } from "@/config/site";
-import { absoluteUrl, formatDate } from "@/lib/format";
+import { absoluteUrl, canonicalUrl as normalizeCanonicalUrl, formatDate } from "@/lib/format";
 
 type IconName =
   | "archive"
@@ -95,7 +95,7 @@ const {
   readingTime = 1,
 } = Astro.props;
 
-const pageCanonical = Astro.url.toString();
+const pageCanonical = normalizeCanonicalUrl(Astro.url.pathname);
 const authorId = absoluteUrl("/about/#author");
 const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const sectionCount = headings.filter((heading) => heading.depth === 2).length;
@@ -149,6 +149,9 @@ const jsonLd = {
   },
   creator: {
     "@id": authorId,
+  },
+  mainEntityOfPage: {
+    "@id": `${pageCanonical}#webpage`,
   },
   isAccessibleForFree: true,
   image: heroImage ? [absoluteUrl(heroImage)] : undefined,
