@@ -1,41 +1,89 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { siteConfig } from "@/config/site";
+import { getFeaturedArticles, getFlagshipProjects } from "@/lib/content";
+import { formatDate } from "@/lib/format";
+
+const [flagshipProjects, featuredArticles] = await Promise.all([
+  getFlagshipProjects(),
+  getFeaturedArticles(),
+]);
+
+const buildFocus = [
+  "AI-facing tools with real auth, deployment, documentation, and operator review paths.",
+  "Backend benchmark harnesses that expose runtime tradeoffs instead of flattering one stack.",
+  "Service and platform defaults that keep teams from rediscovering the same operational shape.",
+] as const;
 ---
 
-<BaseLayout title="About" description="About Daniel Tse and the editorial direction behind danieltse.org." profilePage>
+<BaseLayout
+  title="About"
+  description="Daniel Tse is a principal engineer building proof-backed AI systems, JVM backend benchmarks, and cloud platform defaults."
+  profilePage
+>
   <section id="author" class="page-lead">
-    <p class="eyebrow">About</p>
-    <h1>Hands-on engineering leadership, documented through proof.</h1>
+    <p class="eyebrow">About Daniel Tse</p>
+    <h1>Principal engineer, judged by working systems.</h1>
     <p class="page-lead-summary">
-      I care about AI systems that behave under pressure, backend services that stay legible under
-      load, and cloud platforms that reduce operator drag instead of multiplying it.
+      I build and write about the layer where architecture claims meet code, load, security
+      boundaries, deployment paths, and team defaults. This site is the public proof ledger:
+      flagship projects first, arguments second, generic commentary nowhere.
     </p>
   </section>
 
-  <section class="copy-grid">
+  <section class="copy-grid about-credibility-grid">
     <div>
-      <h2>What this site is for</h2>
-      <p>
-        This is the canonical home for my writing and the narrative layer around the projects that
-        back it up. Long-form essays live here first. Project pages exist only for work with real
-        surface area, evidence, and a maintenance story.
-      </p>
-      <p>
-        The editorial line is deliberate: practical systems thinking, benchmark caveats,
-        implementation detail, and engineering judgment rather than generic trend commentary.
-      </p>
+      <h2>What I build</h2>
+      <ul class="about-proof-list">
+        {buildFocus.map((item) => <li>{item}</li>)}
+      </ul>
     </div>
     <div>
-      <h2>What I write about</h2>
-      <p>
-        Expect essays on local LLMs, integration protocols, JVM and Kotlin backend work, cloud
-        infrastructure, delivery pipelines, and the operational details that decide whether an
-        architecture is elegant only on slides or robust in production.
-      </p>
-      <p>
-        Notes stay shorter and more tactical. Essays expand the reasoning. Project pages show the
-        shipped systems, benchmarks, and tooling choices that give the writing teeth.
-      </p>
+      <h2>Lanes I want to own</h2>
+      <ul class="about-proof-list">
+        {siteConfig.topicLanes.map((lane) => <li>{lane}</li>)}
+      </ul>
     </div>
+  </section>
+
+  <section class="copy-grid about-proof-grid" aria-labelledby="about-proof">
+    <div>
+      <p class="eyebrow">Flagship projects</p>
+      <h2 id="about-proof">The work that proves the claim</h2>
+      <div class="about-proof-stack">
+        {flagshipProjects.map((project) => (
+          <article class="about-proof-item">
+            <a href={`/projects/${project.slug}/`}>{project.data.title}</a>
+            <p>{project.data.proofPoints[0] ?? project.data.summary}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+    <div>
+      <p class="eyebrow">Articles</p>
+      <h2>The writing that explains the judgment</h2>
+      <div class="about-proof-stack">
+        {featuredArticles.map((article) => (
+          <article class="about-proof-item">
+            <a href={`/posts/${article.slug}/`}>{article.data.title}</a>
+            <p>
+              <time datetime={article.data.date.toISOString()}>{formatDate(article.data.date)}</time>
+              {" - "}
+              {article.data.summary}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block section-block--quiet about-bio">
+    <p class="eyebrow">Bio</p>
+    <p>
+      Daniel Tse is a principal engineer focused on AI systems, JVM backends, and cloud delivery.
+      His useful edge is not framework taste; it is forcing technical claims to survive
+      implementation detail, benchmark constraints, operational guardrails, and reuse by real
+      teams.
+    </p>
   </section>
 </BaseLayout>

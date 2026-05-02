@@ -1002,6 +1002,70 @@ summary:focus-visible {
   margin-bottom: 0;
 }
 
+.about-credibility-grid,
+.about-proof-grid {
+  align-items: start;
+}
+
+.about-proof-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-proof-list li,
+.about-proof-item {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.about-proof-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.about-proof-item {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.about-proof-item a {
+  color: var(--ink-strong);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.about-proof-item a:hover {
+  color: var(--accent-strong);
+}
+
+.about-proof-item p,
+.about-proof-list li,
+.about-bio p:not(.eyebrow) {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.about-proof-item time {
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+}
+
+.about-bio {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.about-bio p:not(.eyebrow) {
+  max-width: 72ch;
+}
+
 .post-shell {
   display: grid;
   gap: 2rem;
