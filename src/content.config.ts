@@ -11,6 +11,7 @@ const articles = defineCollection({
     draft: z.boolean().default(false),
     canonicalUrl: z.string().url().optional(),
     mediumUrl: z.string().url().optional(),
+    archiveReason: z.string().optional(),
     heroImage: z.string().optional(),
   }),
 });

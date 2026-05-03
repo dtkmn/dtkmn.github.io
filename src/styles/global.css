@@ -858,6 +858,13 @@ summary:focus-visible {
   padding: 1.6rem;
 }
 
+.article-card--archived {
+  border-color: rgba(143, 160, 155, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.01)),
+    rgba(8, 11, 16, 0.2);
+}
+
 .project-card {
   display: grid;
 }
@@ -907,6 +914,15 @@ summary:focus-visible {
 
 .article-card--feature .article-card-summary {
   -webkit-line-clamp: 4;
+}
+
+.article-card-archive {
+  margin: 0;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
 }
 
 .project-card-media {
@@ -1167,6 +1183,10 @@ summary:focus-visible {
   color: var(--muted);
   line-height: 1.7;
   max-width: 60ch;
+}
+
+.post-canonical-note strong {
+  color: var(--ink-strong);
 }
 
 .prose {
