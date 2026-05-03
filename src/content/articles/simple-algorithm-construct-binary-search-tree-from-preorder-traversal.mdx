@@ -9,7 +9,9 @@ tags:
 featured: false
 draft: false
 mediumUrl: https://medium.com/@danieltse/simple-algorithm-construct-binary-search-tree-from-preorder-traversal-d7de1e2a34fe
-heroImage: https://cdn-images-1.medium.com/max/201/1*fbdEEtJG5YApXo7pkVrUxg.png
+canonicalUrl: https://medium.com/@danieltse/simple-algorithm-construct-binary-search-tree-from-preorder-traversal-d7de1e2a34fe
+archiveReason: Interview-practice note; it does not belong in the current principal-engineer positioning.
+heroImage: /images/posts/bst-preorder/constructed-bst.png
 ---
 
 Tree traversal is one of the classic interview topics, and binary search trees come up repeatedly. This walkthrough focuses on reconstructing a BST when the preorder traversal values are already provided.
@@ -36,7 +38,7 @@ int[] preorder = new int[] { 8, 5, 1, 7, 10, 12 };
 
 Then the expected tree is:
 
-![Constructed BST from preorder traversal](https://cdn-images-1.medium.com/max/201/1*fbdEEtJG5YApXo7pkVrUxg.png)
+![Constructed BST from preorder traversal](/images/posts/bst-preorder/constructed-bst.png)
 
 The useful property of preorder traversal is that the first value is always the root:
 

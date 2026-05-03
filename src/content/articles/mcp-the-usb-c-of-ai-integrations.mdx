@@ -1,6 +1,6 @@
 ---
 title: "MCP: The USB-C of AI Integrations"
-summary: Why MCP matters, how hosts-clients-servers fit together, and what tools, resources, and prompts mean in practice.
+summary: A practical explainer for why MCP matters, how hosts-clients-servers fit together, and why protocol boundaries beat one-off agent glue.
 date: 2025-05-04
 tags:
   - MCP
@@ -105,6 +105,10 @@ Both can be described with JSON schemas. The LLM sees those schemas in its promp
 
 That is the key shift. Instead of the model guessing how to call an API, it gets a menu of available actions with explicit shapes and constraints.
 
-## Demo preview
+## Where this leads
 
-TBC ;)
+The useful test is not whether MCP sounds elegant. It is whether a server can expose a real tool with permissions, repeatable packaging, and enough guardrails that an agent can use it without turning every integration into custom glue.
+
+That is why [MCP ZAP Server](/projects/mcp-zap-server/) belongs next to this essay. It takes the protocol idea and applies it to OWASP ZAP: tool discovery, scan orchestration, deployment paths, and operator-visible security boundaries.
+
+The protocol matters because it turns integrations from bespoke demos into inspectable contracts. That is the part worth building around.

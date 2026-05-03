@@ -10,10 +10,10 @@ tags:
 featured: true
 draft: false
 mediumUrl: https://medium.com/@danieltse/why-local-llms-matter-in-2025-be0b46eb6f8c
-heroImage: https://cdn-images-1.medium.com/max/1024/1*iQfrhEGusZEjETLRCcd5Fw.png
+heroImage: /images/posts/local-llms/hero.png
 ---
 
-![Why local LLMs matter](https://cdn-images-1.medium.com/max/1024/1*iQfrhEGusZEjETLRCcd5Fw.png)
+![Why local LLMs matter](/images/posts/local-llms/hero.png)
 
 Large language models running entirely on your own device matter more than ever. Privacy concerns are rising, on-device data processing is becoming more valuable, and cloud inference costs are still unpredictable. A local setup gives you stronger control over where data lives and how it is processed.
 
@@ -159,3 +159,9 @@ That combination makes local models especially attractive for:
 Running your own model in 2025 is no longer a novelty. It is a credible engineering choice. With tools like Ollama, the setup cost is low enough that more teams should treat local inference as a default option to evaluate, not an exotic alternative.
 
 If the workload is privacy-sensitive, latency-sensitive, or cost-sensitive, local models deserve a serious place in the architecture discussion.
+
+## Where this connects to the work
+
+The serious point is not "run a model locally because it is interesting." The serious point is control over the inference boundary.
+
+That is why this essay belongs next to the [LLM AI Assistant](/projects/llm-ai-assistant/) project. Private document analysis, local retrieval, and on-device experimentation all depend on the same architectural choice: decide deliberately where the model runs, where the data lives, and what leaves the machine.
