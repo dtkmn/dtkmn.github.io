@@ -4,19 +4,44 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getPublishedArticles } from "@/lib/content";
 
 const articles = await getPublishedArticles();
+const canonicalArticles = articles.filter((entry) => !entry.data.canonicalUrl);
+const archivedArticles = articles.filter((entry) => entry.data.canonicalUrl);
 ---
 
-<BaseLayout title="Articles" description="Essays and archived technical writing by Daniel Tse.">
+<BaseLayout title="Articles" description="Site-canonical essays and archived technical writing by Daniel Tse.">
   <section class="page-lead">
     <p class="eyebrow">Articles</p>
-    <h1>Arguments, benchmarks, and older writeups with context.</h1>
+    <h1>The arguments that belong here now.</h1>
     <p class="page-lead-summary">
-      Long-form writing across AI systems, backend engineering, platform operations, and the archive
-      that shaped the current point of view.
+      danieltse.org is the canonical home for the AI tooling, local LLM, and benchmark essays that
+      match the current positioning. The older Medium-era tutorials are still available, but they
+      are archive material, not the front door.
     </p>
   </section>
 
-  <div class="stack-grid">
-    {articles.map((entry) => <ArticleCard entry={entry} />)}
-  </div>
+  <section class="section-block">
+    <div class="section-heading">
+      <p class="eyebrow">Site canonical</p>
+      <h2>Current essays with enough signal to carry the site.</h2>
+    </div>
+    <div class="stack-grid">
+      {canonicalArticles.map((entry) => <ArticleCard entry={entry} />)}
+    </div>
+  </section>
+
+  {archivedArticles.length > 0 && (
+    <section class="section-block section-block--quiet">
+      <div class="section-heading">
+        <p class="eyebrow">Archive</p>
+        <h2>Useful history, not flagship positioning.</h2>
+        <p class="section-summary">
+          These posts can stay available for continuity, but promoting them would make the site look
+          smaller than the work is now.
+        </p>
+      </div>
+      <div class="stack-grid">
+        {archivedArticles.map((entry) => <ArticleCard entry={entry} />)}
+      </div>
+    </section>
+  )}
 </BaseLayout>

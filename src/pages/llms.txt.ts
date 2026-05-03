@@ -18,6 +18,8 @@ export async function GET() {
   const featured = new Set(siteConfig.featuredPostSlugs);
 
   const sortedArticles = articles.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  const canonicalArticles = sortedArticles.filter((article) => !article.data.canonicalUrl);
+  const archivedArticles = sortedArticles.filter((article) => article.data.canonicalUrl);
   const featuredArticles = sortedArticles.filter((article) => featured.has(article.slug));
   const featuredProjects = projects
     .filter((project) => project.data.featured)
@@ -54,12 +56,23 @@ export async function GET() {
         `- ${project.data.title}: ${projectUrl(project.slug)} -- ${project.data.summary}`,
     ),
     "",
-    "## All Articles",
-    ...sortedArticles.map(
+    "## Site-Canonical Articles",
+    ...canonicalArticles.map(
       (article) =>
         `- ${article.data.title}: ${articleUrl(article.slug)} -- ${article.data.summary}`,
     ),
   ];
+
+  if (archivedArticles.length > 0) {
+    lines.push(
+      "",
+      "## Archive Articles",
+      ...archivedArticles.map(
+        (article) =>
+          `- ${article.data.title}: ${articleUrl(article.slug)} -- ${article.data.archiveReason ?? article.data.summary}`,
+      ),
+    );
+  }
 
   if (notes.length > 0) {
     lines.push("", "## Notes", ...notes.map((note) => `- ${note.data.title}: ${siteConfig.siteUrl}/notes/${note.slug}/`));
