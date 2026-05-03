@@ -11,6 +11,7 @@ interface Props {
   tags: string[];
   canonicalUrl?: string;
   mediumUrl?: string;
+  archiveReason?: string;
   heroImage?: string;
   headings?: { depth: number; slug: string; text: string }[];
   readingTime?: number;
@@ -24,6 +25,7 @@ const {
   tags,
   canonicalUrl,
   mediumUrl,
+  archiveReason,
   heroImage,
   headings = [],
   readingTime = 1,
@@ -32,11 +34,14 @@ const {
 
 const localCanonical = normalizeCanonicalUrl(Astro.url.pathname);
 const pageCanonical = canonicalUrl ? normalizeCanonicalUrl(canonicalUrl) : localCanonical;
+const isExternalCanonical = !pageCanonical.startsWith(absoluteUrl("/"));
 const socialImage = heroImage ? (heroImage.startsWith("http") ? heroImage : absoluteUrl(heroImage)) : undefined;
 const authorId = absoluteUrl("/about/#author");
 const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const sectionCount = headings.filter((heading) => heading.depth === 2).length;
 const readingMode = kind === "article" ? "Deep dive" : "Tactical note";
+const postKicker = kind === "note" ? "Note" : isExternalCanonical ? "Archived essay" : "Site-canonical essay";
+const externalCanonicalLabel = pageCanonical.includes("medium.com") ? "Medium" : "the original publication";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -81,14 +86,26 @@ const jsonLd = {
 
   <article class="post-shell">
     <div class="post-intro">
-      <p class="post-kicker">{kind === "article" ? "Essay" : "Note"}</p>
+      <p class="post-kicker">{postKicker}</p>
       <h1>{title}</h1>
       <p class="post-summary">{summary}</p>
-      <ArticleMeta date={date} mediumUrl={mediumUrl} />
-      {canonicalUrl && pageCanonical !== localCanonical && (
+      <ArticleMeta
+        date={date}
+        mediumUrl={mediumUrl}
+        canonicalUrl={canonicalUrl}
+        showCanonicalStatus={kind === "article"}
+      />
+      {kind === "article" && isExternalCanonical && (
         <p class="post-canonical-note">
-          This piece is archived here for continuity. The original canonical publication lives on
-          <a href={pageCanonical} rel="noreferrer noopener" target="_blank"> Medium</a>.
+          <strong>Archive call:</strong> {archiveReason ?? "This is useful historical context, not current positioning."}
+          {" "}The canonical publication remains on
+          <a href={pageCanonical} rel="noreferrer noopener" target="_blank"> {externalCanonicalLabel}</a>.
+        </p>
+      )}
+      {kind === "article" && !isExternalCanonical && mediumUrl && (
+        <p class="post-canonical-note">
+          <strong>Site canonical:</strong> danieltse.org is the version of record now. Medium is
+          kept only as a syndication mirror.
         </p>
       )}
       {tags.length > 0 && <TagList tags={tags} />}
