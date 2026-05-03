@@ -4,20 +4,28 @@ import { formatDate } from "@/lib/format";
 interface Props {
   date: Date;
   mediumUrl?: string;
+  canonicalUrl?: string;
+  showCanonicalStatus?: boolean;
 }
 
-const { date, mediumUrl } = Astro.props;
+const { date, mediumUrl, canonicalUrl, showCanonicalStatus = false } = Astro.props;
+const isExternalCanonical = Boolean(canonicalUrl && !canonicalUrl.startsWith("https://danieltse.org"));
 ---
 
 <div class="article-meta">
   <span>{formatDate(date)}</span>
+  {showCanonicalStatus && (
+    <>
+      <span class="article-meta-separator">/</span>
+      <span>{isExternalCanonical ? "Archive copy" : "Site canonical"}</span>
+    </>
+  )}
   {mediumUrl && (
     <>
       <span class="article-meta-separator">/</span>
       <a href={mediumUrl} rel="noreferrer noopener" target="_blank">
-        Originally on Medium
+        {isExternalCanonical ? "Medium canonical" : "Medium mirror"}
       </a>
     </>
   )}
 </div>
-

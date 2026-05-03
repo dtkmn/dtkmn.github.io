@@ -15,23 +15,30 @@ const href =
     ? `/posts/${entry.slug}/`
     : `/notes/${entry.slug}/`;
 const description = entry.data.summary ?? "";
+const canonicalUrl = entry.collection === "articles" ? entry.data.canonicalUrl : undefined;
+const archiveReason = entry.collection === "articles" ? entry.data.archiveReason : undefined;
+const isArchived = Boolean(canonicalUrl && !canonicalUrl.startsWith("https://danieltse.org"));
 const kindIcon = entry.collection === "articles" ? "file-text" : "notes";
+const kindLabel = entry.collection === "notes" ? "Note" : isArchived ? "Archive" : "Essay";
 ---
 
-<article class:list={["article-card", `article-card--${variant}`]}>
+<article class:list={["article-card", `article-card--${variant}`, isArchived && "article-card--archived"]}>
   <a class="article-card-link" href={href}>
     <div class="article-card-copy">
       <p class="article-card-kind">
         <UiIcon name={kindIcon} class="article-card-kind-icon" />
-        <span>{entry.collection === "articles" ? "Essay" : "Note"}</span>
+        <span>{kindLabel}</span>
       </p>
       <h3>{entry.data.title}</h3>
       {description && <p class="article-card-summary">{description}</p>}
+      {archiveReason && <p class="article-card-archive">{archiveReason}</p>}
     </div>
   </a>
   <ArticleMeta
     date={entry.data.date}
     mediumUrl={entry.collection === "articles" ? entry.data.mediumUrl : undefined}
+    canonicalUrl={canonicalUrl}
+    showCanonicalStatus={entry.collection === "articles"}
   />
   {entry.data.tags.length > 0 && <TagList tags={entry.data.tags} />}
 </article>
