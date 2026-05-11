@@ -23,6 +23,8 @@ interface Props {
     | "rocket"
     | "server"
     | "shield"
+    | "moon"
+    | "sun"
     | "spark"
     | "terminal";
   class?: string;
@@ -103,6 +105,26 @@ const viewBox = "0 0 24 24";
       <path d="M5 8.5h14"></path>
       <path d="M5 12h14"></path>
       <path d="M5 15.5h14"></path>
+    </>
+  )}
+
+  {name === "moon" && (
+    <>
+      <path d="M19 14.4A7.2 7.2 0 0 1 9.6 5a7.4 7.4 0 1 0 9.4 9.4z"></path>
+    </>
+  )}
+
+  {name === "sun" && (
+    <>
+      <circle cx="12" cy="12" r="3.6"></circle>
+      <path d="M12 3.5v2"></path>
+      <path d="M12 18.5v2"></path>
+      <path d="m5.2 5.2 1.4 1.4"></path>
+      <path d="m17.4 17.4 1.4 1.4"></path>
+      <path d="M3.5 12h2"></path>
+      <path d="M18.5 12h2"></path>
+      <path d="m5.2 18.8 1.4-1.4"></path>
+      <path d="m17.4 6.6 1.4-1.4"></path>
     </>
   )}
 

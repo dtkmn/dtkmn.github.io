@@ -46,6 +46,11 @@ function isActive(href: string) {
   </nav>
 
   <div class="site-actions">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme">
+      <UiIcon name="sun" class="theme-toggle-icon theme-toggle-icon--sun" />
+      <UiIcon name="moon" class="theme-toggle-icon theme-toggle-icon--moon" />
+      <span class="theme-toggle-text">Theme</span>
+    </button>
     <a class="site-action-cta" href="/projects/">
       <UiIcon name="rocket" class="site-link-icon" />
       <span>Inspect work</span>
@@ -59,6 +64,12 @@ function isActive(href: string) {
     </summary>
 
     <div class="site-menu-panel">
+      <button class="theme-toggle theme-toggle--menu" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme">
+        <UiIcon name="sun" class="theme-toggle-icon theme-toggle-icon--sun" />
+        <UiIcon name="moon" class="theme-toggle-icon theme-toggle-icon--moon" />
+        <span class="theme-toggle-text">Theme</span>
+      </button>
+
       <a class="site-action-cta site-action-cta--menu" href="/projects/">
         <UiIcon name="rocket" class="site-link-icon" />
         <span>Inspect work</span>
