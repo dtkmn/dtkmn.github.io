@@ -100,7 +100,26 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={siteConfig.author.name} />
-    <meta name="theme-color" content="#0d1117" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#030303" />
+    <script is:inline>
+      (() => {
+        const storageKey = "dtkmn-theme";
+        const root = document.documentElement;
+        const systemTheme = () => window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        let storedTheme = null;
+
+        try {
+          storedTheme = localStorage.getItem(storageKey);
+        } catch {
+          storedTheme = null;
+        }
+
+        const theme = storedTheme === "light" || storedTheme === "dark" ? storedTheme : systemTheme();
+        root.dataset.theme = theme;
+        root.style.colorScheme = theme;
+      })();
+    </script>
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta name="googlebot" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href={pageCanonical} />
@@ -143,5 +162,66 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
         <SiteFooter />
       </div>
     </div>
+    <script is:inline>
+      (() => {
+        const storageKey = "dtkmn-theme";
+        const root = document.documentElement;
+        const media = window.matchMedia("(prefers-color-scheme: light)");
+        const themeColor = {
+          dark: "#030303",
+          light: "#fbfaf6",
+        };
+
+        const getStoredTheme = () => {
+          try {
+            const value = localStorage.getItem(storageKey);
+            return value === "light" || value === "dark" ? value : null;
+          } catch {
+            return null;
+          }
+        };
+
+        const systemTheme = () => media.matches ? "light" : "dark";
+
+        const applyTheme = (theme, persist) => {
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) {
+            meta.setAttribute("content", themeColor[theme]);
+          }
+
+          document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+            const nextTheme = theme === "dark" ? "light" : "dark";
+            const label = `Switch to ${nextTheme} mode`;
+            button.setAttribute("aria-label", label);
+            button.setAttribute("title", label);
+          });
+
+          if (persist) {
+            try {
+              localStorage.setItem(storageKey, theme);
+            } catch {
+              // Ignore storage failures; the visual toggle still works for this page view.
+            }
+          }
+        };
+
+        applyTheme(getStoredTheme() ?? root.dataset.theme ?? systemTheme(), false);
+
+        document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+          button.addEventListener("click", () => {
+            applyTheme(root.dataset.theme === "dark" ? "light" : "dark", true);
+          });
+        });
+
+        media.addEventListener("change", () => {
+          if (!getStoredTheme()) {
+            applyTheme(systemTheme(), false);
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
