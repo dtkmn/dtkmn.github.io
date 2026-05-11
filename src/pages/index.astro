@@ -60,42 +60,60 @@ const proofLedger = featuredProjects.map((project) => ({
   stack: project.data.stack.slice(0, 3).join(" / "),
   icon: proofIconBySlug[project.slug as keyof typeof proofIconBySlug] ?? "terminal",
 }));
-const operatingPrinciples = [
+const stackSurfaces = [
   {
-    kicker: "Benchmarking",
-    title: "Fairness controls before winner tables.",
-    body: "The useful result is not the runtime that wins one graph. It is knowing what the test actually measured.",
-    icon: "gauge",
+    title: "AI tooling",
+    body: "Agents, MCP tools, local model workflows, and the security boundaries that keep experiments from becoming liabilities.",
+    icon: "spark",
+    href: "/projects/mcp-zap-server/",
+    action: "Inspect agent tooling",
   },
   {
-    kicker: "Agent systems",
-    title: "Tool boundaries before agent theater.",
-    body: "If an AI integration cannot survive auth, limits, packaging, and operator review, it is still a demo.",
-    icon: "shield",
+    title: "Backend systems",
+    body: "JVM, Kotlin, Go, and runtime tradeoffs tested with harnesses instead of vibes and winner-table theater.",
+    icon: "server",
+    href: "/posts/what-microservice-benchmarks-actually-measure-in-2026/",
+    action: "Read benchmark thinking",
   },
   {
-    kicker: "Platform work",
-    title: "Standards that teams can actually reuse.",
-    body: "Good engineering leadership shows up in defaults, release paths, and decisions that stop drifting.",
-    icon: "layers",
+    title: "Cloud delivery",
+    body: "Service defaults, Kubernetes paths, deployment constraints, and the boring decisions that make systems survive launch day.",
+    icon: "cloud",
+    href: "/projects/",
+    action: "Review delivery work",
   },
 ] as const;
-const signalAreas = [
+const workbenchSteps = [
   {
-    label: "MCP security",
-    detail: "Agent tools with operational guardrails",
-    icon: "shield",
+    label: "Understand",
+    title: "Map the system before touching the graph.",
+    body: "The first job is exposing the real contract: dependencies, failure modes, limits, and the parts teams usually hand-wave.",
+    icon: "layers",
   },
   {
-    label: "Runtime evidence",
-    detail: "JVM, Go, Rust, Python, Node under load",
+    label: "Benchmark",
+    title: "Make claims earn their numbers.",
+    body: "Benchmarks only matter when the setup, workload, warmup, and operational context are clear enough to attack.",
     icon: "gauge",
   },
   {
-    label: "Platform defaults",
-    detail: "Service templates and deployment paths",
-    icon: "cloud",
+    label: "Ship",
+    title: "Turn sharp ideas into reusable defaults.",
+    body: "The useful output is code, guardrails, templates, and release paths that other engineers can trust under pressure.",
+    icon: "rocket",
   },
+] as const;
+const focusSignals = [
+  "MCP",
+  "Agent security",
+  "JVM",
+  "Kotlin",
+  "Quarkus",
+  "Go",
+  "Kubernetes",
+  "AWS",
+  "Benchmarks",
+  "Delivery paths",
 ] as const;
 const currentWriting = recentArticles.filter((entry) => entry.data.date.getFullYear() >= 2025);
 const archiveWriting = recentArticles
@@ -104,13 +122,12 @@ const archiveWriting = recentArticles
 ---
 
 <BaseLayout>
-  <section class="hero hero--home">
+  <section class="hero hero--home home-hero">
     <div class="hero-copy">
-      <p class="eyebrow">Principal-engineer evidence lab</p>
-      <h1>I test architecture claims with real systems.</h1>
+      <h1>Architecture<br />needs receipts.</h1>
       <p class="hero-summary">
-        Case studies, benchmark harnesses, and AI-tooling projects from the layer where diagrams
-        become code, deployment paths, limits, and tradeoffs.
+        I build and pressure-test AI tooling, backend platforms, and cloud delivery paths from the
+        layer where architecture claims become code, limits, and operational tradeoffs.
       </p>
       <div class="hero-actions">
         <a class="button button--primary" href="/projects/">
@@ -121,47 +138,120 @@ const archiveWriting = recentArticles
           <UiIcon name="book-open" class="button-icon" />
           <span>Read the arguments</span>
         </a>
+        <a class="button button--quiet" href="https://github.com/dtkmn" rel="noreferrer noopener" target="_blank">
+          <UiIcon name="github" class="button-icon" />
+          <span>Visit GitHub</span>
+        </a>
       </div>
-      <dl class="hero-proof-grid">
-        {proofStats.map((stat) => (
-          <div>
-            <dt>
-              <UiIcon name={stat.icon} class="stat-icon" />
-              <span>{stat.label}</span>
-            </dt>
-            <dd>{stat.value}</dd>
-          </div>
-        ))}
-      </dl>
+      <p class="hero-install-note">
+        Principal-engineer evidence lab for people allergic to architecture theater.
+      </p>
     </div>
-    <div class="hero-side">
-      <HomeSignalGraphic />
-      <div class="signal-legend">
-        {signalAreas.map((area) => (
-          <article class="signal-pill">
-            <UiIcon name={area.icon} class="signal-pill-icon" />
-            <p>{area.label}</p>
-            <strong>{area.detail}</strong>
-          </article>
-        ))}
+    <aside class="hero-console" aria-label="Evidence console">
+      <div class="hero-console-bar">
+        <span>danieltse.org</span>
+        <strong>evidence mode</strong>
       </div>
-      <div class="signal-note">
-        <p class="eyebrow">Positioning rule</p>
-        <p>
-          If it cannot point to code, a benchmark, a deployment path, or a hard tradeoff, it stays
-          off the homepage.
-        </p>
+      <div class="hero-console-body">
+        <p class="hero-console-command">$ inspect --with-receipts</p>
+        <div class="hero-console-output">
+          <span>agent tools need boundaries</span>
+          <span>benchmarks need fairness controls</span>
+          <span>platforms need reusable defaults</span>
+        </div>
+        <dl class="hero-console-grid">
+          {proofStats.map((stat) => (
+            <div>
+              <dt>
+                <UiIcon name={stat.icon} class="stat-icon" />
+                <span>{stat.label}</span>
+              </dt>
+              <dd>{stat.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </aside>
+  </section>
+
+  <section class="home-proof-strip" aria-label="Published proof and focus areas">
+    <p>Published work across</p>
+    <div class="focus-marquee">
+      {focusSignals.map((signal) => <span>{signal}</span>)}
+    </div>
+  </section>
+
+  <section class="home-cta-band">
+    <div>
+      <h2>Ready to inspect architecture without the pitch?</h2>
+      <p>Start with the systems that have code, benchmarks, deployment context, and hard tradeoffs attached.</p>
+    </div>
+    <a class="button button--primary" href="/projects/">
+      <UiIcon name="arrow-right" class="button-icon" />
+      <span>Get started</span>
+    </a>
+  </section>
+
+  <section class="section-block home-section home-section--plain">
+    <div class="section-heading">
+      <h2>Same judgment, across the stack.</h2>
+      <p class="section-summary">
+        The point is not being loud about AI, cloud, or backend engineering. The point is knowing
+        where the work breaks when the demo ends.
+      </p>
+    </div>
+    <div class="stack-surface-grid">
+      {stackSurfaces.map((surface) => (
+        <a class="stack-surface-card" href={surface.href}>
+          <span class="stack-surface-icon">
+            <UiIcon name={surface.icon} />
+          </span>
+          <h3>{surface.title}</h3>
+          <p>{surface.body}</p>
+          <span class="stack-surface-link">
+            <span>{surface.action}</span>
+            <UiIcon name="arrow-right" />
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-block home-section workbench-section">
+    <div class="workbench-layout">
+      <div class="workbench-copy">
+        <div class="section-heading">
+          <h2>Put the work under pressure.</h2>
+          <p class="section-summary">
+            Strong engineering work follows the same standard every time: understand, benchmark,
+            ship, then show the evidence.
+          </p>
+        </div>
+        <div class="workbench-steps">
+          {workbenchSteps.map((step, index) => (
+            <article class:list={["workbench-step", index === 0 && "workbench-step--active"]}>
+              <span class="workbench-step-label">
+                <UiIcon name={step.icon} />
+                {step.label}
+              </span>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <div class="workbench-visual">
+        <HomeSignalGraphic />
       </div>
     </div>
   </section>
 
-  <section class="section-block section-block--accent">
+  <section class="section-block home-section section-block--accent">
     <div class="section-heading">
-      <p class="eyebrow">Proof ledger</p>
       <h2>The work has to carry the claim.</h2>
       <p class="section-summary">
-        This is the part most personal technical sites avoid. Assertions are cheap. These projects
-        are here because they have enough implementation surface to be judged.
+        Assertions are cheap. These projects are here because they have enough implementation
+        surface to be judged.
       </p>
     </div>
     <div class="proof-ledger">
@@ -182,29 +272,9 @@ const archiveWriting = recentArticles
     </div>
   </section>
 
-  <section class="section-block">
+  <section class="section-block home-section">
     <div class="section-heading">
-      <p class="eyebrow">Operating thesis</p>
-      <h2>Less commentary. More receipts.</h2>
-    </div>
-    <div class="principles-grid">
-      {operatingPrinciples.map((principle) => (
-        <article class="principle-card">
-          <div class="principle-card-head">
-            <UiIcon name={principle.icon} class="principle-icon" />
-            <p class="eyebrow">{principle.kicker}</p>
-          </div>
-          <h3>{principle.title}</h3>
-          <p>{principle.body}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="section-block">
-    <div class="section-heading">
-      <p class="eyebrow">Start here</p>
-      <h2>The essays that explain the judgment behind the work.</h2>
+      <h2>Start with the arguments behind the work.</h2>
     </div>
     <div class="feature-grid">
       {featuredArticles.map((entry) => <ArticleCard entry={entry} variant="feature" />)}
@@ -212,10 +282,9 @@ const archiveWriting = recentArticles
   </section>
 
   {showProjects && (
-    <section class="section-block">
+    <section class="section-block home-section">
       <div class="section-heading section-heading--inline">
         <div>
-          <p class="eyebrow">Flagship projects</p>
           <h2>Projects with enough surface area to inspect.</h2>
         </div>
         <a class="section-link" href="/projects/">
@@ -229,11 +298,10 @@ const archiveWriting = recentArticles
     </section>
   )}
 
-  <section class="section-block">
+  <section class="section-block home-section">
     <div class="section-heading section-heading--inline">
       <div>
-        <p class="eyebrow">Current writing</p>
-        <h2>Recent pieces that still match the positioning.</h2>
+        <h2>Recent thinking.</h2>
       </div>
       <a class="section-link" href="/articles/">
         <span>View all articles</span>
@@ -248,7 +316,7 @@ const archiveWriting = recentArticles
   </section>
 
   {archiveWriting.length > 0 && (
-    <section class="section-block section-block--quiet">
+    <section class="section-block home-section section-block--quiet">
       <div class="section-heading section-heading--inline">
         <div>
           <p class="eyebrow">Archive</p>
@@ -266,7 +334,7 @@ const archiveWriting = recentArticles
   )}
 
   {showNotes && (
-    <section class="section-block">
+    <section class="section-block home-section">
       <div class="section-heading section-heading--inline">
         <div>
           <p class="eyebrow">Recent notes</p>

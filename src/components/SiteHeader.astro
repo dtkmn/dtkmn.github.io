@@ -5,7 +5,6 @@ import UiIcon from "@/components/UiIcon.astro";
 const pathname = Astro.url.pathname;
 const navLinks = [
   { href: "/articles/", label: "Articles", icon: "articles" },
-  { href: "/projects/", label: "Projects", icon: "projects" },
   { href: "/notes/", label: "Notes", icon: "notes" },
   { href: "/about/", label: "About", icon: "about" },
  ] as const;
@@ -46,22 +45,25 @@ function isActive(href: string) {
     ))}
   </nav>
 
-  <div class="site-links site-links--desktop" aria-label="External">
-    <span class="site-links-label">Elsewhere</span>
-    {externalLinks.map((link) => (
-      <a href={link.href} rel="noreferrer noopener" target="_blank" aria-label={link.label} title={link.label}>
-        <UiIcon name={link.icon} class="site-link-icon" />
-      </a>
-    ))}
+  <div class="site-actions">
+    <a class="site-action-cta" href="/projects/">
+      <UiIcon name="rocket" class="site-link-icon" />
+      <span>Inspect work</span>
+    </a>
   </div>
 
   <details class="site-menu">
-    <summary class="site-menu-toggle">
+    <summary class="site-menu-toggle" aria-label="Menu">
       <UiIcon name="menu" class="site-menu-toggle-icon" />
       <span>Menu</span>
     </summary>
 
     <div class="site-menu-panel">
+      <a class="site-action-cta site-action-cta--menu" href="/projects/">
+        <UiIcon name="rocket" class="site-link-icon" />
+        <span>Inspect work</span>
+      </a>
+
       <nav class="site-nav site-nav--menu" aria-label="Mobile primary">
         {navLinks.map((link) => (
           <a href={link.href} aria-current={isActive(link.href) ? "page" : undefined}>
