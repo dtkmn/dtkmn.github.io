@@ -100,13 +100,16 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={siteConfig.author.name} />
-    <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="#030303" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fbfaf6" />
     <script is:inline>
       (() => {
         const storageKey = "dtkmn-theme";
         const root = document.documentElement;
-        const systemTheme = () => window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        const themeColor = {
+          dark: "#030303",
+          light: "#fbfaf6",
+        };
         let storedTheme = null;
 
         try {
@@ -115,9 +118,14 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
           storedTheme = null;
         }
 
-        const theme = storedTheme === "light" || storedTheme === "dark" ? storedTheme : systemTheme();
+        const theme = storedTheme === "light" || storedTheme === "dark" ? storedTheme : "light";
         root.dataset.theme = theme;
         root.style.colorScheme = theme;
+
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+          meta.setAttribute("content", themeColor[theme]);
+        }
       })();
     </script>
     <meta name="robots" content="index,follow,max-image-preview:large" />
@@ -166,7 +174,6 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
       (() => {
         const storageKey = "dtkmn-theme";
         const root = document.documentElement;
-        const media = window.matchMedia("(prefers-color-scheme: light)");
         const themeColor = {
           dark: "#030303",
           light: "#fbfaf6",
@@ -180,8 +187,6 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
             return null;
           }
         };
-
-        const systemTheme = () => media.matches ? "light" : "dark";
 
         const applyTheme = (theme, persist) => {
           root.dataset.theme = theme;
@@ -208,18 +213,12 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
           }
         };
 
-        applyTheme(getStoredTheme() ?? root.dataset.theme ?? systemTheme(), false);
+        applyTheme(getStoredTheme() ?? root.dataset.theme ?? "light", false);
 
         document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
           button.addEventListener("click", () => {
             applyTheme(root.dataset.theme === "dark" ? "light" : "dark", true);
           });
-        });
-
-        media.addEventListener("change", () => {
-          if (!getStoredTheme()) {
-            applyTheme(systemTheme(), false);
-          }
         });
       })();
     </script>

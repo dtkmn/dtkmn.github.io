@@ -6,66 +6,6 @@
 @import "@fontsource/ibm-plex-mono/500.css";
 
 :root {
-  color-scheme: dark;
-  --graphite-950: #030303;
-  --graphite-900: #070708;
-  --graphite-850: #0e0f11;
-  --graphite-800: #18191d;
-  --ink: #e6e6e3;
-  --ink-strong: #fbfaf6;
-  --muted: #9b9b97;
-  --accent: #f0efea;
-  --accent-secondary: #d8d8d2;
-  --accent-strong: #ffffff;
-  --accent-warm: #d9d5c9;
-  --border: rgb(var(--wash-rgb) / 0.15);
-  --border-strong: rgb(var(--wash-rgb) / 0.34);
-  --shadow: 0 30px 80px rgb(var(--shadow-rgb) / 0.42);
-  --wash-rgb: 255 255 255;
-  --surface-rgb: 18 18 20;
-  --surface-deep-rgb: 6 6 7;
-  --shadow-rgb: 0 0 0;
-  --page-background: linear-gradient(180deg, #111214 0%, #080809 42%, #030303 100%);
-  --page-ambient: linear-gradient(90deg, rgb(var(--wash-rgb) / 0.035), transparent 72%);
-  --grid-line: rgb(var(--wash-rgb) / 0.015);
-  --selection-bg: rgb(var(--wash-rgb) / 0.24);
-  --primary-text: #050505;
-  --code-bg: #030303;
-  --radius: 24px;
-  --content-width: 73rem;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    color-scheme: light;
-    --graphite-950: #fbfaf6;
-    --graphite-900: #f3f2ec;
-    --graphite-850: #eceae2;
-    --graphite-800: #dedbd0;
-    --ink: #252522;
-    --ink-strong: #050505;
-    --muted: #706f68;
-    --accent: #161616;
-    --accent-secondary: #3f3f3a;
-    --accent-strong: #000000;
-    --accent-warm: #4f4a40;
-    --border: rgb(var(--shadow-rgb) / 0.14);
-    --border-strong: rgb(var(--shadow-rgb) / 0.3);
-    --shadow: 0 24px 70px rgba(28, 27, 22, 0.12);
-    --wash-rgb: 0 0 0;
-    --surface-rgb: 255 255 255;
-    --surface-deep-rgb: 248 247 242;
-    --shadow-rgb: 28 27 22;
-    --page-background: linear-gradient(180deg, #f7f6f1 0%, #eeede6 48%, #fbfaf6 100%);
-    --page-ambient: linear-gradient(90deg, rgb(var(--wash-rgb) / 0.035), transparent 72%);
-    --grid-line: rgb(var(--wash-rgb) / 0.018);
-    --selection-bg: rgb(var(--wash-rgb) / 0.16);
-    --primary-text: #ffffff;
-    --code-bg: #141414;
-  }
-}
-
-:root[data-theme="light"] {
   color-scheme: light;
   --graphite-950: #fbfaf6;
   --graphite-900: #f3f2ec;
@@ -91,10 +31,40 @@
   --selection-bg: rgb(var(--wash-rgb) / 0.16);
   --primary-text: #ffffff;
   --code-bg: #141414;
+  --radius: 24px;
+  --content-width: 73rem;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
+  --graphite-950: #030303;
+  --graphite-900: #070708;
+  --graphite-850: #0e0f11;
+  --graphite-800: #18191d;
+  --ink: #e6e6e3;
+  --ink-strong: #fbfaf6;
+  --muted: #9b9b97;
+  --accent: #f0efea;
+  --accent-secondary: #d8d8d2;
+  --accent-strong: #ffffff;
+  --accent-warm: #d9d5c9;
+  --border: rgb(var(--wash-rgb) / 0.15);
+  --border-strong: rgb(var(--wash-rgb) / 0.34);
+  --shadow: 0 30px 80px rgb(var(--shadow-rgb) / 0.42);
+  --wash-rgb: 255 255 255;
+  --surface-rgb: 18 18 20;
+  --surface-deep-rgb: 6 6 7;
+  --shadow-rgb: 0 0 0;
+  --page-background: linear-gradient(180deg, #111214 0%, #080809 42%, #030303 100%);
+  --page-ambient: linear-gradient(90deg, rgb(var(--wash-rgb) / 0.035), transparent 72%);
+  --grid-line: rgb(var(--wash-rgb) / 0.015);
+  --selection-bg: rgb(var(--wash-rgb) / 0.24);
+  --primary-text: #050505;
+  --code-bg: #030303;
 }
 
 * {
@@ -377,14 +347,12 @@ summary:focus-visible {
   display: block;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .theme-toggle-icon--sun {
-    display: none;
-  }
+:root:not([data-theme]) .theme-toggle-icon--sun {
+  display: none;
+}
 
-  :root:not([data-theme]) .theme-toggle-icon--moon {
-    display: block;
-  }
+:root:not([data-theme]) .theme-toggle-icon--moon {
+  display: block;
 }
 
 .theme-toggle-text {
