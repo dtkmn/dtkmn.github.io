@@ -15,6 +15,7 @@ interface Props {
   publishedTime?: Date | string;
   modifiedTime?: Date | string;
   tags?: string[];
+  robots?: string;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   publishedTime,
   modifiedTime,
   tags = [],
+  robots = "index,follow,max-image-preview:large",
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${siteConfig.siteTitle}` : `${siteConfig.siteTitle} | ${siteConfig.tagline}`;
@@ -128,8 +130,8 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
         }
       })();
     </script>
-    <meta name="robots" content="index,follow,max-image-preview:large" />
-    <meta name="googlebot" content="index,follow,max-image-preview:large" />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
     <link rel="canonical" href={pageCanonical} />
     <link rel="author" href={siteConfig.author.url} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

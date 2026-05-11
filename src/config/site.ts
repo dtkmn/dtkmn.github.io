@@ -7,9 +7,8 @@ export const siteConfig = {
   siteUrl: "https://danieltse.org",
   siteTitle: "Daniel Tse",
   siteDescription:
-    "Case studies, benchmarks, and technical essays on AI systems, integration protocols, JVM backend engineering, and cloud delivery from a hands-on principal engineer.",
-  tagline:
-    "Benchmarks and shipped systems for AI tooling, JVM services, and cloud delivery.",
+    "Case studies, benchmarks, and essays on AI systems, JVM backend engineering, integration protocols, and cloud delivery.",
+  tagline: "AI systems, JVM benchmarks, and cloud delivery.",
   author: {
     name: "Daniel Tse",
     role: "Principal Engineer",
