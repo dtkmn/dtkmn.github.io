@@ -34,8 +34,8 @@ export const siteConfig = {
     "Cloud platforms, Kubernetes, and delivery paths after launch day",
   ],
   featuredPostSlugs: [
+    "simulate-customer-outcomes-before-shipping-ai-agents",
     "mcp-the-usb-c-of-ai-integrations",
     "what-microservice-benchmarks-actually-measure-in-2026",
-    "why-local-llms-matter-in-2025",
   ] as string[],
 } as const;

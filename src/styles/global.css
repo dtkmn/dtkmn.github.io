@@ -2684,6 +2684,7 @@ summary:focus-visible {
 
   .post-sidebar {
     position: static;
+    order: 2;
   }
 
   .project-sidebar {
@@ -2691,6 +2692,7 @@ summary:focus-visible {
   }
 
   .prose {
+    order: 1;
     width: 100%;
   }
 

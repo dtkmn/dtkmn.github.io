@@ -1,0 +1,400 @@
+<figure id="customer-outcome-simulation" class="outcome-sim" aria-labelledby="outcome-sim-title" aria-describedby="outcome-sim-desc">
+  <div class="outcome-sim__topline">
+    <span>Simulation run</span>
+    <strong>Baseline vs proposed</strong>
+  </div>
+
+  <figcaption class="outcome-sim__heading">
+    <span id="outcome-sim-title">Customer outcome simulation before launch</span>
+    <small id="outcome-sim-desc">
+      Synthetic customer cohorts move through an AI change, domain-owned systems, and an evidence report before reviewers choose a launch posture.
+    </small>
+  </figcaption>
+
+  <div class="outcome-sim__stages" aria-hidden="true">
+    <section class="outcome-sim__stage outcome-sim__stage--cohort">
+      <p>01 Customer cohorts</p>
+      <h3>Controlled variation</h3>
+      <div class="outcome-sim__dots">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <small>Everyday, vulnerable, escalation-risk</small>
+    </section>
+
+    <section class="outcome-sim__stage outcome-sim__stage--change">
+      <p>02 Proposed change</p>
+      <h3>Agent, tool, or policy</h3>
+      <div class="outcome-sim__mini-bars">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <small>Prompt, permission, workflow, threshold</small>
+    </section>
+
+    <section class="outcome-sim__stage outcome-sim__stage--boundary">
+      <p>03 Business boundary</p>
+      <h3>Systems stay yours</h3>
+      <div class="outcome-sim__boundary">
+        <span>API</span>
+        <span>Policy</span>
+        <span>State</span>
+      </div>
+      <small>Side effects and business logic remain owned</small>
+    </section>
+
+    <section class="outcome-sim__stage outcome-sim__stage--report">
+      <p>04 Outcome report</p>
+      <h3>Replayable evidence</h3>
+      <div class="outcome-sim__report-lines">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <small>Helped, harmed, missed, owner</small>
+    </section>
+  </div>
+
+  <div class="outcome-sim__flow" aria-hidden="true">
+    <span class="outcome-sim__packet outcome-sim__packet--one"></span>
+    <span class="outcome-sim__packet outcome-sim__packet--two"></span>
+    <span class="outcome-sim__packet outcome-sim__packet--three"></span>
+  </div>
+
+  <div class="outcome-sim__footer" aria-label="Example simulation result">
+    <div>
+      <span>Cohort</span>
+      <strong>100 customers</strong>
+    </div>
+    <div>
+      <span>Horizon</span>
+      <strong>30 simulated days</strong>
+    </div>
+    <div>
+      <span>Evidence coverage</span>
+      <strong>Audited: partial</strong>
+    </div>
+    <div class="outcome-sim__decision">
+      <span>Launch posture</span>
+      <strong>Hold until the escalation gate is fixed</strong>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .outcome-sim {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    margin: 2rem 0 2.4rem;
+    padding: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 1.15rem;
+    background:
+      linear-gradient(135deg, rgb(var(--wash-rgb) / 0.055), transparent 42%),
+      linear-gradient(180deg, rgb(var(--surface-rgb) / 0.68), rgb(var(--surface-deep-rgb) / 0.44));
+    box-shadow: 0 24px 60px rgb(var(--shadow-rgb) / 0.16);
+  }
+
+  .outcome-sim::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(var(--wash-rgb) / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--wash-rgb) / 0.035) 1px, transparent 1px);
+    background-size: 2.4rem 2.4rem;
+    mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+    pointer-events: none;
+  }
+
+  .outcome-sim__topline,
+  .outcome-sim__heading,
+  .outcome-sim__stages,
+  .outcome-sim__flow,
+  .outcome-sim__footer {
+    position: relative;
+    z-index: 1;
+  }
+
+  .outcome-sim__topline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+  }
+
+  .outcome-sim__topline strong {
+    color: var(--ink-strong);
+    font-weight: 500;
+  }
+
+  .outcome-sim__heading {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 42rem;
+  }
+
+  .outcome-sim__heading span {
+    color: var(--ink-strong);
+    font-family: "Newsreader Variable", serif;
+    font-size: clamp(1.55rem, 4vw, 2.15rem);
+    font-variation-settings: "opsz" 48, "wght" 620;
+    line-height: 1.04;
+  }
+
+  .outcome-sim__heading small {
+    color: var(--ink);
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  .outcome-sim__stages {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.72rem;
+  }
+
+  .outcome-sim__stage {
+    display: grid;
+    min-height: 13.5rem;
+    align-content: space-between;
+    gap: 0.7rem;
+    padding: 0.95rem;
+    border: 1px solid rgb(var(--wash-rgb) / 0.12);
+    border-radius: 0.95rem;
+    background:
+      linear-gradient(180deg, rgb(var(--wash-rgb) / 0.04), rgb(var(--wash-rgb) / 0.012)),
+      rgb(var(--surface-rgb) / 0.38);
+  }
+
+  .outcome-sim__stage p,
+  .outcome-sim__stage h3,
+  .outcome-sim__stage small {
+    margin: 0;
+  }
+
+  .outcome-sim__stage p {
+    color: var(--muted);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .outcome-sim__stage h3 {
+    color: var(--ink-strong);
+    font-size: 1.02rem;
+    line-height: 1.15;
+  }
+
+  .outcome-sim__stage small {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .outcome-sim__dots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.45rem;
+    width: min(100%, 8rem);
+  }
+
+  .outcome-sim__dots span {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--ink-strong);
+    opacity: 0.76;
+    animation: sim-breathe 3.6s ease-in-out infinite;
+  }
+
+  .outcome-sim__dots span:nth-child(2n) {
+    background: var(--accent-secondary);
+    animation-delay: 480ms;
+  }
+
+  .outcome-sim__dots span:nth-child(3n) {
+    background: var(--accent-warm);
+    animation-delay: 960ms;
+  }
+
+  .outcome-sim__mini-bars,
+  .outcome-sim__report-lines {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .outcome-sim__mini-bars span,
+  .outcome-sim__report-lines span {
+    display: block;
+    height: 0.58rem;
+    border-radius: 999px;
+    background: rgb(var(--wash-rgb) / 0.18);
+  }
+
+  .outcome-sim__mini-bars span:first-child,
+  .outcome-sim__report-lines span:first-child {
+    width: 88%;
+    background: var(--accent);
+  }
+
+  .outcome-sim__mini-bars span:nth-child(2),
+  .outcome-sim__report-lines span:nth-child(2) {
+    width: 62%;
+  }
+
+  .outcome-sim__mini-bars span:nth-child(3),
+  .outcome-sim__report-lines span:nth-child(3) {
+    width: 74%;
+  }
+
+  .outcome-sim__boundary {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .outcome-sim__boundary span {
+    display: block;
+    padding: 0.42rem 0.55rem;
+    border: 1px solid rgb(var(--wash-rgb) / 0.13);
+    border-radius: 0.65rem;
+    color: var(--ink-strong);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    background: rgb(var(--surface-deep-rgb) / 0.36);
+  }
+
+  .outcome-sim__flow {
+    height: 0.5rem;
+    margin: 0 0.4rem;
+    border-radius: 999px;
+    background:
+      linear-gradient(90deg, transparent, rgb(var(--wash-rgb) / 0.2), transparent),
+      rgb(var(--wash-rgb) / 0.04);
+  }
+
+  .outcome-sim__packet {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 50%;
+    background: var(--ink-strong);
+    box-shadow: 0 0 0 0.42rem rgb(var(--wash-rgb) / 0.065);
+    transform: translate(-50%, -50%);
+    animation: sim-travel 5.8s linear infinite;
+  }
+
+  .outcome-sim__packet--two {
+    animation-delay: 1.9s;
+    background: var(--accent-secondary);
+  }
+
+  .outcome-sim__packet--three {
+    animation-delay: 3.8s;
+    background: var(--accent-warm);
+  }
+
+  .outcome-sim__footer {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .outcome-sim__footer div {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.78rem;
+    border: 1px solid rgb(var(--wash-rgb) / 0.11);
+    border-radius: 0.85rem;
+    background: rgb(var(--surface-deep-rgb) / 0.24);
+  }
+
+  .outcome-sim__footer span {
+    color: var(--muted);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+  }
+
+  .outcome-sim__footer strong {
+    color: var(--ink-strong);
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  .outcome-sim__decision {
+    border-color: rgb(var(--wash-rgb) / 0.22) !important;
+    background:
+      linear-gradient(180deg, rgb(var(--wash-rgb) / 0.07), rgb(var(--wash-rgb) / 0.03)),
+      rgb(var(--surface-deep-rgb) / 0.38) !important;
+  }
+
+  @keyframes sim-travel {
+    0% {
+      left: 0%;
+      opacity: 0;
+    }
+
+    8%,
+    92% {
+      opacity: 1;
+    }
+
+    100% {
+      left: 100%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes sim-breathe {
+    0%,
+    100% {
+      transform: scale(0.92);
+      opacity: 0.5;
+    }
+
+    50% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .outcome-sim {
+      padding: 0.85rem;
+    }
+
+    .outcome-sim__stages,
+    .outcome-sim__footer {
+      grid-template-columns: 1fr;
+    }
+
+    .outcome-sim__stage {
+      min-height: 10.5rem;
+    }
+
+    .outcome-sim__flow {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .outcome-sim__packet,
+    .outcome-sim__dots span {
+      animation: none;
+    }
+  }
+</style>
