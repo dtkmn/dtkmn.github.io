@@ -33,8 +33,8 @@ export const siteConfig = {
     "Cloud platforms, Kubernetes, and delivery paths after launch day",
   ],
   featuredPostSlugs: [
+    "demos-are-cheap-production-mcp-is-expensive",
     "simulate-customer-outcomes-before-shipping-ai-agents",
-    "mcp-the-usb-c-of-ai-integrations",
     "what-microservice-benchmarks-actually-measure-in-2026",
   ] as string[],
 } as const;

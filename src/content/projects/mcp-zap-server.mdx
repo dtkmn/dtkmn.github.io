@@ -1,6 +1,6 @@
 ---
 title: MCP ZAP Server
-summary: Secure OWASP ZAP scanning exposed as an MCP server for AI agents, with real deployment paths, documentation, and production-oriented auth.
+summary: Secure OWASP ZAP scanning exposed as an MCP server for AI agents, with gateway-core policy boundaries, CI security gates, observability, and production-oriented auth.
 date: 2025-04-20
 draft: false
 featured: true
@@ -13,6 +13,7 @@ docsUrl: https://dtkmn.github.io/mcp-zap-server/
 demoUrl: https://dtkmn.github.io/mcp-zap-server/demo.html
 heroImage: /images/projects/mcp-zap-server-hero.svg
 relatedPosts:
+  - demos-are-cheap-production-mcp-is-expensive
   - mcp-the-usb-c-of-ai-integrations
 tags:
   - AI systems
@@ -32,37 +33,48 @@ audience:
   - Platform engineers integrating security checks into developer tooling
   - Teams evaluating MCP beyond toy demos
 proofPoints:
-  - 53 GitHub stars and 9 forks as of May 11, 2026.
-  - Separate docs site, release notes, and demo flow instead of a README-only repo.
-  - Supports API-key and JWT authentication modes plus URL validation and scan limits.
+  - 56 GitHub stars and 9 forks as of June 10, 2026.
+  - June 10 v0.9.0 release-branch metadata moves policy, audit, and abuse-protection handling onto shared gateway-core adapter boundaries.
+  - Supports API-key and JWT authentication modes, tool scopes, runtime policy bundles, URL validation, rate limits, workspace quotas, and audit events.
+  - "Security-alert pressure is visible: June 10 Netty dependency alerts were remediated by an upgrade, while scanner findings remain part of active triage."
 evidenceStats:
   - label: Public traction
-    value: 53 stars
-    detail: GitHub stars as recorded on May 11, 2026.
+    value: 56 stars
+    detail: GitHub stars as recorded on June 10, 2026, with 9 forks.
     icon: github
-  - label: Auth modes
-    value: "2"
-    detail: API-key and JWT paths are called out as operational controls.
-    icon: shield
-  - label: Delivery paths
-    value: "3"
-    detail: Repository, documentation site, and hosted demo are all linked.
+  - label: Release track
+    value: "0.9.0"
+    detail: June 10 release-branch metadata, release notes, and Helm/app version updates.
     icon: rocket
   - label: Guardrails
-    value: URL limits
-    detail: URL validation and scan limits keep the agent boundary visible.
+    value: Gateway
+    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries route through shared gateway-core adapters.
+    icon: shield
+  - label: Delivery paths
+    value: CI + Helm
+    detail: GitHub/GitLab security-gate examples, Docker Compose, Helm, and docs are all part of the artifact.
     icon: check-circle
+  - label: Alert pressure
+    value: Live
+    detail: Dependency and scanner alerts feed remediation work instead of being hidden behind the demo.
+    icon: terminal
 evidenceAssets:
   - type: repository
     label: Repository signal
-    title: Public code with visible adoption
-    detail: The repo has public traction plus enough structure to inspect beyond a README headline.
+    title: Public code with visible adoption and maintenance pressure
+    detail: The repo has public traction, active June 10 release-branch work, and enough structure to inspect beyond a README headline.
     href: https://github.com/dtkmn/mcp-zap-server
     hrefLabel: Inspect repository
+  - type: governance
+    label: Release evidence
+    title: v0.9.0 release-branch notes
+    detail: The June 10 notes document gateway-core adapter adoption, CI security-gate packaging, dependency updates, Snyk workflow coverage, and release validation commands.
+    href: https://github.com/dtkmn/mcp-zap-server/blob/release/v0.9.0/RELEASE_NOTES_0.9.0.md
+    hrefLabel: Read release notes
   - type: docs
     label: Docs surface
-    title: Separate documentation and release discipline
-    detail: The project has a docs site, release notes, and setup paths, which makes it easier to judge as software rather than a demo.
+    title: Separate documentation and operator runbooks
+    detail: The project has docs for auth, tool surfaces, abuse protection, observability, scan execution, runtime policy bundles, and production checklists.
     href: https://dtkmn.github.io/mcp-zap-server/
     hrefLabel: Read docs
   - type: demo
@@ -73,36 +85,55 @@ evidenceAssets:
     hrefLabel: Open demo
   - type: security
     label: Operational guardrails
-    title: Auth, URL validation, and scan limits
-    detail: This is the proof that the project is thinking about operator risk, not just successful tool calls.
+    title: Auth, policy, audit, rate limits, and URL boundaries
+    detail: This is the proof that the project is thinking about operator risk, live remediation pressure, and failure handling, not just successful tool calls.
 ---
 
 ## What it is
 
-This project turns OWASP ZAP into an MCP-accessible tool so an AI agent can drive scanning,
-import OpenAPI specs, and pull structured findings without falling back to brittle shell scripts.
+This project turns OWASP ZAP into an MCP-accessible security tool so an AI agent can import API
+schemas, run scanning workflows, and pull structured findings without falling back to brittle shell
+scripts.
 
 ## Why it matters
 
-Many MCP demos stop at convenience. This one is stronger because it sits on a real operational seam:
-security automation. The interesting question is not whether an agent can call a tool. It is whether
-that tool can be exposed in a way that is safe enough, observable enough, and packaged well enough to
-fit into actual engineering workflows.
+Many MCP demos stop at convenience. This one is stronger because it sits on a real operational
+boundary: security automation. The interesting question is not whether an agent can call a tool. It
+is whether that tool can be exposed in a way that is safe enough, observable enough, and packaged
+well enough to fit into actual engineering workflows.
 
 ## What makes it credible
 
 The repository has enough surface area to show that it has moved past novelty:
 
-- a documentation site with security and deployment guides,
+- a documentation site with security, deployment, observability, and operator runbooks,
 - a demo path that shows the workflow end to end,
 - release notes and changelog discipline,
-- deployment material for containerized and Kubernetes-based setups.
+- GitHub Actions and GitLab security-gate examples,
+- Docker Compose and Helm deployment material,
+- API-key/JWT auth, tool scopes, runtime policy bundles, audit events, rate limits, workspace quotas,
+  and target URL validation.
 
-That combination is exactly why it deserves a page here. The repository handles setup and usage. This
-page explains why the project matters in the first place.
+The June 10 v0.9.0 release-branch work makes the proof sharper. Policy, audit, and abuse-protection
+handling now route through shared gateway-core adapter boundaries instead of living as one-off local
+filters. The security-gate examples reject mutable image tags. The docs and validation commands make
+the release process inspectable.
+
+The security-alert context is part of the proof, not something to airbrush out. On June 10, GitHub
+dependency alerts flagged high-severity Netty issues; the branch moved to Netty `4.2.15.Final` and
+the relevant Dependabot alerts were marked fixed the same morning. Snyk still showed high-severity
+framework and Micrometer findings that need triage. That is what production-adjacent maintenance
+looks like: alerts arrive, fixes land, unresolved work stays visible.
+
+That combination is exactly why this deserves a page here. The repository handles setup and usage.
+This page explains why the project matters in the first place.
 
 ## How it connects to the writing
 
-This is the practical counterpart to the argument in [MCP: the USB-C of AI integrations](/posts/mcp-the-usb-c-of-ai-integrations/).
-The article explains why a common integration layer matters. The project shows what that looks like
-when the tool on the other side has real security and operational constraints.
+This is the practical counterpart to the production argument in [Demos Are Cheap. Production MCP Is
+Expensive.](/posts/demos-are-cheap-production-mcp-is-expensive/) and the protocol explainer in
+[MCP: the USB-C of AI integrations](/posts/mcp-the-usb-c-of-ai-integrations/).
+
+The protocol article explains why a common integration layer matters. The production article explains
+why the protocol is not enough. This project shows what happens when the tool on the other side has
+real security, deployment, observability, and remediation pressure.
