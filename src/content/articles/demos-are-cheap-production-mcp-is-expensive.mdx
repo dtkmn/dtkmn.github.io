@@ -1,0 +1,214 @@
+---
+title: "Demos Are Cheap. Production MCP Is Expensive."
+summary: "MCP reduces integration glue, but production readiness lives outside the protocol: ownership, auth, deployment, observability, and operator-visible limits."
+date: 2026-05-20
+tags:
+  - MCP
+  - AI Agents
+  - Security
+  - Platform Engineering
+  - Deployment
+featured: false
+draft: false
+heroImage: /images/projects/mcp-zap-server-hero.svg
+---
+
+![MCP ZAP Server secure orchestration flow](/images/projects/mcp-zap-server-hero.svg)
+
+The fastest way to misunderstand MCP is to watch a demo and think you have seen the system.
+
+The agent discovers a tool. The schema looks clean. The call succeeds. The response streams back into the chat. Everyone nods because the protocol did what the protocol promised.
+
+That is useful.
+
+It is also nowhere near production.
+
+MCP solves a real problem. I argued that in [MCP: The USB-C of AI Integrations](/posts/mcp-the-usb-c-of-ai-integrations/): without a common protocol, every AI surface and every external tool becomes another custom integration. That M x N problem is wasteful, brittle, and boring in the worst engineering sense. MCP turns the wiring into something more reusable.
+
+But the recent production-MCP conversation around [Pinterest's MCP ecosystem](https://medium.com/pinterest-engineering/building-an-mcp-ecosystem-at-pinterest-d881eb4c16f1) makes the more important point clear: the protocol is the easy layer to admire. Production is everything that happens around it.
+
+Registry. Ownership. Auth. Authorization. Deployment. Observability. Human approval. Blast-radius control. Tool scoping. Incident review. Rollback. Cost. Latency. Data exposure. Audit trails.
+
+If those words make the conversation feel less exciting, good. That is where the truth is.
+
+## MCP is the boundary, not the business
+
+Under the hood, MCP gives AI systems a shared way to discover capabilities and call tools. A host runs the AI experience. A client speaks MCP. A server exposes tools, resources, and prompts.
+
+That boundary matters because it stops the model from freehanding access to your systems. The model does not "just call the database." It sees a declared tool with a name, a description, and a schema. The client routes the call. The server executes code you own.
+
+That is the right shape.
+
+But do not confuse a clean protocol boundary with a complete operational boundary.
+
+MCP does not decide who should access revenue data.
+
+MCP does not know whether a scan target belongs to you.
+
+MCP does not tell you which team owns the server at 2 a.m.
+
+MCP does not make a dangerous action safe because the arguments were valid JSON.
+
+MCP is a protocol layer. It gives the system grammar. It does not give the system judgement.
+
+The work of production is deciding where judgement lives.
+
+## Demos hide the hardest part
+
+Most MCP demos are cheap because they optimize for the moment of visible magic.
+
+The model asks for something. The tool runs. The output appears.
+
+That tells you almost nothing about whether the server belongs in a real engineering environment.
+
+A production review has to ask harsher questions:
+
+- Who owns this server?
+- Who is allowed to discover it?
+- Who is allowed to call each tool?
+- Which actions require human approval?
+- What happens if the model supplies a technically valid but dangerous argument?
+- Where are inputs, outputs, errors, and decisions logged?
+- Can an operator replay what happened?
+- Can the server be deployed the same way twice?
+- Can it be rolled back?
+- Can it be killed quickly?
+- Does the tool fail closed when identity, policy, or downstream services are unavailable?
+
+If the answer is "we can add that later," you are not building production MCP. You are building a demo with a liability backlog.
+
+That may sound harsh. It should. Agents turn integration mistakes into action mistakes. Once the model can invoke tools, the risk is no longer confined to a bad answer in a chat window. The system can query data, trigger workflows, scan targets, mutate state, open tickets, send messages, or produce artifacts that other humans trust.
+
+That changes the standard.
+
+## Operator-visible security beats invisible confidence
+
+Security controls are weaker when only the platform team can see them.
+
+In production, operators need to understand what the system will allow, what it blocked, and why. That does not mean every end user needs a security console. It means the people responsible for the system need visible, inspectable controls.
+
+For MCP, that usually means at least four layers.
+
+First, identity. The system needs to know who is asking, whether that is a human user, a service, or an automated workflow.
+
+Second, server-level access. Not every host should be allowed to connect to every MCP server. A general chat surface and a privileged security workflow should not inherit the same reach just because they both speak MCP.
+
+Third, tool-level authorization. Being able to connect to a server is not the same as being allowed to invoke every tool on it. A low-risk documentation lookup and a high-risk production query do not belong behind the same permission check.
+
+Fourth, argument-level and action-level guardrails. Valid JSON is not the same as valid intent. The server still needs to validate target URLs, environment names, query scopes, destructive flags, rate limits, cost limits, and approval requirements.
+
+This is why the Pinterest case is more interesting than the usual MCP excitement cycle. The important part is not that they used MCP. It is that they treated MCP as one layer inside a broader operating model: cloud-hosted servers, a central registry, layered auth, team ownership, deployment paths, and observability.
+
+That is the right instinct.
+
+The boring controls are the product.
+
+## Deployment reality decides whether the design survives
+
+There is a reason production systems converge on paved roads.
+
+If every team has to invent its own MCP server deployment story, most teams will choose one of two bad options. They will either avoid building servers because the platform work is too heavy, or they will build snowflake servers that pass demos and fail operations.
+
+Neither path scales.
+
+The many-small-servers model is attractive because it keeps domains coherent. A data warehouse server can have different controls from a documentation server. A security scanning server can have different limits from a ticketing server. The model's tool context stays smaller, and the blast radius stays more legible.
+
+But many small servers only work if the deployment burden is low.
+
+That means production MCP needs repeatable packaging, configuration, auth integration, logs, metrics, ownership metadata, health checks, versioning, and rollout mechanics. It needs a registry that is more than a directory. The registry has to become the control plane for discovery, approval, status, support ownership, and policy.
+
+Otherwise, "many small servers" becomes "many small operational messes."
+
+This is where founders and engineers often lie to themselves. They say they are building an ecosystem when they are really accumulating integration demos. An ecosystem has distribution, governance, upgrade paths, documentation, and failure handling. A pile of clever servers is not an ecosystem.
+
+It is a pile.
+
+## MCP ZAP Server is the kind of test that matters
+
+This is why [MCP ZAP Server](/projects/mcp-zap-server/) is a better proof point than another toy integration.
+
+It wraps OWASP ZAP behind MCP so agents can import OpenAPI specs, run scans, and return structured findings. That is a real tool with real consequences. Security scanning is not a harmless example. It touches target ownership, network boundaries, scan intensity, false positives, report handling, and operator trust.
+
+A weak demo would stop at "the agent launched a scan."
+
+A credible implementation has to answer harder questions:
+
+- Can the server reject targets it should not scan?
+- Can operators see which scan ran, who requested it, and why?
+- Are scan limits explicit?
+- Is authentication built in rather than hand-waved?
+- Can the server run locally for development and in containers or Kubernetes for real workflows?
+- Is the result structured enough for an agent to use without hiding the evidence?
+- Can a security team inspect the project and understand the boundary?
+
+That is the difference between an integration and a system.
+
+The ZAP project is not interesting because MCP makes OWASP ZAP look shiny. It is interesting because it forces the production question early. Once an agent can drive a scanner, the protocol boundary has to meet security reality. You cannot pretend the tool call is the whole story.
+
+That is exactly the mental model MCP needs.
+
+## The production checklist is not optional
+
+If I were reviewing an MCP server for production, I would not start with the demo.
+
+I would start with the operating contract.
+
+What does the server expose?
+
+Who owns it?
+
+Who can discover it?
+
+Who can connect to it?
+
+Which tools are safe by default?
+
+Which tools require approval?
+
+Which arguments are constrained by policy?
+
+Which logs prove what happened?
+
+Which metrics show usage, errors, latency, cost, and value?
+
+Which failure modes fail closed?
+
+Which deployment path is blessed?
+
+Which version is running?
+
+Who gets paged when it breaks?
+
+That list is not glamorous. It is the price of letting agents operate near real systems.
+
+The protocol makes the server easier to plug in. It does not make the server safe, useful, owned, observable, or deployable. Those qualities are earned separately.
+
+## Where this leads
+
+The next phase of MCP will not be won by the teams with the cleanest "hello world" demos.
+
+It will be won by teams that make the boundary inspectable.
+
+The AI surface should know which tools exist. The user should only see tools they can actually use. The operator should know who owns the server, what policy applies, how it is deployed, what happened during each invocation, and how to stop it when something goes wrong.
+
+That is the line between protocol enthusiasm and production engineering.
+
+MCP matters because it turns integrations into contracts. But a contract is only useful when the organization can enforce it.
+
+So yes, build the MCP server. Show the demo. Let the agent call the tool.
+
+Then do the real work:
+
+- make ownership explicit
+- make authorization layered
+- make dangerous actions confirmable
+- make deployment boring
+- make observability default
+- make evidence replayable
+- make the boundary visible to the people carrying the risk
+
+That is the standard.
+
+Demos prove that the protocol can move.
+
+Production proves that the system can be trusted.

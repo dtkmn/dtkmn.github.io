@@ -135,6 +135,18 @@ Can a product owner explain the recommendation without hiding behind a model sco
 
 If the answer is no, the team is not ready. They might still ship, but they should be honest about what they are doing: using production customers as the test harness.
 
+## The proof trail is getting less theoretical
+
+DoorDash's support automation team has now published the clearest public version of this pattern. In its [January 2026 simulation-evaluation flywheel write-up](https://careersatdoordash.com/blog/doordash-simulation-evaluation-flywheel-to-develop-llm-chatbots-at-scale/), the team describes moving from risky production testing and slow manual scenario review to offline, multi-turn simulations grounded in real support transcripts, mock backend responses, and calibrated LLM-as-judge evaluations.
+
+The more recent [June 2026 platform follow-up](https://careersatdoordash.com/blog/doordashs-one-click-simulation-and-evaluation-platform-for-support-chatbots/) makes the proof stronger. DoorDash reports an order-status validation where simulation produced 302 conversations in five minutes with a 46% escalation rate, while a 1% production rollout produced 175 conversations in seven hours with a 44% escalation rate. They also report a 90% reduction in simulated hallucinations for chatbot development, with the improvement carrying into production.
+
+That is not a universal benchmark. It is a useful proof pattern: production failures become replayable scenarios, proposed changes are compared against a baseline, tool behavior is mocked instead of hand-waved, evaluations are tied to workflow-specific criteria, and post-deployment monitoring checks whether the offline signal held up.
+
+This is why customer-outcome simulation matters more than agent demos. A demo shows that the bot can survive a staged path. A flywheel shows whether a proposed change preserves escalation, policy adherence, resolution quality, and customer state across many production-derived paths before customers absorb the test.
+
+That same standard applies to the rest of this site. [MCP turns tool access into inspectable contracts](/posts/mcp-the-usb-c-of-ai-integrations/), and [MCP ZAP Server](/projects/mcp-zap-server/) is useful because it makes auth, target limits, deployment, and evidence visible around a real tool call. Customer-outcome simulation is the next layer up: after the agent can act, prove what happened to the customer, workflow, or operator who lives with the consequence.
+
 ## Where Astraform fits
 
 This is the product direction that makes [Astraform](https://astraform.ai/) interesting to me.

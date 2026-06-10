@@ -1,6 +1,6 @@
 ---
 title: Why Local LLMs Matter in 2025
-summary: Local models are no longer just a hobbyist niche. In 2025 they are a practical answer to privacy, latency, and cloud-cost pressure.
+summary: Local models are no longer just a hobbyist niche. They are a practical answer to privacy, latency, cloud-cost pressure, and private AI system boundaries.
 date: 2025-04-28
 tags:
   - LLM
@@ -15,11 +15,13 @@ heroImage: /images/posts/local-llms/hero.png
 
 ![Why local LLMs matter](/images/posts/local-llms/hero.png)
 
+> **Editor's note (June 2026):** This was my top-viewed Medium story this week, so I am keeping the practical Ollama walkthrough intact but tightening why it belongs here. Treat the model examples as a 2025 snapshot; the current site-level argument is about private AI systems and explicit boundaries: what stays local, what an agent can reach, and what evidence survives for operators. That same boundary question runs through [MCP: The USB-C of AI Integrations](/posts/mcp-the-usb-c-of-ai-integrations/), [MCP ZAP Server](/projects/mcp-zap-server/), and [Test Customer Outcomes, Not AI Agents](/posts/simulate-customer-outcomes-before-shipping-ai-agents/).
+
 Large language models running entirely on your own device matter more than ever. Privacy concerns are rising, on-device data processing is becoming more valuable, and cloud inference costs are still unpredictable. A local setup gives you stronger control over where data lives and how it is processed.
 
 In practice that means your chats, documents, and code can stay on your machine while still benefiting from a capable model. Ollama is one of the simplest ways to get there because it wraps model download, runtime management, and local APIs into a workflow that is approachable for developers.
 
-This guide covers the practical case for local models, the hardware expectations, how to install Ollama, and the core workflow for pulling and running a model locally.
+This guide covers the practical case for local models, the hardware expectations, how to install Ollama, and the core workflow for pulling and running a model locally. The larger engineering question is where the inference boundary belongs when the system is reading private context, generating structured outputs, or preparing to call tools.
 
 ## System requirements
 
@@ -139,9 +141,11 @@ The response comes back as JSON, which makes it straightforward to integrate int
 
 ## Why this matters in practice
 
-Local LLMs are not just about cost. They change the engineering constraints:
+Local LLMs are not just about cost. They change the engineering constraints by making the model boundary explicit:
 
 - sensitive data can remain local
+- retrieval over private documents can happen without external model calls
+- tool and agent experiments can start behind a smaller boundary
 - latency is predictable and often lower for iterative work
 - experimentation is easier because you control the full stack
 - billing uncertainty is replaced by infrastructure you already own
@@ -154,6 +158,8 @@ That combination makes local models especially attractive for:
 - on-device copilots
 - internal tooling that should not depend on outbound model calls
 
+That boundary framing is the connection to the rest of this site. Local inference controls where prompts, documents, and embeddings go. [MCP-style tool servers](/posts/mcp-the-usb-c-of-ai-integrations/) control what capabilities an agent can discover and invoke. [Customer-outcome simulation](/posts/simulate-customer-outcomes-before-shipping-ai-agents/) asks whether those boundaries still produce acceptable results once the system can affect a user, workflow, or security process.
+
 ## Closing thought
 
 Running your own model in 2025 is no longer a novelty. It is a credible engineering choice. With tools like Ollama, the setup cost is low enough that more teams should treat local inference as a default option to evaluate, not an exotic alternative.
@@ -164,4 +170,8 @@ If the workload is privacy-sensitive, latency-sensitive, or cost-sensitive, loca
 
 The serious point is not "run a model locally because it is interesting." The serious point is control over the inference boundary.
 
-That is why this essay belongs next to the [LLM AI Assistant](https://github.com/dtkmn/llm-ai-assistant) project. Private document analysis, local retrieval, and on-device experimentation all depend on the same architectural choice: decide deliberately where the model runs, where the data lives, and what leaves the machine.
+That is why this essay belongs next to the [LLM AI Assistant](https://github.com/dtkmn/llm-ai-assistant), which is also listed with the supporting [AI systems projects](/projects/). The project is deliberately practical: document-grounded QA, local model execution, vector search, and a runnable interface. It is a private-AI boundary test, not just another chat UI.
+
+The useful question is simple: can a user ask questions over private documents while keeping retrieval, model execution, and evidence close enough to inspect? Once that local system connects to external tools, the next boundary becomes [MCP](/posts/mcp-the-usb-c-of-ai-integrations/) and the operational controls in [MCP ZAP Server](/projects/mcp-zap-server/). Once the system can affect customer state, the next test is [customer outcomes](/posts/simulate-customer-outcomes-before-shipping-ai-agents/).
+
+That is the path from this explainer into the rest of the site: local model, private context, explicit tool boundary, observable outcome.
