@@ -1,7 +1,7 @@
 ---
 title: "Demos Are Cheap. Production MCP Is Expensive."
 summary: "MCP makes tool wiring legible, but production readiness is earned in ownership, authorization, deployment, observability, and live remediation pressure."
-date: 2026-06-10
+date: 2026-06-26
 tags:
   - MCP
   - AI Agents
@@ -116,9 +116,11 @@ It is a pile.
 
 Production proof is not a frozen screenshot of a working demo. It is the system continuing to make defensible changes after reality hits it.
 
-That is the useful lesson from the June 10 work on [MCP ZAP Server](/projects/mcp-zap-server/). The v0.9.0 release branch did not just add more tools. It moved policy, audit, and abuse-protection handling toward shared gateway-core adapter boundaries; added reusable GitHub Actions and GitLab security-gate examples; tightened CI image-reference validation; and updated dependency surfaces including Spring AI, Netty, and the docs stack.
+That is the useful lesson from the June maintenance trail on [MCP ZAP Server](/projects/mcp-zap-server/). The v0.9.0 release on June 10 did not just add more tools. It moved policy, audit, and abuse-protection handling toward shared gateway-core adapter boundaries; added reusable GitHub Actions and GitLab security-gate examples; tightened CI image-reference validation; and updated dependency surfaces including Spring AI, Netty, and the docs stack.
 
-The security-alert context matters because it removes the fantasy that production readiness means nothing ever fires. GitHub dependency alerts on June 10 flagged high-severity Netty issues. The branch moved to Netty `4.2.15.Final`, and GitHub marked the relevant Dependabot alerts fixed the same morning. Snyk still showed high-severity framework and Micrometer findings that need triage.
+The v0.9.1 release on June 26 is the more important maintenance signal because it refuses to freeze the proof at the exciting part. It bumps runtime, Helm, MCP Registry, and install metadata to `0.9.1`; refreshes gateway-core to `0.5.10`; moves Spring Boot to `4.0.7`, Spring AI to `2.0.0`, Gradle to `9.6.0`, and the docs stack to Astro `7.0.3`; and archives old release notes under `docs/releases/` instead of leaving root-level snapshots to rot.
+
+The security-alert context matters because it removes the fantasy that production readiness means nothing ever fires. GitHub dependency alerts on June 10 flagged high-severity Netty issues. The branch moved to Netty `4.2.15.Final`, and GitHub marked the relevant Dependabot alerts fixed the same morning. On June 26, the release overrode Spring Boot's Jackson 2 BOM to `2.22.0` so the runtime no longer resolved `jackson-databind` `2.21.4`; hardened Snyk by requiring `SNYK_ORG`, checking for generated SARIF files, and bounding monitor steps; and updated support tables so `>= 0.9.1` is active while `0.9.0` is explicitly an upgrade target for dependency refresh.
 
 That is not a blemish to hide. It is the point.
 

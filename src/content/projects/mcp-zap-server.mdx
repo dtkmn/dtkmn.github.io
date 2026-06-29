@@ -33,43 +33,43 @@ audience:
   - Platform engineers integrating security checks into developer tooling
   - Teams evaluating MCP beyond toy demos
 proofPoints:
-  - 56 GitHub stars and 9 forks as of June 10, 2026.
-  - June 10 v0.9.0 release-branch metadata moves policy, audit, and abuse-protection handling onto shared gateway-core adapter boundaries.
+  - 58 GitHub stars and 8 forks as of June 30, 2026.
+  - June 26 v0.9.1 maintenance/security release refreshes runtime, Helm, MCP Registry, and install metadata without pretending to be a feature launch.
   - Supports API-key and JWT authentication modes, tool scopes, runtime policy bundles, URL validation, rate limits, workspace quotas, and audit events.
-  - "Security-alert pressure is visible: June 10 Netty dependency alerts were remediated by an upgrade, while scanner findings remain part of active triage."
+  - "Security posture is visible: Jackson is pinned forward through a BOM override, Snyk scans now require org/SARIF evidence, and v0.9.0 is marked upgrade-only."
 evidenceStats:
   - label: Public traction
-    value: 56 stars
-    detail: GitHub stars as recorded on June 10, 2026, with 9 forks.
+    value: 58 stars
+    detail: GitHub stars as recorded on June 30, 2026, with 8 forks.
     icon: github
   - label: Release track
-    value: "0.9.0"
-    detail: June 10 release-branch metadata, release notes, and Helm/app version updates.
+    value: "0.9.1"
+    detail: June 26 maintenance/security release with runtime, Helm/app, MCP Registry, and install metadata refreshed.
     icon: rocket
   - label: Guardrails
     value: Gateway
-    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries route through shared gateway-core adapters.
+    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries route through shared gateway-core adapters now refreshed to 0.5.10.
     icon: shield
   - label: Delivery paths
     value: CI + Helm
     detail: GitHub/GitLab security-gate examples, Docker Compose, Helm, and docs are all part of the artifact.
     icon: check-circle
-  - label: Alert pressure
-    value: Live
-    detail: Dependency and scanner alerts feed remediation work instead of being hidden behind the demo.
+  - label: Security refresh
+    value: Jackson
+    detail: Jackson 2.22.0 override, hardened Snyk workflow configuration, and support-table cleanup are part of the release.
     icon: terminal
 evidenceAssets:
   - type: repository
     label: Repository signal
     title: Public code with visible adoption and maintenance pressure
-    detail: The repo has public traction, active June 10 release-branch work, and enough structure to inspect beyond a README headline.
+    detail: The repo has public traction, June 26 maintenance/security release work, and enough structure to inspect beyond a README headline.
     href: https://github.com/dtkmn/mcp-zap-server
     hrefLabel: Inspect repository
   - type: governance
     label: Release evidence
-    title: v0.9.0 release-branch notes
-    detail: The June 10 notes document gateway-core adapter adoption, CI security-gate packaging, dependency updates, Snyk workflow coverage, and release validation commands.
-    href: https://github.com/dtkmn/mcp-zap-server/blob/release/v0.9.0/RELEASE_NOTES_0.9.0.md
+    title: v0.9.1 maintenance/security release
+    detail: The June 26 notes document the 0.9.1 metadata bump, gateway-core 0.5.10 refresh, Jackson 2.22.0 override, Snyk hardening, and archived release-note cleanup.
+    href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.9.1
     hrefLabel: Read release notes
   - type: docs
     label: Docs surface
@@ -114,16 +114,22 @@ The repository has enough surface area to show that it has moved past novelty:
 - API-key/JWT auth, tool scopes, runtime policy bundles, audit events, rate limits, workspace quotas,
   and target URL validation.
 
-The June 10 v0.9.0 release-branch work makes the proof sharper. Policy, audit, and abuse-protection
-handling now route through shared gateway-core adapter boundaries instead of living as one-off local
-filters. The security-gate examples reject mutable image tags. The docs and validation commands make
-the release process inspectable.
+The June 10 v0.9.0 release made the proof sharper: policy, audit, and abuse-protection handling moved
+through shared gateway-core adapter boundaries instead of one-off local filters. The security-gate
+examples rejected mutable image tags, and the release notes made validation commands inspectable.
 
-The security-alert context is part of the proof, not something to airbrush out. On June 10, GitHub
-dependency alerts flagged high-severity Netty issues; the branch moved to Netty `4.2.15.Final` and
-the relevant Dependabot alerts were marked fixed the same morning. Snyk still showed high-severity
-framework and Micrometer findings that need triage. That is what production-adjacent maintenance
-looks like: alerts arrive, fixes land, unresolved work stays visible.
+The June 26 v0.9.1 release is the part that keeps the proof honest. It is a maintenance/security
+release, not a feature launch. Runtime, Helm, MCP Registry, and install metadata moved to `0.9.1`.
+The gateway-core adapters moved to `0.5.10`; Spring Boot moved to `4.0.7`; Spring AI moved to
+`2.0.0`; Gradle moved to `9.6.0`; the docs stack moved to Astro `7.0.3`.
+
+The security posture matters more than the version churn. The release overrides Spring Boot's Jackson
+2 BOM to `2.22.0` so the runtime no longer resolves `jackson-databind` `2.21.4`. The Snyk workflow
+now requires `SNYK_ORG`, fails when expected SARIF files are missing, and keeps monitor steps bounded
+with explicit timeouts. Historical release notes were moved under `docs/releases/`, and the support
+tables now say `>= 0.9.1` is active while `0.9.0` should be upgraded for dependency refresh. That is
+what production-adjacent maintenance looks like: the proof ages, the repo catches up, and stale
+claims get removed instead of defended.
 
 That combination is exactly why this deserves a page here. The repository handles setup and usage.
 This page explains why the project matters in the first place.
