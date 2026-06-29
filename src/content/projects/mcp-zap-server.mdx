@@ -1,6 +1,6 @@
 ---
 title: MCP ZAP Server
-summary: Secure OWASP ZAP scanning exposed as an MCP server for AI agents, with gateway-core policy boundaries, CI security gates, observability, and production-oriented auth.
+summary: Secure OWASP ZAP scanning exposed as an MCP server for AI agents, with reusable tool-governance boundaries, CI security gates, observability, and production-oriented auth.
 date: 2025-04-20
 draft: false
 featured: true
@@ -48,7 +48,7 @@ evidenceStats:
     icon: rocket
   - label: Guardrails
     value: Gateway
-    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries route through shared gateway-core adapters now refreshed to 0.5.10.
+    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries route through shared Java governance adapters now refreshed to 0.5.10.
     icon: shield
   - label: Delivery paths
     value: CI + Helm
@@ -68,7 +68,7 @@ evidenceAssets:
   - type: governance
     label: Release evidence
     title: v0.9.1 maintenance/security release
-    detail: The June 26 notes document the 0.9.1 metadata bump, gateway-core 0.5.10 refresh, Jackson 2.22.0 override, Snyk hardening, and archived release-note cleanup.
+    detail: The June 26 notes document the 0.9.1 metadata bump, shared governance adapter refresh, Jackson 2.22.0 override, Snyk hardening, and archived release-note cleanup.
     href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.9.1
     hrefLabel: Read release notes
   - type: docs
@@ -95,6 +95,10 @@ This project turns OWASP ZAP into an MCP-accessible security tool so an AI agent
 schemas, run scanning workflows, and pull structured findings without falling back to brittle shell
 scripts.
 
+The reusable boundary layer now has its own site entry: [MCP Gateway Core](/projects/mcp-gateway-core/)
+is the Java contract layer for tool identity, authorization, policy, audit, abuse protection, and
+adapter behavior. This project stays responsible for the ZAP-specific runtime.
+
 ## Why it matters
 
 Many MCP demos stop at convenience. This one is stronger because it sits on a real operational
@@ -115,13 +119,15 @@ The repository has enough surface area to show that it has moved past novelty:
   and target URL validation.
 
 The June 10 v0.9.0 release made the proof sharper: policy, audit, and abuse-protection handling moved
-through shared gateway-core adapter boundaries instead of one-off local filters. The security-gate
-examples rejected mutable image tags, and the release notes made validation commands inspectable.
+through shared [MCP Gateway Core](/projects/mcp-gateway-core/) adapter boundaries instead of one-off
+local filters. The security-gate examples rejected mutable image tags, and the release notes made
+validation commands inspectable.
 
 The June 26 v0.9.1 release is the part that keeps the proof honest. It is a maintenance/security
 release, not a feature launch. Runtime, Helm, MCP Registry, and install metadata moved to `0.9.1`.
-The gateway-core adapters moved to `0.5.10`; Spring Boot moved to `4.0.7`; Spring AI moved to
-`2.0.0`; Gradle moved to `9.6.0`; the docs stack moved to Astro `7.0.3`.
+The [MCP Gateway Core](/projects/mcp-gateway-core/) adapters moved to `0.5.10`; Spring Boot moved
+to `4.0.7`; Spring AI moved to `2.0.0`; Gradle moved to `9.6.0`; the docs stack moved to Astro
+`7.0.3`.
 
 The security posture matters more than the version churn. The release overrides Spring Boot's Jackson
 2 BOM to `2.22.0` so the runtime no longer resolves `jackson-databind` `2.21.4`. The Snyk workflow
@@ -137,8 +143,9 @@ This page explains why the project matters in the first place.
 ## How it connects to the writing
 
 This is the practical counterpart to the production argument in [Demos Are Cheap. Production MCP Is
-Expensive.](/posts/demos-are-cheap-production-mcp-is-expensive/) and the protocol explainer in
-[MCP: the USB-C of AI integrations](/posts/mcp-the-usb-c-of-ai-integrations/).
+Expensive.](/posts/demos-are-cheap-production-mcp-is-expensive/), the protocol explainer in
+[MCP: the USB-C of AI integrations](/posts/mcp-the-usb-c-of-ai-integrations/), and the reusable
+boundary layer in [MCP Gateway Core](/projects/mcp-gateway-core/).
 
 The protocol article explains why a common integration layer matters. The production article explains
 why the protocol is not enough. This project shows what happens when the tool on the other side has

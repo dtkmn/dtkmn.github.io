@@ -1,0 +1,198 @@
+---
+title: MCP Gateway Core
+summary: "Java governance contracts for MCP tool gateways: tool identity, authorization decisions, policy bundles, audit events, abuse protection, URL scoping, rate limits, and a separate Spring WebFlux adapter."
+date: 2026-06-22
+draft: false
+featured: false
+detailPage: true
+tier: flagship
+status: active
+order: 0
+repoUrl: https://github.com/dtkmn/mcp-gateway-core
+docsUrl: https://danieltse.org/mcp-gateway-core/
+heroImage: /images/projects/mcp-gateway-core-hero.svg
+relatedPosts:
+  - demos-are-cheap-production-mcp-is-expensive
+  - mcp-the-usb-c-of-ai-integrations
+tags:
+  - AI systems
+  - MCP
+  - Java
+  - Security tooling
+  - Governance
+stack:
+  - Java 17+
+  - Spring WebFlux
+  - Gradle
+  - Maven Central
+  - GitHub Actions
+  - Astro Starlight
+audience:
+  - Java MCP server maintainers who need shared tool-governance contracts
+  - Security-runtime builders separating policy decisions from scanner behavior
+  - Platform engineers evaluating MCP boundaries before choosing a proxy or runtime gateway
+proofPoints:
+  - "v0.7.0 was published on June 22, 2026 as a public-preview hardening release, not a stable API promise."
+  - "The 0.7.0 milestone still shows 10 open release-gate issues, including docs/release/security version sync and final release verification."
+  - "The June 29, 2026 Snyk workflow on main failed after PR #24 merged because the Spring WebFlux Gradle graph resolved jackson-databind 2.21.2 with seven vulnerable paths; SARIF upload still completed before the enforced exit code failed."
+  - "The core artifact is kept JDK-only while the Spring WebFlux adapter is separate, so downstream runtimes do not inherit Spring unless they choose it."
+  - "Forbidden-coupling checks reject scanner, runtime, private-repo, and data-plane references from the shared library boundary."
+evidenceStats:
+  - label: Preview line
+    value: "0.7.0"
+    detail: Published June 22, 2026 with compatibility gates and WebFlux fail-closed request-shape behavior.
+    icon: rocket
+  - label: Open hardening
+    value: "10 issues"
+    detail: The 0.7.0 milestone remains open with release-gate work still visible.
+    icon: check-circle
+  - label: Scanner signal
+    value: Snyk failed
+    detail: June 29 main run uploaded SARIF, then enforced the Snyk exit code on Jackson findings.
+    icon: shield
+  - label: Boundary
+    value: Core + adapter
+    detail: JDK-only core contracts stay separate from the optional Spring WebFlux governance filter.
+    icon: layers
+  - label: Public traction
+    value: "1 star"
+    detail: This page treats the repo as a boundary-layer proof, not as popularity evidence.
+    icon: github
+evidenceAssets:
+  - type: repository
+    label: Repository signal
+    title: Small public Java library with a deliberately narrow scope
+    detail: The repository describes itself as Java governance contracts for MCP tool gateways and explicitly says it is not a proxy data plane.
+    href: https://github.com/dtkmn/mcp-gateway-core
+    hrefLabel: Inspect repository
+  - type: governance
+    label: Release evidence
+    title: v0.7.0 public-preview hardening release
+    detail: The release adds compatibility gates, WebFlux fail-closed request-shape handling, invalid-request observer support, and stronger consumer smoke checks.
+    href: https://github.com/dtkmn/mcp-gateway-core/releases/tag/v0.7.0
+    hrefLabel: Read release
+  - type: governance
+    label: Hardening ledger
+    title: 0.7.0 milestone still has open release gates
+    detail: Open issues keep the remaining compatibility, WebFlux, docs/release sync, and final verification work inspectable instead of hidden behind the release badge.
+    href: https://github.com/dtkmn/mcp-gateway-core/milestone/1
+    hrefLabel: View milestone
+  - type: security
+    label: Security pressure
+    title: June 29 Snyk failure on main
+    detail: "The Snyk workflow failed after PR #24 merged, with SARIF uploaded and the exit code enforced against Jackson findings in the Spring WebFlux adapter graph."
+    href: https://github.com/dtkmn/mcp-gateway-core/actions/runs/28365344965
+    hrefLabel: Inspect workflow
+  - type: docs
+    label: Docs sync
+    title: Docs and release state are treated as part of the artifact
+    detail: "The docs site is generated from repository Markdown and SECURITY.md, while issue #13 tracks docs, release notes, and security version sync."
+    href: https://github.com/dtkmn/mcp-gateway-core/issues/13
+    hrefLabel: Track docs sync
+---
+
+## What it is
+
+`mcp-gateway-core` is a Java library for MCP tool-governance contracts. It gives
+downstream runtimes shared types and helpers for tool identity, authorization requirements,
+policy decisions, audit events, abuse-protection decisions, URL scope checks, correlation IDs,
+and rate limiting.
+
+It also publishes `mcp-gateway-spring-webflux`, an optional adapter that applies those contracts
+to Spring WebFlux HTTP traffic.
+
+That is the whole point. The project is not trying to be an MCP router, proxy data plane, ZAP
+integration, marketplace, service mesh, UI, or scanner runtime. If it starts swallowing those jobs,
+it becomes less useful.
+
+## Why it exists
+
+MCP servers keep running into the same governance questions:
+
+- what tool is being called,
+- which principal and workspace are attached to the call,
+- whether the caller is authorized,
+- whether a policy bundle allows or denies the request,
+- how quotas, abuse protection, and rate limits are represented,
+- what audit event survives after the tool call,
+- which URL or target scope is allowed.
+
+Those concepts should not be reinvented inside every MCP server. They also should not be tangled
+with a specific product like OWASP ZAP, a specific auth provider, or a specific proxy runtime.
+
+`mcp-gateway-core` exists to keep that middle layer boring and reusable.
+
+## The boundary it enforces
+
+The strongest design choice is the boundary, not the API surface.
+
+The core artifact stays JDK-only. The Spring WebFlux adapter lives in a separate artifact. Storage,
+scanner behavior, auth-provider wiring, observability backend, transport setup, and product-specific
+tool behavior stay downstream.
+
+The repository backs that up with build gates. The core build rejects scanner, runtime, private-repo,
+and data-plane coupling. It checks JAR contents, Java 17 bytecode, `jdeps`, Maven Central bundle
+shape, checksums, and signed dry-run payloads. The compatibility work compares public API against a
+frozen `0.6.0` baseline and records accepted deltas for the `0.7.0` preview line.
+
+That is not glamorous. Good. This repo should be unglamorous. Its job is to stop each MCP server
+from making up a different vocabulary for the same governance decisions.
+
+## What the current evidence says
+
+The honest status is public preview.
+
+[v0.7.0](https://github.com/dtkmn/mcp-gateway-core/releases/tag/v0.7.0) was published on
+June 22, 2026 as a hardening release. It added compatibility gates, WebFlux fail-closed
+request-shape handling when governance is active, invalid-request observer support, pass-through
+behavior tests for inactive governance, Java 17 consumer smoke checks, and documentation updates.
+
+That release does not mean the work is done. The
+[0.7.0 milestone](https://github.com/dtkmn/mcp-gateway-core/milestone/1) still shows 10 open issues,
+including release-grade hardening, compatibility fixtures, WebFlux request classification,
+[docs/release/security version sync](https://github.com/dtkmn/mcp-gateway-core/issues/13), and
+[final release verification](https://github.com/dtkmn/mcp-gateway-core/issues/14).
+
+The security signal is also live, not cosmetic. On June 29, 2026, the
+[Snyk workflow on `main`](https://github.com/dtkmn/mcp-gateway-core/actions/runs/28365344965)
+failed after PR #24 merged. The run had Snyk configuration, scanned four Gradle projects, found
+seven vulnerable paths in the Spring WebFlux adapter graph through `jackson-databind` `2.21.2`,
+uploaded SARIF to GitHub Code Scanning, uploaded the SARIF artifact, and then failed on the enforced
+Snyk exit code.
+
+That is exactly the kind of maintenance pressure a boundary library should expose. A fake proof says
+"security scanning exists." A better proof shows what happened when the scanner found something.
+
+The docs/release-sync work is part of the same story. The repository keeps the docs site generated
+from `docs/` and `SECURITY.md`, and issue #13 keeps README, contract reference, compatibility,
+roadmap, release notes, security policy, and docs-site state tied to the shipped artifact line. That
+is not polish. For a contract library, stale docs are a contract defect.
+
+## How it differs from MCP ZAP Server
+
+[MCP ZAP Server](/projects/mcp-zap-server/) is a product-facing MCP server around OWASP ZAP. It has
+to care about scan targets, ZAP execution, reports, findings, deployment paths, and operator safety
+around a real security scanner.
+
+`mcp-gateway-core` is lower and narrower. It does not know how to run ZAP. It does not store
+findings. It does not decide what a scan means. It gives Java MCP runtimes a shared way to represent
+tool governance decisions before and around the product-specific behavior.
+
+That separation matters. If ZAP-specific concepts leak into the core library, the core stops being a
+contract. If the ZAP server hand-rolls every governance decision locally, the server becomes harder
+to inspect and harder to reuse. The useful architecture is a clean boundary: reusable governance
+contracts in `mcp-gateway-core`, scanner behavior in MCP ZAP Server.
+
+## How it connects to the writing
+
+The production-MCP argument keeps coming back to the same uncomfortable point: a protocol is not an
+operating model.
+
+[Demos Are Cheap. Production MCP Is Expensive.](/posts/demos-are-cheap-production-mcp-is-expensive/)
+uses live maintenance pressure as the test. `mcp-gateway-core` is the library-layer version of that
+test: compatibility gates, docs/release sync, public-preview caveats, and a failed scanner workflow
+that forces the next maintenance move.
+
+[MCP: the USB-C of AI integrations](/posts/mcp-the-usb-c-of-ai-integrations/) explains why the
+protocol matters. This project explains one thing the protocol does not give you automatically: a
+reusable boundary for authorization, policy, audit, and abuse-protection decisions around tool calls.

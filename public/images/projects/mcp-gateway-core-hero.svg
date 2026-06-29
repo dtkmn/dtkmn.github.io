@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" role="img" aria-labelledby="title desc">
+  <title id="title">MCP Gateway Core editorial hero</title>
+  <desc id="desc">A technical illustration showing Java MCP gateway contracts separating tool governance from downstream runtimes and product-specific behavior.</desc>
+  <style>
+    svg {
+      color-scheme: dark light;
+      --hero-bg-0: #070708;
+      --hero-bg-1: #0e0f11;
+      --hero-bg-2: #030303;
+      --hero-panel-0: #18191d;
+      --hero-panel-1: #070708;
+      --hero-panel-solid: #070708;
+      --hero-ink: #e6e6e3;
+      --hero-ink-strong: #fbfaf6;
+      --hero-muted: #9b9b97;
+      --hero-accent: #f0efea;
+      --hero-accent-soft: #d8d8d2;
+      --hero-accent-border: #d9d5c9;
+      --hero-line: #e6e6e3;
+      --hero-grid: #ffffff;
+      --hero-shadow: #000000;
+    }
+
+    @media (prefers-color-scheme: light) {
+      svg {
+        --hero-bg-0: #f7f6f1;
+        --hero-bg-1: #eeede6;
+        --hero-bg-2: #fbfaf6;
+        --hero-panel-0: #eceae2;
+        --hero-panel-1: #f7f6f1;
+        --hero-panel-solid: #fbfaf6;
+        --hero-ink: #252522;
+        --hero-ink-strong: #050505;
+        --hero-muted: #706f68;
+        --hero-accent: #161616;
+        --hero-accent-soft: #3f3f3a;
+        --hero-accent-border: #4f4a40;
+        --hero-line: #4f4a40;
+        --hero-grid: #000000;
+        --hero-shadow: #1c1b16;
+      }
+    }
+  </style>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--hero-bg-0)"/>
+      <stop offset="56%" stop-color="var(--hero-bg-1)"/>
+      <stop offset="100%" stop-color="var(--hero-bg-2)"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientTransform="translate(430 260) rotate(18) scale(540 420)">
+      <stop offset="0%" stop-color="var(--hero-accent)" stop-opacity="0.24"/>
+      <stop offset="100%" stop-color="var(--hero-accent)" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientTransform="translate(1160 560) rotate(-12) scale(500 420)">
+      <stop offset="0%" stop-color="var(--hero-accent-soft)" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="var(--hero-accent-soft)" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--hero-panel-0)" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="var(--hero-panel-1)" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--hero-accent)"/>
+      <stop offset="100%" stop-color="var(--hero-accent-soft)"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="var(--hero-shadow)" flood-opacity="0.42"/>
+    </filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="var(--hero-grid)" stroke-opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1067" fill="url(#bg)"/>
+  <rect width="1600" height="1067" fill="url(#grid)"/>
+  <rect width="1600" height="1067" fill="url(#glowA)"/>
+  <rect width="1600" height="1067" fill="url(#glowB)"/>
+
+  <g opacity="0.42">
+    <path d="M104 852C306 734 466 688 622 610C780 530 894 420 1060 356C1214 296 1364 226 1494 120" fill="none" stroke="var(--hero-accent)" stroke-opacity="0.16" stroke-width="3"/>
+    <path d="M118 922C328 816 494 764 688 664C848 582 972 486 1132 424C1288 364 1390 278 1516 184" fill="none" stroke="var(--hero-line)" stroke-opacity="0.1" stroke-width="2"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="118" y="168" width="412" height="646" rx="34" fill="url(#panel)" stroke="var(--hero-accent-border)" stroke-opacity="0.2"/>
+    <rect x="584" y="148" width="432" height="720" rx="36" fill="url(#panel)" stroke="var(--hero-accent-border)" stroke-opacity="0.24"/>
+    <rect x="1068" y="180" width="414" height="250" rx="32" fill="url(#panel)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+    <rect x="1068" y="484" width="414" height="330" rx="32" fill="url(#panel)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+  </g>
+
+  <g>
+    <text x="162" y="224" fill="var(--hero-accent)" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">DOWNSTREAM RUNTIME</text>
+    <text x="162" y="286" fill="var(--hero-ink-strong)" font-family="'Newsreader', serif" font-size="62">Tool calls</text>
+    <text x="162" y="342" fill="var(--hero-ink-strong)" font-family="'Newsreader', serif" font-size="62">need rules</text>
+    <text x="162" y="394" fill="var(--hero-ink)" font-family="'IBM Plex Sans', sans-serif" font-size="24">MCP servers should not invent governance every time.</text>
+
+    <rect x="162" y="462" width="324" height="102" rx="22" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+    <text x="198" y="526" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="30">tools/call</text>
+    <rect x="162" y="596" width="324" height="160" rx="24" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+    <circle cx="208" cy="646" r="10" fill="var(--hero-accent)"/>
+    <rect x="234" y="636" width="178" height="14" rx="7" fill="var(--hero-line)" fill-opacity="0.72"/>
+    <circle cx="208" cy="696" r="10" fill="var(--hero-accent)" fill-opacity="0.62"/>
+    <rect x="234" y="686" width="220" height="14" rx="7" fill="var(--hero-muted)" fill-opacity="0.34"/>
+  </g>
+
+  <g>
+    <text x="632" y="214" fill="var(--hero-accent)" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">MCP GATEWAY CORE</text>
+    <rect x="636" y="254" width="336" height="110" rx="26" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.22"/>
+    <text x="674" y="322" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="34">Java contracts</text>
+
+    <g transform="translate(636 410)">
+      <rect width="154" height="78" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="24" y="46" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">identity</text>
+      <rect x="182" width="154" height="78" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="206" y="46" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">authz</text>
+    </g>
+    <g transform="translate(636 516)">
+      <rect width="154" height="78" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="24" y="46" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">policy</text>
+      <rect x="182" width="154" height="78" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="206" y="46" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">audit</text>
+    </g>
+    <g transform="translate(636 622)">
+      <rect width="154" height="78" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="24" y="46" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">quotas</text>
+      <rect x="182" width="154" height="78" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="206" y="46" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">URL scope</text>
+    </g>
+
+    <rect x="636" y="746" width="336" height="72" rx="22" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+    <rect x="668" y="774" width="84" height="16" rx="8" fill="url(#accent)"/>
+    <rect x="774" y="774" width="132" height="16" rx="8" fill="var(--hero-line)" fill-opacity="0.22"/>
+  </g>
+
+  <g>
+    <text x="1112" y="234" fill="var(--hero-accent)" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">OPTIONAL ADAPTER</text>
+    <rect x="1112" y="274" width="326" height="94" rx="24" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+    <text x="1148" y="334" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="30">Spring WebFlux</text>
+
+    <text x="1112" y="544" fill="var(--hero-accent)" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">STAYS DOWNSTREAM</text>
+    <g transform="translate(1112 584)">
+      <rect width="326" height="56" rx="18" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.14"/>
+      <text x="24" y="36" fill="var(--hero-ink)" font-family="'IBM Plex Sans', sans-serif" font-size="22">scanner behavior</text>
+      <rect y="76" width="326" height="56" rx="18" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.14"/>
+      <text x="24" y="112" fill="var(--hero-ink)" font-family="'IBM Plex Sans', sans-serif" font-size="22">storage and reports</text>
+      <rect y="152" width="326" height="56" rx="18" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.14"/>
+      <text x="24" y="188" fill="var(--hero-ink)" font-family="'IBM Plex Sans', sans-serif" font-size="22">proxy/data plane</text>
+    </g>
+  </g>
+
+  <g opacity="0.95">
+    <path d="M486 514C540 514 570 468 636 468" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M972 310C1028 310 1052 318 1112 318" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M972 672C1046 672 1060 666 1112 666" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="18 18"/>
+    <circle cx="486" cy="514" r="9" fill="var(--hero-accent)"/>
+    <circle cx="636" cy="468" r="9" fill="var(--hero-accent-soft)"/>
+    <circle cx="972" cy="310" r="9" fill="var(--hero-accent)"/>
+    <circle cx="1112" cy="318" r="9" fill="var(--hero-accent-soft)"/>
+    <circle cx="972" cy="672" r="9" fill="var(--hero-accent)"/>
+    <circle cx="1112" cy="666" r="9" fill="var(--hero-accent-soft)"/>
+  </g>
+</svg>

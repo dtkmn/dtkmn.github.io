@@ -16,7 +16,12 @@ type IconName =
   | "spark"
   | "terminal";
 
-type ProjectKey = "mcp-zap-server" | "rtb-ingress-benchmark" | "spring-boot-playground" | "default";
+type ProjectKey =
+  | "mcp-gateway-core"
+  | "mcp-zap-server"
+  | "rtb-ingress-benchmark"
+  | "spring-boot-playground"
+  | "default";
 
 interface Props {
   variant: string;
@@ -26,6 +31,7 @@ interface Props {
 
 const { variant, title, stack } = Astro.props;
 const projectKey: ProjectKey =
+  variant === "mcp-gateway-core" ||
   variant === "mcp-zap-server" ||
   variant === "rtb-ingress-benchmark" ||
   variant === "spring-boot-playground"
@@ -42,6 +48,14 @@ const visualMeta: Record<
     badge: string;
   }
 > = {
+  "mcp-gateway-core": {
+    icon: "layers",
+    kicker: "Contract boundary",
+    title: "Governance contracts, not a gateway runtime.",
+    summary:
+      "The proof is the narrowness: JDK-only core contracts, an optional WebFlux adapter, and scanner or data-plane behavior kept downstream.",
+    badge: "Core + adapter",
+  },
   "mcp-zap-server": {
     icon: "shield",
     kicker: "Security flow",
@@ -85,6 +99,15 @@ const mcpNodes = [
 ];
 
 const mcpGuardrails = ["API key / JWT", "URL validation", "Scan limits", "Docs + demo"];
+
+const gatewayCoreNodes = [
+  { icon: "server" as IconName, label: "MCP runtime", detail: "Owns transport, auth provider, and product wiring." },
+  { icon: "layers" as IconName, label: "Core contracts", detail: "Defines tool identity, authz, policy, audit, and quotas." },
+  { icon: "shield" as IconName, label: "WebFlux adapter", detail: "Applies governance to HTTP traffic when chosen." },
+  { icon: "check-circle" as IconName, label: "Downstream tool", detail: "Keeps scanner behavior and storage outside core." },
+];
+
+const gatewayCoreBoundaries = ["JDK-only core", "Optional Spring", "No scanner coupling", "No proxy data plane"];
 
 const runtimeLanes = [
   { label: "Quarkus JVM", modes: "HTTP / Kafka" },
@@ -136,6 +159,29 @@ const starterLayers = [
       <div class="proof-guardrails">
         {mcpGuardrails.map((guardrail) => (
           <span>{guardrail}</span>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {projectKey === "mcp-gateway-core" && (
+    <div class="proof-flow proof-flow--gateway-core" aria-label="MCP Gateway Core contract boundary">
+      <div class="proof-flow-nodes">
+        {gatewayCoreNodes.map((node) => (
+          <div class="proof-flow-node">
+            <span class="proof-flow-node-icon">
+              <UiIcon name={node.icon} />
+            </span>
+            <span class="proof-flow-node-copy">
+              <strong>{node.label}</strong>
+              <span>{node.detail}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+      <div class="proof-guardrails">
+        {gatewayCoreBoundaries.map((boundary) => (
+          <span>{boundary}</span>
         ))}
       </div>
     </div>
