@@ -55,10 +55,10 @@ const proofIconBySlug = {
 } as const;
 const proofLedger = featuredProjects.map((project) => ({
   title: project.data.title,
-  href: `/projects/${project.slug}/`,
+  href: `/projects/${project.id}/`,
   proof: project.data.proofPoints[0] ?? "Curated because the project has enough surface area to prove the point.",
   stack: project.data.stack.slice(0, 3).join(" / "),
-  icon: proofIconBySlug[project.slug as keyof typeof proofIconBySlug] ?? "terminal",
+  icon: proofIconBySlug[project.id as keyof typeof proofIconBySlug] ?? "terminal",
 }));
 const stackSurfaces = [
   {

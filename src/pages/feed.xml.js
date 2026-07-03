@@ -10,7 +10,7 @@ export async function GET(context) {
       title: article.data.title,
       description: article.data.summary,
       pubDate: article.data.date,
-      link: `/posts/${article.slug}/`,
+      link: `/posts/${article.id}/`,
       categories: article.data.tags,
     }));
 
@@ -22,4 +22,3 @@ export async function GET(context) {
     customData: `<language>en-au</language>`,
   });
 }
-

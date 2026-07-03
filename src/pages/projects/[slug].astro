@@ -6,19 +6,19 @@ import { getArticlesBySlugs } from "@/lib/content";
 export async function getStaticPaths() {
   const projects = await getCollection("projects", ({ data }) => !data.draft && data.detailPage);
   return projects.map((project) => ({
-    params: { slug: project.slug },
+    params: { slug: project.id },
     props: { project },
   }));
 }
 
 const { project } = Astro.props;
 const { Content, headings } = await render(project);
-const readingTime = Math.max(1, Math.round(project.body.split(/\s+/u).filter(Boolean).length / 220));
+const readingTime = Math.max(1, Math.round((project.body ?? "").split(/\s+/u).filter(Boolean).length / 220));
 const relatedArticles = await getArticlesBySlugs(project.data.relatedPosts);
 ---
 
 <ProjectLayout
-  slug={project.slug}
+  slug={project.id}
   title={project.data.title}
   summary={project.data.summary}
   date={project.data.date}

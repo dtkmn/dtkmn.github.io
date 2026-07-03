@@ -35,7 +35,7 @@ export async function getPublishedProjects() {
 
 export async function getFeaturedArticles() {
   const articles = await getPublishedArticles();
-  const articleBySlug = new Map(articles.map((entry) => [entry.slug, entry]));
+  const articleBySlug = new Map(articles.map((entry) => [entry.id, entry]));
 
   return siteConfig.featuredPostSlugs
     .map((slug) => articleBySlug.get(slug))
@@ -46,7 +46,7 @@ export async function getRecentArticles(limit = 6) {
   const articles = await getPublishedArticles();
   const featured = new Set<string>(siteConfig.featuredPostSlugs);
 
-  return articles.filter((entry) => !featured.has(entry.slug)).slice(0, limit);
+  return articles.filter((entry) => !featured.has(entry.id)).slice(0, limit);
 }
 
 export async function getRecentNotes(limit = 4) {
@@ -75,7 +75,7 @@ export async function getArticlesBySlugs(slugs: string[]) {
   }
 
   const articles = await getPublishedArticles();
-  const articleBySlug = new Map(articles.map((entry) => [entry.slug, entry]));
+  const articleBySlug = new Map(articles.map((entry) => [entry.id, entry]));
 
   return slugs
     .map((slug) => articleBySlug.get(slug))

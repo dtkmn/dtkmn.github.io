@@ -53,7 +53,7 @@ const buildFocus = [
       <div class="about-proof-stack">
         {flagshipProjects.map((project) => (
           <article class="about-proof-item">
-            <a href={`/projects/${project.slug}/`}>{project.data.title}</a>
+            <a href={`/projects/${project.id}/`}>{project.data.title}</a>
             <p>{project.data.proofPoints[0] ?? project.data.summary}</p>
           </article>
         ))}
@@ -65,7 +65,7 @@ const buildFocus = [
       <div class="about-proof-stack">
         {featuredArticles.map((article) => (
           <article class="about-proof-item">
-            <a href={`/posts/${article.slug}/`}>{article.data.title}</a>
+            <a href={`/posts/${article.id}/`}>{article.data.title}</a>
             <p>
               <time datetime={article.data.date.toISOString()}>{formatDate(article.data.date)}</time>
               {" - "}

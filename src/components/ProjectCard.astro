@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { project, variant = "list" } = Astro.props;
-const href = project.data.detailPage ? `/projects/${project.slug}/` : project.data.repoUrl;
+const href = project.data.detailPage ? `/projects/${project.id}/` : project.data.repoUrl;
 const external = !project.data.detailPage;
 
 const statusLabel = {

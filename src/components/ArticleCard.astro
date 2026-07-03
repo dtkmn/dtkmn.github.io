@@ -12,8 +12,8 @@ interface Props {
 const { entry, variant = "list" } = Astro.props;
 const href =
   entry.collection === "articles"
-    ? `/posts/${entry.slug}/`
-    : `/notes/${entry.slug}/`;
+    ? `/posts/${entry.id}/`
+    : `/notes/${entry.id}/`;
 const description = entry.data.summary ?? "";
 const canonicalUrl = entry.collection === "articles" ? entry.data.canonicalUrl : undefined;
 const archiveReason = entry.collection === "articles" ? entry.data.archiveReason : undefined;

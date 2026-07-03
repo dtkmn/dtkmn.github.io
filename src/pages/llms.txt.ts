@@ -20,7 +20,7 @@ export async function GET() {
   const sortedArticles = articles.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
   const canonicalArticles = sortedArticles.filter((article) => !article.data.canonicalUrl);
   const archivedArticles = sortedArticles.filter((article) => article.data.canonicalUrl);
-  const featuredArticles = sortedArticles.filter((article) => featured.has(article.slug));
+  const featuredArticles = sortedArticles.filter((article) => featured.has(article.id));
   const featuredProjects = projects
     .filter((project) => project.data.featured)
     .sort((a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime());
@@ -47,19 +47,19 @@ export async function GET() {
     "## Featured Essays",
     ...featuredArticles.map(
       (article) =>
-        `- ${article.data.title}: ${articleUrl(article.slug)} -- ${article.data.summary}`,
+        `- ${article.data.title}: ${articleUrl(article.id)} -- ${article.data.summary}`,
     ),
     "",
     "## Flagship Projects",
     ...featuredProjects.map(
       (project) =>
-        `- ${project.data.title}: ${projectUrl(project.slug)} -- ${project.data.summary}`,
+        `- ${project.data.title}: ${projectUrl(project.id)} -- ${project.data.summary}`,
     ),
     "",
     "## Site-Canonical Articles",
     ...canonicalArticles.map(
       (article) =>
-        `- ${article.data.title}: ${articleUrl(article.slug)} -- ${article.data.summary}`,
+        `- ${article.data.title}: ${articleUrl(article.id)} -- ${article.data.summary}`,
     ),
   ];
 
@@ -69,13 +69,13 @@ export async function GET() {
       "## Archive Articles",
       ...archivedArticles.map(
         (article) =>
-          `- ${article.data.title}: ${articleUrl(article.slug)} -- ${article.data.archiveReason ?? article.data.summary}`,
+          `- ${article.data.title}: ${articleUrl(article.id)} -- ${article.data.archiveReason ?? article.data.summary}`,
       ),
     );
   }
 
   if (notes.length > 0) {
-    lines.push("", "## Notes", ...notes.map((note) => `- ${note.data.title}: ${siteConfig.siteUrl}/notes/${note.slug}/`));
+    lines.push("", "## Notes", ...notes.map((note) => `- ${note.data.title}: ${siteConfig.siteUrl}/notes/${note.id}/`));
   }
 
   return new Response(`${lines.join("\n")}\n`, {

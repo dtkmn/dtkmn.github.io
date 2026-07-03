@@ -1,7 +1,9 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const articles = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/articles" }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
@@ -9,15 +11,15 @@ const articles = defineCollection({
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
-    canonicalUrl: z.string().url().optional(),
-    mediumUrl: z.string().url().optional(),
+    canonicalUrl: z.url().optional(),
+    mediumUrl: z.url().optional(),
     archiveReason: z.string().optional(),
     heroImage: z.string().optional(),
   }),
 });
 
 const notes = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/notes" }),
   schema: z.object({
     title: z.string(),
     summary: z.string().optional(),
@@ -28,7 +30,7 @@ const notes = defineCollection({
 });
 
 const projects = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
@@ -39,9 +41,9 @@ const projects = defineCollection({
     tier: z.enum(["flagship", "supporting"]).default("flagship"),
     status: z.enum(["active", "maintained", "experimental"]).default("active"),
     order: z.number().int().default(0),
-    repoUrl: z.string().url(),
-    docsUrl: z.string().url().optional(),
-    demoUrl: z.string().url().optional(),
+    repoUrl: z.url(),
+    docsUrl: z.url().optional(),
+    demoUrl: z.url().optional(),
     heroImage: z.string().optional(),
     relatedPosts: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
@@ -93,7 +95,7 @@ const projects = defineCollection({
           label: z.string(),
           title: z.string(),
           detail: z.string(),
-          href: z.string().url().optional(),
+          href: z.url().optional(),
           hrefLabel: z.string().optional(),
         }),
       )
