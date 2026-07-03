@@ -1,6 +1,6 @@
 ---
 title: MCP Gateway Core
-summary: "Java governance contracts for MCP tool gateways: tool identity, authorization decisions, policy bundles, audit events, abuse protection, URL scoping, rate limits, and a separate Spring WebFlux adapter."
+summary: "Embeddable Java governance contracts for MCP tool runtimes: tool identity, access rules, governance decisions, audit events, abuse protection, URL scoping, rate limits, and a separate Spring WebFlux adapter."
 date: 2026-06-22
 draft: false
 featured: false
@@ -28,13 +28,13 @@ stack:
   - GitHub Actions
   - Astro Starlight
 audience:
-  - Java MCP server maintainers who need shared tool-governance contracts
+  - Java MCP server maintainers who need shared tool-governance contracts without adopting a proxy
   - Security-runtime builders separating policy decisions from scanner behavior
   - Platform engineers evaluating MCP boundaries before choosing a proxy or runtime gateway
 proofPoints:
   - "v0.7.0 was published on June 22, 2026 as a public-preview hardening release, not a stable API promise."
-  - "The 0.7.0 milestone still shows 10 open release-gate issues, including docs/release/security version sync and final release verification."
-  - "The June 29, 2026 Snyk workflow on main failed after PR #24 merged because the Spring WebFlux Gradle graph resolved jackson-databind 2.21.2 with seven vulnerable paths; SARIF upload still completed before the enforced exit code failed."
+  - "The 0.7.0 milestone is closed with 11 completed release-gate issues, including docs/release/security version sync and final release verification."
+  - "The June 29, 2026 Snyk workflow on main failed after PR #24 merged; the July 1, 2026 main run passed, which is the useful signal: the gate stays enforced after remediation."
   - "The core artifact is kept JDK-only while the Spring WebFlux adapter is separate, so downstream runtimes do not inherit Spring unless they choose it."
   - "Forbidden-coupling checks reject scanner, runtime, private-repo, and data-plane references from the shared library boundary."
 evidenceStats:
@@ -42,13 +42,13 @@ evidenceStats:
     value: "0.7.0"
     detail: Published June 22, 2026 with compatibility gates and WebFlux fail-closed request-shape behavior.
     icon: rocket
-  - label: Open hardening
-    value: "10 issues"
-    detail: The 0.7.0 milestone remains open with release-gate work still visible.
+  - label: Hardening ledger
+    value: "11 closed"
+    detail: The 0.7.0 milestone is closed with every release-gate issue completed.
     icon: check-circle
   - label: Scanner signal
-    value: Snyk failed
-    detail: June 29 main run uploaded SARIF, then enforced the Snyk exit code on Jackson findings.
+    value: Enforced
+    detail: Snyk failed on June 29, then passed on the July 1 main run after the gate stayed active.
     icon: shield
   - label: Boundary
     value: Core + adapter
@@ -62,7 +62,7 @@ evidenceAssets:
   - type: repository
     label: Repository signal
     title: Small public Java library with a deliberately narrow scope
-    detail: The repository describes itself as Java governance contracts for MCP tool gateways and explicitly says it is not a proxy data plane.
+    detail: The repository describes itself as an embeddable Java governance contract library for MCP tool runtimes and explicitly says it is not a proxy data plane.
     href: https://github.com/dtkmn/mcp-gateway-core
     hrefLabel: Inspect repository
   - type: governance
@@ -73,37 +73,37 @@ evidenceAssets:
     hrefLabel: Read release
   - type: governance
     label: Hardening ledger
-    title: 0.7.0 milestone still has open release gates
-    detail: Open issues keep the remaining compatibility, WebFlux, docs/release sync, and final verification work inspectable instead of hidden behind the release badge.
+    title: 0.7.0 milestone is closed, not hidden
+    detail: All 11 release-gate issues are closed, including compatibility fixtures, WebFlux hardening, docs/release sync, and final verification.
     href: https://github.com/dtkmn/mcp-gateway-core/milestone/1
-    hrefLabel: View milestone
+    hrefLabel: View closed milestone
   - type: security
     label: Security pressure
-    title: June 29 Snyk failure on main
-    detail: "The Snyk workflow failed after PR #24 merged, with SARIF uploaded and the exit code enforced against Jackson findings in the Spring WebFlux adapter graph."
-    href: https://github.com/dtkmn/mcp-gateway-core/actions/runs/28365344965
-    hrefLabel: Inspect workflow
+    title: Snyk is an enforced gate, not a badge
+    detail: "The June 29 Snyk failure proved the gate can block on dependency risk; the July 1 main run passed with the same workflow still active."
+    href: https://github.com/dtkmn/mcp-gateway-core/actions/runs/28506184319
+    hrefLabel: Inspect latest main Snyk run
   - type: docs
     label: Docs sync
     title: Docs and release state are treated as part of the artifact
-    detail: "The docs site is generated from repository Markdown and SECURITY.md, while issue #13 tracks docs, release notes, and security version sync."
+    detail: "The docs site is generated from repository Markdown and SECURITY.md, while issue #13 closed the docs, release notes, and security version sync work for 0.7.0."
     href: https://github.com/dtkmn/mcp-gateway-core/issues/13
-    hrefLabel: Track docs sync
+    hrefLabel: Inspect closed docs sync issue
 ---
 
 ## What it is
 
-`mcp-gateway-core` is a Java library for MCP tool-governance contracts. It gives
-downstream runtimes shared types and helpers for tool identity, authorization requirements,
-policy decisions, audit events, abuse-protection decisions, URL scope checks, correlation IDs,
-and rate limiting.
+`mcp-gateway-core` is an embeddable Java governance contract library for MCP tool runtimes.
+It gives downstream runtimes shared types and helpers for tool identity, access rules,
+governance decisions, audit events, abuse-protection decisions, URL scope checks,
+correlation IDs, and rate limiting.
 
 It also publishes `mcp-gateway-spring-webflux`, an optional adapter that applies those contracts
 to Spring WebFlux HTTP traffic.
 
-That is the whole point. The project is not trying to be an MCP router, proxy data plane, ZAP
-integration, marketplace, service mesh, UI, or scanner runtime. If it starts swallowing those jobs,
-it becomes less useful.
+That is the whole point. The project is not trying to be an MCP server SDK, Spring Boot starter,
+OAuth provider, policy language, scanner layer, plugin system, proxy, or data plane. If it starts
+swallowing those jobs, it becomes less useful.
 
 ## Why it exists
 
@@ -147,26 +147,28 @@ June 22, 2026 as a hardening release. It added compatibility gates, WebFlux fail
 request-shape handling when governance is active, invalid-request observer support, pass-through
 behavior tests for inactive governance, Java 17 consumer smoke checks, and documentation updates.
 
-That release does not mean the work is done. The
-[0.7.0 milestone](https://github.com/dtkmn/mcp-gateway-core/milestone/1) still shows 10 open issues,
-including release-grade hardening, compatibility fixtures, WebFlux request classification,
-[docs/release/security version sync](https://github.com/dtkmn/mcp-gateway-core/issues/13), and
-[final release verification](https://github.com/dtkmn/mcp-gateway-core/issues/14).
+The release ledger is now closed too. The
+[0.7.0 milestone](https://github.com/dtkmn/mcp-gateway-core/milestone/1) has 11 closed issues and
+zero open issues, including release-grade hardening, compatibility fixtures, WebFlux request
+classification, [docs/release/security version sync](https://github.com/dtkmn/mcp-gateway-core/issues/13),
+and [final release verification](https://github.com/dtkmn/mcp-gateway-core/issues/14).
 
 The security signal is also live, not cosmetic. On June 29, 2026, the
 [Snyk workflow on `main`](https://github.com/dtkmn/mcp-gateway-core/actions/runs/28365344965)
 failed after PR #24 merged. The run had Snyk configuration, scanned four Gradle projects, found
 seven vulnerable paths in the Spring WebFlux adapter graph through `jackson-databind` `2.21.2`,
 uploaded SARIF to GitHub Code Scanning, uploaded the SARIF artifact, and then failed on the enforced
-Snyk exit code.
+Snyk exit code. On July 1, 2026, the
+[same workflow passed on `main`](https://github.com/dtkmn/mcp-gateway-core/actions/runs/28506184319).
 
 That is exactly the kind of maintenance pressure a boundary library should expose. A fake proof says
-"security scanning exists." A better proof shows what happened when the scanner found something.
+"security scanning exists." A better proof shows what happened when the scanner found something and
+that the gate still existed afterward.
 
 The docs/release-sync work is part of the same story. The repository keeps the docs site generated
-from `docs/` and `SECURITY.md`, and issue #13 keeps README, contract reference, compatibility,
-roadmap, release notes, security policy, and docs-site state tied to the shipped artifact line. That
-is not polish. For a contract library, stale docs are a contract defect.
+from `docs/` and `SECURITY.md`, and issue #13 closed the work that kept README, contract reference,
+compatibility, roadmap, release notes, security policy, and docs-site state tied to the shipped
+artifact line. That is not polish. For a contract library, stale docs are a contract defect.
 
 ## How it differs from MCP ZAP Server
 
