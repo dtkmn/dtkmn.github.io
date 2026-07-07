@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" role="img" aria-labelledby="title desc">
+  <title id="title">Loopwright editorial hero</title>
+  <desc id="desc">A technical illustration of an agent-loop flight recorder capturing context, verifier decisions, retries, refusals, and exportable run reports.</desc>
+  <style>
+    svg {
+      color-scheme: dark light;
+      --hero-bg-0: #070708;
+      --hero-bg-1: #0e0f11;
+      --hero-bg-2: #030303;
+      --hero-panel-0: #18191d;
+      --hero-panel-1: #070708;
+      --hero-panel-solid: #070708;
+      --hero-ink: #e6e6e3;
+      --hero-ink-strong: #fbfaf6;
+      --hero-muted: #9b9b97;
+      --hero-accent: #f0efea;
+      --hero-accent-soft: #d8d8d2;
+      --hero-accent-border: #d9d5c9;
+      --hero-line: #e6e6e3;
+      --hero-grid: #ffffff;
+      --hero-shadow: #000000;
+    }
+
+    @media (prefers-color-scheme: light) {
+      svg {
+        --hero-bg-0: #f7f6f1;
+        --hero-bg-1: #eeede6;
+        --hero-bg-2: #fbfaf6;
+        --hero-panel-0: #eceae2;
+        --hero-panel-1: #f7f6f1;
+        --hero-panel-solid: #fbfaf6;
+        --hero-ink: #252522;
+        --hero-ink-strong: #050505;
+        --hero-muted: #706f68;
+        --hero-accent: #161616;
+        --hero-accent-soft: #3f3f3a;
+        --hero-accent-border: #4f4a40;
+        --hero-line: #4f4a40;
+        --hero-grid: #000000;
+        --hero-shadow: #1c1b16;
+      }
+    }
+  </style>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--hero-bg-0)"/>
+      <stop offset="58%" stop-color="var(--hero-bg-1)"/>
+      <stop offset="100%" stop-color="var(--hero-bg-2)"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--hero-panel-0)" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="var(--hero-panel-1)" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--hero-accent)"/>
+      <stop offset="100%" stop-color="var(--hero-accent-soft)"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientTransform="translate(380 250) rotate(18) scale(560 420)">
+      <stop offset="0%" stop-color="var(--hero-accent)" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="var(--hero-accent)" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientTransform="translate(1180 640) rotate(-12) scale(500 380)">
+      <stop offset="0%" stop-color="var(--hero-accent-soft)" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="var(--hero-accent-soft)" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="var(--hero-shadow)" flood-opacity="0.42"/>
+    </filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="var(--hero-grid)" stroke-opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1067" fill="url(#bg)"/>
+  <rect width="1600" height="1067" fill="url(#grid)"/>
+  <rect width="1600" height="1067" fill="url(#glowA)"/>
+  <rect width="1600" height="1067" fill="url(#glowB)"/>
+
+  <g opacity="0.44">
+    <path d="M120 858C292 762 420 712 568 628C738 532 890 448 1048 370C1210 292 1328 224 1490 132" fill="none" stroke="var(--hero-accent)" stroke-opacity="0.16" stroke-width="3"/>
+    <path d="M134 930C340 826 512 768 690 674C852 588 976 512 1136 438C1302 360 1398 282 1512 204" fill="none" stroke="var(--hero-line)" stroke-opacity="0.1" stroke-width="2"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="116" y="150" width="394" height="724" rx="34" fill="url(#panel)" stroke="var(--hero-accent-border)" stroke-opacity="0.2"/>
+    <rect x="566" y="126" width="468" height="772" rx="38" fill="url(#panel)" stroke="var(--hero-accent-border)" stroke-opacity="0.24"/>
+    <rect x="1090" y="168" width="392" height="310" rx="32" fill="url(#panel)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+    <rect x="1090" y="526" width="392" height="294" rx="32" fill="url(#panel)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+  </g>
+
+  <g>
+    <text x="160" y="214" fill="var(--hero-accent)" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">AGENT LOOP</text>
+    <text x="160" y="276" fill="var(--hero-ink-strong)" font-family="'Newsreader', serif" font-size="64">Motion is</text>
+    <text x="160" y="334" fill="var(--hero-ink-strong)" font-family="'Newsreader', serif" font-size="64">not proof</text>
+    <text x="160" y="386" fill="var(--hero-ink)" font-family="'IBM Plex Sans', sans-serif" font-size="24">Context, draft, verify, retry, decide.</text>
+
+    <g transform="translate(160 468)">
+      <rect width="306" height="72" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+      <circle cx="42" cy="36" r="10" fill="var(--hero-accent)"/>
+      <text x="70" y="44" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="26">select_context</text>
+      <rect y="96" width="306" height="72" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <circle cx="42" cy="132" r="10" fill="var(--hero-accent)" fill-opacity="0.68"/>
+      <text x="70" y="140" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="26">draft_answer</text>
+      <rect y="192" width="306" height="72" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <circle cx="42" cy="228" r="10" fill="var(--hero-accent)" fill-opacity="0.48"/>
+      <text x="70" y="236" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="26">verify</text>
+    </g>
+  </g>
+
+  <g>
+    <text x="616" y="198" fill="var(--hero-accent)" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">FLIGHT RECORDER</text>
+    <rect x="620" y="238" width="368" height="116" rx="28" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.22"/>
+    <text x="660" y="308" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="36">LoopReport</text>
+
+    <g transform="translate(620 404)">
+      <rect width="162" height="82" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="24" y="48" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">evidence</text>
+      <rect x="206" width="162" height="82" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="230" y="48" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">checks</text>
+    </g>
+    <g transform="translate(620 520)">
+      <rect width="162" height="82" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="24" y="48" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">verifier</text>
+      <rect x="206" width="162" height="82" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="230" y="48" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">retry</text>
+    </g>
+    <g transform="translate(620 636)">
+      <rect width="162" height="82" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="24" y="48" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">refusal</text>
+      <rect x="206" width="162" height="82" rx="20" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+      <text x="230" y="48" fill="var(--hero-ink-strong)" font-family="'IBM Plex Sans', sans-serif" font-size="22">redaction</text>
+    </g>
+    <rect x="620" y="772" width="368" height="72" rx="22" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.18"/>
+    <rect x="656" y="801" width="84" height="14" rx="7" fill="url(#accent)"/>
+    <rect x="760" y="801" width="168" height="14" rx="7" fill="var(--hero-line)" fill-opacity="0.22"/>
+  </g>
+
+  <g>
+    <text x="1134" y="226" fill="var(--hero-accent)" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">EXPORTS</text>
+    <rect x="1134" y="268" width="304" height="56" rx="18" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+    <text x="1160" y="305" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="22">JSONL session</text>
+    <rect x="1134" y="344" width="304" height="56" rx="18" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.16"/>
+    <text x="1160" y="381" fill="var(--hero-ink-strong)" font-family="'IBM Plex Mono', monospace" font-size="22">OpenAI trace</text>
+
+    <text x="1134" y="584" fill="var(--hero-accent)" font-family="'IBM Plex Sans', sans-serif" font-size="20" letter-spacing="4">NOT CLAIMED</text>
+    <rect x="1134" y="624" width="304" height="50" rx="16" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.14"/>
+    <text x="1160" y="657" fill="var(--hero-ink)" font-family="'IBM Plex Sans', sans-serif" font-size="22">planner runtime</text>
+    <rect x="1134" y="694" width="304" height="50" rx="16" fill="var(--hero-panel-solid)" stroke="var(--hero-accent-border)" stroke-opacity="0.14"/>
+    <text x="1160" y="727" fill="var(--hero-ink)" font-family="'IBM Plex Sans', sans-serif" font-size="22">framework dependency</text>
+  </g>
+
+  <g opacity="0.95">
+    <path d="M466 596C520 596 556 574 620 562" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M988 296C1044 296 1070 298 1134 298" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M988 808C1050 808 1082 736 1134 720" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="18 18"/>
+    <circle cx="466" cy="596" r="9" fill="var(--hero-accent)"/>
+    <circle cx="620" cy="562" r="9" fill="var(--hero-accent-soft)"/>
+    <circle cx="988" cy="296" r="9" fill="var(--hero-accent)"/>
+    <circle cx="1134" cy="298" r="9" fill="var(--hero-accent-soft)"/>
+    <circle cx="988" cy="808" r="9" fill="var(--hero-accent)"/>
+    <circle cx="1134" cy="720" r="9" fill="var(--hero-accent-soft)"/>
+  </g>
+</svg>

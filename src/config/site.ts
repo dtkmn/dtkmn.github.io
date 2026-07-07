@@ -33,6 +33,7 @@ export const siteConfig = {
     "Cloud platforms, Kubernetes, and delivery paths after launch day",
   ],
   featuredPostSlugs: [
+    "loop-engineering-needs-a-flight-recorder",
     "demos-are-cheap-production-mcp-is-expensive",
     "simulate-customer-outcomes-before-shipping-ai-agents",
     "what-microservice-benchmarks-actually-measure-in-2026",

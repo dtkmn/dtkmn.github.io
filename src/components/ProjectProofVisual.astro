@@ -6,6 +6,7 @@ type IconName =
   | "book-open"
   | "check-circle"
   | "cloud"
+  | "file-text"
   | "flask"
   | "gauge"
   | "github"
@@ -17,6 +18,7 @@ type IconName =
   | "terminal";
 
 type ProjectKey =
+  | "loopwright"
   | "mcp-gateway-core"
   | "mcp-zap-server"
   | "rtb-ingress-benchmark"
@@ -31,6 +33,7 @@ interface Props {
 
 const { variant, title, stack } = Astro.props;
 const projectKey: ProjectKey =
+  variant === "loopwright" ||
   variant === "mcp-gateway-core" ||
   variant === "mcp-zap-server" ||
   variant === "rtb-ingress-benchmark" ||
@@ -48,6 +51,14 @@ const visualMeta: Record<
     badge: string;
   }
 > = {
+  loopwright: {
+    icon: "archive",
+    kicker: "Flight recorder",
+    title: "Agent loops need replayable evidence.",
+    summary:
+      "The proof is the report shape: context, evidence, checks, verifier decisions, retries, refusals, redaction, and exports captured as a reviewable artifact.",
+    badge: "Trace + replay",
+  },
   "mcp-gateway-core": {
     icon: "layers",
     kicker: "Contract boundary",
@@ -125,6 +136,15 @@ const starterLayers = [
   { icon: "check-circle" as IconName, label: "Governance", detail: "CI, release, ADRs" },
   { icon: "cloud" as IconName, label: "Delivery", detail: "Docker Compose + Helm" },
 ];
+
+const loopwrightNodes = [
+  { icon: "layers" as IconName, label: "Context", detail: "Route evidence before drafting." },
+  { icon: "file-text" as IconName, label: "Draft", detail: "Keep prompt-facing evidence visible." },
+  { icon: "check-circle" as IconName, label: "Verify", detail: "Record checks, retry, or refusal." },
+  { icon: "archive" as IconName, label: "Report", detail: "Export redacted run artifacts." },
+];
+
+const loopwrightGuardrails = ["LoopReport", "JSONL export", "public redaction", "framework-shaped adapters"];
 ---
 
 <figure class:list={["project-proof-visual", `project-proof-visual--${projectKey}`]}>
@@ -158,6 +178,29 @@ const starterLayers = [
       </div>
       <div class="proof-guardrails">
         {mcpGuardrails.map((guardrail) => (
+          <span>{guardrail}</span>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {projectKey === "loopwright" && (
+    <div class="proof-flow proof-flow--loopwright" aria-label="Loopwright flight recorder flow">
+      <div class="proof-flow-nodes">
+        {loopwrightNodes.map((node) => (
+          <div class="proof-flow-node">
+            <span class="proof-flow-node-icon">
+              <UiIcon name={node.icon} />
+            </span>
+            <span class="proof-flow-node-copy">
+              <strong>{node.label}</strong>
+              <span>{node.detail}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+      <div class="proof-guardrails">
+        {loopwrightGuardrails.map((guardrail) => (
           <span>{guardrail}</span>
         ))}
       </div>

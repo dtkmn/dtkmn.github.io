@@ -1,14 +1,19 @@
 ---
 title: Loopwright
-summary: "Flight recorder for AI agent loops: evidence routing, verification, retry/refusal guardrails, evals, replay, and trace exports across Ollama/OpenAI-compatible runtimes."
-date: 2026-07-03
+summary: "Flight recorder for AI agent loops: evidence routing, verification, retries, refusals, durable local run reports, replay artifacts, evals, and trace exports."
+date: 2026-07-08
 draft: false
-featured: false
-detailPage: false
-tier: supporting
-status: maintained
-order: 2
+featured: true
+detailPage: true
+tier: flagship
+status: active
+order: 0
 repoUrl: https://github.com/dtkmn/loopwright
+heroImage: /images/projects/loopwright-hero.svg
+relatedPosts:
+  - loop-engineering-needs-a-flight-recorder
+  - simulate-customer-outcomes-before-shipping-ai-agents
+  - why-local-llms-matter-in-2025
 tags:
   - AI systems
   - Agent loops
@@ -20,8 +25,123 @@ stack:
   - FAISS
   - Ollama
   - OpenAI-compatible gateways
+  - JSONL
+audience:
+  - AI product engineers who need agent-loop evidence before adding autonomy
+  - Platform teams evaluating private/local agent runtimes
+  - Builders who want trace exports without letting a framework own the core loop
+proofPoints:
+  - "The public repo describes Loopwright as a flight recorder for agent loops, not a chatbot wrapper."
+  - "The loop contract records context selection, prompt evidence, drafts, checks, verifier decisions, retries, refusals, redaction, evals, and export state."
+  - "Issue #55 keeps replay/session work honest: it was reopened after a premature close until the patch is pushed, CI-green, and merged."
+  - "Issue #56 explicitly keeps framework adapters downstream until internal loop reports are stable."
+  - "July 6, 2026 Dependabot PRs #76, #77, and #78 put the PDF/API/server dependency baseline under visible maintenance pressure."
+evidenceStats:
+  - label: Repo posture
+    value: Flight recorder
+    detail: Public Python project for evidence, verification, retries, refusals, durable run reports, and exportable traces.
+    icon: terminal
+  - label: Replay state
+    value: Open
+    detail: "Issue #55 tracks session state and local JSONL replay artifacts, with a reopened correction instead of a fake done marker."
+    icon: archive
+  - label: Adapter posture
+    value: Dependency-free
+    detail: "Issue #56 keeps OpenAI trace, LangGraph, and Microsoft Agent Framework interop as exports/design work before runtime dependencies."
+    icon: layers
+  - label: Maintenance queue
+    value: "3 PRs"
+    detail: July 6 Dependabot PRs cover pypdf, FastAPI, and Uvicorn in pyproject.toml and requirements.txt.
+    icon: github
+evidenceAssets:
+  - type: repository
+    label: Repository signal
+    title: Public package with a narrow loop-inspection contract
+    detail: The repo frames Loopwright around evidence routing, retrieval, checks, verifier decisions, retries, refusals, evals, and replay rather than generic chat.
+    href: https://github.com/dtkmn/loopwright
+    hrefLabel: Inspect repository
+  - type: governance
+    label: Replay roadmap
+    title: "Issue #55 keeps replay/session work explicit"
+    detail: The issue scopes in-memory session state, run/session IDs, and local JSONL export, then stays open after a correction that the patch was not yet pushed and CI-green.
+    href: https://github.com/dtkmn/loopwright/issues/55
+    hrefLabel: "Inspect issue #55"
+  - type: docs
+    label: Adapter boundary
+    title: "Issue #56 keeps frameworks outside the core loop"
+    detail: The issue researches OpenAI trace/export, LangGraph checkpoint mapping, and Microsoft Agent Framework event mapping without adding those frameworks as core runtime dependencies.
+    href: https://github.com/dtkmn/loopwright/issues/56
+    hrefLabel: "Inspect issue #56"
+  - type: security
+    label: Dependency maintenance
+    title: July 6 PRs expose runtime maintenance pressure
+    detail: "PRs #76, #77, and #78 propose pypdf 6.14.2, FastAPI 0.139.0, and Uvicorn 0.50.0 across pyproject.toml and requirements.txt."
+    href: https://github.com/dtkmn/loopwright/pulls?q=is%3Apr+76+77+78
+    hrefLabel: View PR queue
 ---
 
-Good supporting evidence for the agent-loop inspection lane: evidence routing,
-retrieval, verifier decisions, retry/refusal behavior, eval artifacts, and
-replayable traces in one runnable tool.
+## What it is
+
+Loopwright is a small Python package and local web runtime for inspecting agent loops as evidence
+systems. It routes context, retrieves evidence, drafts an answer, runs format and mechanical checks,
+records verifier decisions, handles retries and refusals, and exposes a redacted public trace.
+
+The important part is not the chat UI. The important part is the `LoopReport`: a typed artifact that
+keeps the loop's decisions inspectable after the run has stopped.
+
+## Why it matters
+
+Agent-loop work is easy to fake. Add retrieval, add a retry, display a timeline, and the demo looks
+responsible. That is not enough. A loop that cannot show what evidence it selected, why it retried,
+what the verifier decided, and what got redacted is just prompt automation with a longer memory.
+
+Loopwright is the practical counterpart to [Loop Engineering Needs a Flight Recorder](/posts/loop-engineering-needs-a-flight-recorder/).
+The article sets the standard. This repo is where that standard becomes a runnable contract.
+
+## What makes it credible
+
+The project is credible because it keeps the product surface narrow:
+
+- evidence routing across web snippets, indexed files, thread memory, and direct model knowledge,
+- local Ollama first, with a generic OpenAI-compatible gateway path for deployment,
+- explicit loop recipes, context providers, verifier metadata, retries, refusals, and public traces,
+- durable thread state and public loop-run records in the local FastAPI app,
+- local JSONL export for loop reports as the replay artifact boundary,
+- dependency-free exports for OpenAI trace and LangGraph manifest shapes.
+
+The July 6 evidence pass is not a victory lap. It says the project is alive and still has hard edges.
+[Issue #55](https://github.com/dtkmn/loopwright/issues/55) tracks in-memory session state, `run_id`,
+`session_id`, and local JSONL artifacts for replay/diff work. The useful signal is the correction in
+that issue: a premature close was reversed until the replay/session patch is actually pushed,
+CI-green, and merged. That is the right posture. Do not let the roadmap lie for the sake of polish.
+
+[Issue #56](https://github.com/dtkmn/loopwright/issues/56) keeps framework interop in its place. The
+repo can export toward OpenAI trace tools, LangGraph manifests, and a future Microsoft Agent
+Framework mapping, but those frameworks do not get to define the core product before the internal
+report shape is stable.
+
+The dependency-maintenance queue is also visible. On July 6, 2026, Dependabot opened
+[PR #76](https://github.com/dtkmn/loopwright/pull/76) for `pypdf` `6.14.2`,
+[PR #77](https://github.com/dtkmn/loopwright/pull/77) for FastAPI `0.139.0`, and
+[PR #78](https://github.com/dtkmn/loopwright/pull/78) for Uvicorn `0.50.0`. Each one touches both
+`pyproject.toml` and `requirements.txt`. That is not glamorous, but it is exactly the maintenance
+pressure a local AI runtime has to absorb.
+
+## What it is not
+
+Loopwright is not a planner, scheduler, tool-use framework, or multi-agent runtime. Those are later
+layers. The current job is simpler and harder to fake: make one loop's evidence, checks, verifier
+state, retry/refusal behavior, and public trace inspectable.
+
+If that layer is weak, adding autonomy only makes the failure harder to diagnose.
+
+## How it connects to the writing
+
+[Loop Engineering Needs a Flight Recorder](/posts/loop-engineering-needs-a-flight-recorder/) is the
+principle. Loopwright is the package that should be judged against it.
+
+[Why Local LLMs Matter in 2025](/posts/why-local-llms-matter-in-2025/) explains why private runtime
+boundaries still matter. [Simulate Customer Outcomes Before Shipping AI Agents](/posts/simulate-customer-outcomes-before-shipping-ai-agents/)
+explains why loop evidence has to survive contact with user-facing workflows. Loopwright sits between
+those arguments: private/local enough to inspect, structured enough to review, and deliberately
+unfinished where replay and framework interop still need harder proof.

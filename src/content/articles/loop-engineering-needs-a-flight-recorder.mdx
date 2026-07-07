@@ -1,0 +1,294 @@
+---
+title: "Loop Engineering Needs a Flight Recorder"
+summary: "Agent loops are becoming the new unit of AI work, but production loops need replayable evidence, not just better automation."
+date: 2026-07-08
+tags:
+  - AI Agents
+  - Loop Engineering
+  - Verification
+  - Observability
+  - Product Engineering
+featured: true
+draft: false
+---
+
+Loop engineering is a useful phrase because it names the thing serious AI builders are already doing.
+
+The unit of work is moving from the prompt to the loop.
+
+Instead of typing one instruction, reading the answer, and typing the next instruction, you design a system that finds work, selects context, calls the model, checks the result, decides whether to retry, and stops when some condition says the job is done.
+
+That is a real shift.
+
+It is also where a lot of teams are about to fool themselves.
+
+A loop that can keep running is not automatically a loop you can trust.
+
+A loop that can call tools is not automatically a loop you can defend.
+
+A loop that can improve itself is not automatically a loop you can explain after it damages a workflow, ships a bad patch, burns a token budget, cites the wrong evidence, or silently retries its way into a confident lie.
+
+The current hype says: stop prompting agents and start designing loops.
+
+Fine.
+
+The production standard should be sharper:
+
+**do not trust an agent loop until it leaves enough evidence to replay what happened.**
+
+## Prompting was manual control
+
+Prompt engineering was not just about clever words. It was a control surface.
+
+The human decided what context mattered. The human noticed when the answer drifted. The human asked the follow-up. The human stopped the run when it was going nowhere. The human absorbed the ambiguity.
+
+That workflow was slow, inconsistent, and full of taste-based judgement. But it had one accidental advantage: a person was watching every turn.
+
+Loop engineering removes that person from the middle of the cycle.
+
+That is the point.
+
+But it also removes the most obvious source of supervision. Once the system prompts the model, calls the tools, checks the result, and decides the next step, the important question is no longer "was the prompt good?"
+
+The important question is:
+
+> Can the system show why it did what it did?
+
+If the answer is no, you have not built a reliable loop. You have built automation with a memory problem.
+
+## The hype is directionally right
+
+The phrase took off for a reason.
+
+Addy Osmani's June 2026 essay on [loop engineering](https://addyosmani.com/blog/loop-engineering/) described the shift from personally prompting an agent to designing the system that prompts it. Business Insider captured the same moment in its June 20 piece, ["Forget prompt engineering: 'Loop engineering' is all the rage now"](https://www.businessinsider.com/what-are-loops-ai-engineering-tips-2026-6). LangChain's ["The Art of Loop Engineering"](https://www.langchain.com/blog/the-art-of-loop-engineering) framed loops as a progression from human-in-the-loop workflows toward event-driven and improvement loops.
+
+That is the right neighborhood.
+
+Agent work is becoming less like a chat session and more like a runtime.
+
+The loop has triggers, state, context, policies, tool access, verifiers, budgets, and stop conditions. It may run in a coding environment, support workflow, security review, research pipeline, data-cleaning path, sales operation, or internal platform process.
+
+That means the engineering object changed.
+
+You are not just writing an instruction. You are designing a control system around a probabilistic worker.
+
+That should make you more cautious, not less.
+
+## The missing layer is evidence
+
+Most loop-engineering explanations focus on how the loop keeps moving.
+
+That matters.
+
+But production cares just as much about what the loop leaves behind.
+
+A serious loop should be able to answer plain questions:
+
+- What goal was it trying to satisfy?
+- What context did it select?
+- Which evidence entered the prompt?
+- Which tool calls ran?
+- Which checks passed or failed?
+- Which verifier made the decision?
+- Why did it retry?
+- Why did it stop?
+- Why did it refuse?
+- Which output became public?
+- Which intermediate output was hidden?
+- Can a reviewer replay the path?
+
+If those questions sound boring, good. That is where the reliability work lives.
+
+The glamorous version of loop engineering is "my agent keeps working while I sleep."
+
+The production version is "my agent keeps working, and tomorrow morning I can inspect exactly what it saw, what it tried, what failed, what changed, and why the final answer deserves trust."
+
+That difference is not cosmetic.
+
+It is the difference between a system and a stunt.
+
+## Loops fail in the spaces between turns
+
+The model is rarely the only problem.
+
+Loops fail when state is fuzzy. They fail when context selection is implicit. They fail when a retry loses the reason for the previous failure. They fail when a tool result is summarized into mush. They fail when a verifier is treated as decoration. They fail when public output includes a draft that should have been blocked. They fail when the system remembers enough to continue but not enough to explain itself.
+
+Cockroach Labs put a useful production spin on this in its July 1, 2026 post, ["Why Agent Loops Fail in Production"](https://www.cockroachlabs.com/blog/agent-loops-production-database-patterns/), arguing that many loop failures are about state between iterations rather than just model quality.
+
+That framing matters.
+
+A loop is not one model call. It is a chain of decisions.
+
+Every decision creates a small accountability problem:
+
+- this context, not that context
+- this tool, not that tool
+- retry, not stop
+- refuse, not answer
+- trust verifier, not draft
+- expose final, not trace
+- continue, not hand back to a human
+
+If those decisions disappear into logs nobody reads, you do not have a flight recorder. You have exhaust.
+
+Logs are useful, but logs are not the contract. A flight recorder is structured around the questions people ask after an incident, regression, launch review, eval failure, customer complaint, or security review.
+
+It preserves the shape of the run.
+
+## A production loop needs a flight recorder
+
+The flight-recorder pattern is simple.
+
+For each run, record the loop as a typed report:
+
+- the recipe or goal that shaped the run
+- the context provider and selected evidence
+- the prompt-facing evidence packet
+- the draft answer or action proposal
+- mechanical checks
+- verifier decisions
+- retry and refusal state
+- middleware or guardrail decisions
+- public output after redaction
+- enough metadata to replay and compare the run later
+
+That report should not be an afterthought. It should be the contract surface.
+
+The UI can show a friendly timeline. The export path can emit JSONL. The adapter can shape the report for OpenAI trace tools, LangGraph manifests, internal review packets, or future workflow systems.
+
+But the core idea is the same:
+
+The loop should produce evidence as a first-class artifact, not as a pile of incidental console output.
+
+That is what lets a human reviewer say:
+
+- This answer used evidence from the right source.
+- This refusal happened for the right reason.
+- This retry was justified.
+- This verifier was real, not mocked.
+- This public trace is redacted correctly.
+- This run can be compared against the next run.
+- This failure can become an eval case.
+
+Without that artifact, "loop engineering" becomes another way to hide uncertainty under motion.
+
+## The verifier is not optional
+
+The easiest way to fake loop engineering is to add a retry loop and call it reliability.
+
+That is not reliability.
+
+A retry without a verifier is just another chance for the model to sound confident.
+
+The loop needs a check that can reject the output for a reason the next iteration can use. Sometimes that check is mechanical: tests pass, links resolve, JSON parses, citations exist, policy constraints are satisfied. Sometimes it needs a model-based verifier. Sometimes it needs a human.
+
+But the loop should be honest about which one happened.
+
+If a mock verifier ran, say that.
+
+If the answer had no evidence, say that.
+
+If the result is mechanically valid but not supported by a real backend verifier, say that.
+
+If the loop refused because the evidence did not support the answer, say that too.
+
+The point is not to make the loop look smart. The point is to keep the system from laundering weak evidence into a strong claim.
+
+This is where a lot of AI products are going to embarrass themselves. They will wrap a model in an agent loop, add a progress timeline, sprinkle in some "self-check" language, and imply verification without actually earning it.
+
+That might sell a demo.
+
+It will not survive serious use.
+
+## Cost is part of the control system
+
+Loop engineering also changes the cost profile.
+
+A single prompt has a visible price. A loop can quietly multiply that price through retries, subagents, context refreshes, tool calls, verifier passes, and scheduled runs.
+
+The Business Insider article called out token cost as one of the main concerns around loops. That is not a side issue. Cost is a reliability signal.
+
+If a loop can keep spending, it needs budgets.
+
+If it can spawn helpers, it needs limits.
+
+If it can retry, it needs stop rules.
+
+If it can wake up on a schedule, it needs a reason not to run.
+
+If it can route work to tools, it needs policy before execution, not just observability after the fact.
+
+The flight recorder should capture those decisions too. A reviewer should be able to see whether the loop stopped because it succeeded, hit a budget, exhausted retries, refused, failed a verifier, or handed back to a human.
+
+Otherwise the system is not autonomous. It is unattended.
+
+## Where Loopwright fits
+
+This is the lane [Loopwright](/projects/loopwright/) occupies on this site.
+
+Not a file-answering demo. Not a local chatbot. Not another wrapper around a model API.
+
+Loopwright is the reference package for the flight-recorder pattern: a Python/FastAPI loop runtime
+that treats evidence routing, retrieval, checks, verifier outcomes, retries, refusals, redaction,
+evals, and trace exports as product surface.
+
+The current shape is deliberately narrow. The public repo records the contract in code and docs, and
+the open roadmap keeps the unfinished parts visible. [Issue #55](https://github.com/dtkmn/loopwright/issues/55)
+tracks session state and local JSONL replay artifacts, but it is still open after a correction that a
+premature close was not backed by a pushed, CI-green patch. [Issue #56](https://github.com/dtkmn/loopwright/issues/56)
+keeps framework adapters as export strategy, not core dependency gravity.
+
+That distinction matters. A package deserves a page here when it can carry the argument and expose its
+limits. Loopwright now does both.
+
+That is not the whole future of agent systems.
+
+It is the base layer those systems keep skipping.
+
+Before adding planners, autonomous tools, framework runtimes, scheduled jobs, or multi-agent theater, the loop has to prove that it can answer the boring questions:
+
+- What evidence did this run use?
+- What did the verifier decide?
+- Why did the loop retry?
+- What got redacted?
+- Can the run be replayed?
+- Can the report be exported without leaking blocked content?
+
+That is the right foundation.
+
+[MCP turns tool access into inspectable contracts](/posts/mcp-the-usb-c-of-ai-integrations/). [Production MCP needs ownership, authorization, deployment, and remediation pressure](/posts/demos-are-cheap-production-mcp-is-expensive/). [Customer-outcome simulation needs replayable evidence before launch](/posts/simulate-customer-outcomes-before-shipping-ai-agents/). [The Loopwright project page](/projects/loopwright/) is the implementation ledger for this argument.
+
+Loopwright is the same argument one layer down: before an agent loop deserves more power, its own run history has to become inspectable.
+
+## The standard
+
+Loop engineering is worth taking seriously.
+
+But the phrase will get diluted quickly. Every while-loop around an LLM will be called a strategy. Every scheduled prompt will be called an agent. Every retry will be called self-correction. Every vague trace will be called observability.
+
+Do not buy that.
+
+The standard should be harder.
+
+A real agent loop needs:
+
+- explicit goals
+- bounded context
+- structured evidence
+- typed decisions
+- real verification
+- honest retry and refusal semantics
+- budget limits
+- public redaction boundaries
+- replayable reports
+- eval feedback from actual failures
+
+That is loop engineering.
+
+Everything less is prompt automation wearing a better jacket.
+
+The next wave of AI systems will not be judged by whether they can keep moving. Motion is easy. Loops can always spend another token, call another tool, ask another model, and generate another plausible answer.
+
+The harder question is whether the system can defend its path after the motion stops.
+
+That is why loop engineering needs a flight recorder.

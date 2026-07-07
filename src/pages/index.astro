@@ -49,6 +49,7 @@ const proofStats = [
   { label: "Last update", value: latestDate ? formatDate(latestDate) : "In flight", icon: "calendar" },
 ] as const;
 const proofIconBySlug = {
+  "loopwright": "archive",
   "mcp-zap-server": "shield",
   "rtb-ingress-benchmark": "gauge",
   "spring-boot-playground": "layers",
@@ -63,10 +64,10 @@ const proofLedger = featuredProjects.map((project) => ({
 const stackSurfaces = [
   {
     title: "AI tooling",
-    body: "Agents, MCP tools, local model workflows, and the security boundaries that keep experiments from becoming liabilities.",
+    body: "Loopwright flight records, MCP tools, local model workflows, and the evidence boundaries that keep agents inspectable.",
     icon: "spark",
-    href: "/projects/mcp-zap-server/",
-    action: "Inspect agent tooling",
+    href: "/projects/loopwright/",
+    action: "Inspect Loopwright",
   },
   {
     title: "Backend systems",
@@ -105,6 +106,8 @@ const workbenchSteps = [
 ] as const;
 const focusSignals = [
   "MCP",
+  "Loopwright",
+  "Loop engineering",
   "Agent security",
   "JVM",
   "Kotlin",
