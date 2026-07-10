@@ -88,7 +88,13 @@ function isActive(href: string) {
         <span class="site-links-label">Elsewhere</span>
         <div class="site-links-grid">
           {externalLinks.map((link) => (
-            <a href={link.href} rel="noreferrer noopener" target="_blank">
+            <a
+              href={link.href}
+              rel="noreferrer noopener"
+              target="_blank"
+              data-goatcounter-click={link.analyticsEvent}
+              data-goatcounter-title={`${link.label} conversion`}
+            >
               <UiIcon name={link.icon} class="site-link-icon" />
               <span>{link.label}</span>
             </a>

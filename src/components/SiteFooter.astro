@@ -15,10 +15,17 @@ const year = new Date().getFullYear();
     {siteConfig.socialLinks
       .filter((link) => ["GitHub", "LinkedIn", "Medium", "RSS"].includes(link.label))
       .map((link) => (
-        <a href={link.href} rel="noreferrer noopener" target={link.href.startsWith("http") ? "_blank" : undefined}>
+        <a
+          href={link.href}
+          rel="noreferrer noopener"
+          target={link.href.startsWith("http") ? "_blank" : undefined}
+          data-goatcounter-click={link.analyticsEvent}
+          data-goatcounter-title={link.analyticsEvent ? `${link.label} conversion` : undefined}
+        >
           {link.label}
         </a>
       ))}
+    <a href="/privacy/">Privacy</a>
   </div>
   <p class="site-footer-meta">© {year} {siteConfig.siteTitle}</p>
 </footer>

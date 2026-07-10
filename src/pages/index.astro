@@ -3,6 +3,7 @@ import HomeSignalGraphic from "@/components/HomeSignalGraphic.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import ArticleCard from "@/components/ArticleCard.astro";
 import UiIcon from "@/components/UiIcon.astro";
+import { analyticsEvents } from "@/config/analytics";
 import { formatDate } from "@/lib/format";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import {
@@ -141,7 +142,14 @@ const archiveWriting = recentArticles
           <UiIcon name="book-open" class="button-icon" />
           <span>Read the arguments</span>
         </a>
-        <a class="button button--quiet" href="https://github.com/dtkmn" rel="noreferrer noopener" target="_blank">
+        <a
+          class="button button--quiet"
+          href="https://github.com/dtkmn"
+          rel="noreferrer noopener"
+          target="_blank"
+          data-goatcounter-click={analyticsEvents.profile.github}
+          data-goatcounter-title="GitHub conversion"
+        >
           <UiIcon name="github" class="button-icon" />
           <span>Visit GitHub</span>
         </a>

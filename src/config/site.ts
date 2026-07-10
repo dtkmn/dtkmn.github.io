@@ -1,6 +1,9 @@
+import { analyticsEvents } from "@/config/analytics";
+
 export type SocialLink = {
   label: string;
   href: string;
+  analyticsEvent?: string;
 };
 
 export const siteConfig = {
@@ -21,9 +24,17 @@ export const siteConfig = {
     ],
   },
   socialLinks: [
-    { label: "GitHub", href: "https://github.com/dtkmn" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/danieltse/" },
-    { label: "RSS", href: "/feed.xml" },
+    {
+      label: "GitHub",
+      href: "https://github.com/dtkmn",
+      analyticsEvent: analyticsEvents.profile.github,
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/danieltse/",
+      analyticsEvent: analyticsEvents.profile.linkedin,
+    },
+    { label: "RSS", href: "/feed.xml", analyticsEvent: analyticsEvents.subscribe.rss },
     { label: "Medium", href: "https://medium.com/@danieltse" },
     { label: "X", href: "https://twitter.com/dtkmn" },
   ] satisfies SocialLink[],

@@ -4,6 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import ArticleCard from "@/components/ArticleCard.astro";
 import ProjectProofVisual from "@/components/ProjectProofVisual.astro";
 import UiIcon from "@/components/UiIcon.astro";
+import { analyticsEvents, type ProjectResourceKind } from "@/config/analytics";
 import { siteConfig } from "@/config/site";
 import { absoluteUrl, canonicalUrl as normalizeCanonicalUrl, formatDate } from "@/lib/format";
 
@@ -53,6 +54,13 @@ interface EvidenceAsset {
   hrefLabel?: string;
 }
 
+interface ProjectResource {
+  kind: ProjectResourceKind;
+  label: string;
+  href: string;
+  icon: IconName;
+}
+
 interface Props {
   slug: string;
   title: string;
@@ -99,11 +107,15 @@ const pageCanonical = normalizeCanonicalUrl(Astro.url.pathname);
 const authorId = absoluteUrl("/about/#author");
 const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const sectionCount = headings.filter((heading) => heading.depth === 2).length;
-const projectResources = [
-  { label: "Repository", href: repoUrl, icon: "github" as IconName },
-  docsUrl ? { label: "Documentation", href: docsUrl, icon: "book-open" as IconName } : undefined,
-  demoUrl ? { label: "Demo", href: demoUrl, icon: "rocket" as IconName } : undefined,
-].filter((resource): resource is { label: string; href: string; icon: IconName } => Boolean(resource));
+const projectResources: ProjectResource[] = [
+  { kind: "repository", label: "Repository", href: repoUrl, icon: "github" },
+];
+if (docsUrl) {
+  projectResources.push({ kind: "documentation", label: "Documentation", href: docsUrl, icon: "book-open" });
+}
+if (demoUrl) {
+  projectResources.push({ kind: "demo", label: "Demo", href: demoUrl, icon: "rocket" });
+}
 const projectSignals = [
   { label: "Estimated read", value: `${readingTime} min`, icon: "book-open" as IconName },
   { label: "Sections", value: sectionCount > 0 ? `${sectionCount}` : "Brief", icon: "layers" as IconName },
@@ -177,18 +189,39 @@ const jsonLd = {
       </div>
 
       <div class="project-actions">
-        <a class="button button--primary" href={repoUrl} rel="noreferrer noopener" target="_blank">
+        <a
+          class="button button--primary"
+          href={repoUrl}
+          rel="noreferrer noopener"
+          target="_blank"
+          data-goatcounter-click={analyticsEvents.projectResource(slug, "repository")}
+          data-goatcounter-title={`${title}: repository conversion`}
+        >
           <UiIcon name="github" class="button-icon" />
           <span>Repository</span>
         </a>
         {docsUrl && (
-          <a class="button button--ghost" href={docsUrl} rel="noreferrer noopener" target="_blank">
+          <a
+            class="button button--ghost"
+            href={docsUrl}
+            rel="noreferrer noopener"
+            target="_blank"
+            data-goatcounter-click={analyticsEvents.projectResource(slug, "documentation")}
+            data-goatcounter-title={`${title}: documentation conversion`}
+          >
             <UiIcon name="book-open" class="button-icon" />
             <span>Documentation</span>
           </a>
         )}
         {demoUrl && (
-          <a class="button button--ghost" href={demoUrl} rel="noreferrer noopener" target="_blank">
+          <a
+            class="button button--ghost"
+            href={demoUrl}
+            rel="noreferrer noopener"
+            target="_blank"
+            data-goatcounter-click={analyticsEvents.projectResource(slug, "demo")}
+            data-goatcounter-title={`${title}: demo conversion`}
+          >
             <UiIcon name="rocket" class="button-icon" />
             <span>Demo</span>
           </a>
@@ -264,6 +297,8 @@ const jsonLd = {
                         href={asset.href}
                         rel="noreferrer noopener"
                         target="_blank"
+                        data-goatcounter-click={analyticsEvents.projectEvidence(slug, asset.type)}
+                        data-goatcounter-title={`${title}: ${asset.label} engagement`}
                       >
                         <span>{asset.hrefLabel ?? "Inspect artifact"}</span>
                         <UiIcon name="arrow-right" />
@@ -309,7 +344,14 @@ const jsonLd = {
             <p class="eyebrow">Project links</p>
             <div class="project-rail-links">
               {projectResources.map((resource) => (
-                <a class="project-rail-link" href={resource.href} rel="noreferrer noopener" target="_blank">
+                <a
+                  class="project-rail-link"
+                  href={resource.href}
+                  rel="noreferrer noopener"
+                  target="_blank"
+                  data-goatcounter-click={analyticsEvents.projectResource(slug, resource.kind)}
+                  data-goatcounter-title={`${title}: ${resource.label.toLowerCase()} conversion`}
+                >
                   <UiIcon name={resource.icon} class="project-rail-link-icon" />
                   <span>{resource.label}</span>
                 </a>

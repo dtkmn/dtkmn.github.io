@@ -152,12 +152,27 @@ const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
     <link rel="alternate" type="application/rss+xml" title="Daniel Tse RSS" href="/feed.xml" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(baseStructuredData)}></script>
     {goatcounter && (
-      <script
-        is:inline
-        data-goatcounter={`https://${goatcounter}.goatcounter.com/count`}
-        async
-        src="//gc.zgo.at/count.js"
-      ></script>
+      <>
+        <script is:inline>
+          (() => {
+            const privacySignal =
+              navigator.globalPrivacyControl === true ||
+              navigator.doNotTrack === "1" ||
+              window.doNotTrack === "1" ||
+              navigator.msDoNotTrack === "1";
+
+            window.goatcounter = { no_onload: privacySignal };
+          })();
+        </script>
+        <script
+          is:inline
+          data-goatcounter={`https://${goatcounter}.goatcounter.com/count`}
+          async
+          src="https://gc.zgo.at/count.v5.js"
+          crossorigin="anonymous"
+          integrity="sha384-atnOLvQb9t+jTSipvd75X2yginT4PjVbqDdlJAmxMm+wYElFmeR6EmLP5bYeoRVQ"
+        ></script>
+      </>
     )}
   </head>
   <body>
