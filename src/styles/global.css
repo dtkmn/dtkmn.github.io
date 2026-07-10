@@ -1120,6 +1120,14 @@ summary:focus-visible {
   line-height: 1;
 }
 
+.stack-surface-card h2 {
+  margin: 0;
+  color: var(--ink-strong);
+  font-family: "Newsreader Variable", serif;
+  font-size: clamp(2rem, 3vw, 2.55rem);
+  line-height: 1;
+}
+
 .stack-surface-card p {
   margin: 0;
   color: var(--muted);
@@ -1589,6 +1597,31 @@ summary:focus-visible {
 .page-lead h1 {
   max-width: 11ch;
   font-size: clamp(2.8rem, 6vw, 5.2rem);
+}
+
+.topic-lead .project-back-link {
+  margin-bottom: 0.25rem;
+}
+
+.topic-lead .project-back-link-icon {
+  transform: rotate(180deg);
+}
+
+.topic-positioning .section-heading h2 {
+  max-width: 22ch;
+}
+
+.topic-copy {
+  display: grid;
+  gap: 1rem;
+  max-width: 72ch;
+}
+
+.topic-copy p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.08rem;
+  line-height: 1.78;
 }
 
 .copy-grid {

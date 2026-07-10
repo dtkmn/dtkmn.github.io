@@ -4,10 +4,11 @@ import UiIcon from "@/components/UiIcon.astro";
 
 const pathname = Astro.url.pathname;
 const navLinks = [
+  { href: "/topics/", label: "Topics", icon: "layers" },
   { href: "/articles/", label: "Articles", icon: "articles" },
   { href: "/notes/", label: "Notes", icon: "notes" },
   { href: "/about/", label: "About", icon: "about" },
- ] as const;
+] as const;
 
 const externalIconByLabel = {
   GitHub: "github",

@@ -12,6 +12,8 @@ const year = new Date().getFullYear();
     </p>
   </div>
   <div class="site-footer-links">
+    <a href="/topics/">Topics</a>
+    <a href="/projects/">Projects</a>
     {siteConfig.socialLinks
       .filter((link) => ["GitHub", "LinkedIn", "Medium", "RSS"].includes(link.label))
       .map((link) => (

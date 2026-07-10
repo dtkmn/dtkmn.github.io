@@ -1,0 +1,38 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import UiIcon from "@/components/UiIcon.astro";
+import { topicHubs, topicUrl } from "@/config/topics";
+---
+
+<BaseLayout
+  title="Topics"
+  description="Curated guides to Daniel Tse's work on AI systems, backend performance, JVM engineering, cloud delivery, and platform operations."
+>
+  <section class="page-lead">
+    <p class="eyebrow">Topic hubs</p>
+    <h1>Three areas, one engineering standard.</h1>
+    <p class="page-lead-summary">
+      These are curated paths through the strongest essays and project evidence on the site. Tags
+      remain useful filters; these hubs explain the arguments, boundaries, and systems that belong
+      together.
+    </p>
+  </section>
+
+  <section class="section-block home-section" aria-label="Topic hubs">
+    <div class="stack-surface-grid">
+      {topicHubs.map((topic) => (
+        <a class="stack-surface-card" href={topicUrl(topic.slug)}>
+          <span class="stack-surface-icon">
+            <UiIcon name={topic.icon} />
+          </span>
+          <h2>{topic.name}</h2>
+          <p>{topic.summary}</p>
+          <span class="stack-surface-link">
+            <span>Explore {topic.shortName}</span>
+            <UiIcon name="arrow-right" />
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

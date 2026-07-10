@@ -1,5 +1,6 @@
 import { getCollection } from "astro:content";
 import { siteConfig } from "@/config/site";
+import { topicHubs } from "@/config/topics";
 
 export const prerender = true;
 
@@ -9,6 +10,10 @@ function articleUrl(slug: string) {
 
 function projectUrl(slug: string) {
   return `${siteConfig.siteUrl}/projects/${slug}/`;
+}
+
+function topicUrl(slug: string) {
+  return `${siteConfig.siteUrl}/topics/${slug}/`;
 }
 
 export async function GET() {
@@ -38,11 +43,14 @@ export async function GET() {
     `- Home: ${siteConfig.siteUrl}/`,
     `- Articles: ${siteConfig.siteUrl}/articles/`,
     `- Projects: ${siteConfig.siteUrl}/projects/`,
+    `- Topics: ${siteConfig.siteUrl}/topics/`,
     `- About: ${siteConfig.author.url}`,
     `- RSS: ${siteConfig.siteUrl}/feed.xml`,
     "",
     "## Focus Areas",
-    ...siteConfig.topicLanes.map((lane) => `- ${lane}`),
+    ...topicHubs.map(
+      (topic) => `- ${topic.name}: ${topicUrl(topic.slug)} -- ${topic.description}`,
+    ),
     "",
     "## Featured Essays",
     ...featuredArticles.map(

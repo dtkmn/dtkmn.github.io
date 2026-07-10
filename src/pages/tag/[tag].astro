@@ -17,7 +17,11 @@ const entries = [...tag.articles, ...tag.notes].sort(
 );
 ---
 
-<BaseLayout title={`Tag: ${tag.label}`} description={`Posts tagged ${tag.label}.`}>
+<BaseLayout
+  title={`Tag: ${tag.label}`}
+  description={`Posts tagged ${tag.label}.`}
+  robots="noindex,follow"
+>
   <section class="page-lead">
     <p class="eyebrow">Topic</p>
     <h1>{tag.label}</h1>
@@ -31,4 +35,3 @@ const entries = [...tag.articles, ...tag.notes].sort(
     {entries.map((entry) => <ArticleCard entry={entry} />)}
   </div>
 </BaseLayout>
-

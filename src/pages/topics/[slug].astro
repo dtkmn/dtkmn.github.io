@@ -1,0 +1,110 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import ArticleCard from "@/components/ArticleCard.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import UiIcon from "@/components/UiIcon.astro";
+import { topicHubs, type TopicHub } from "@/config/topics";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+type ArticleEntry = CollectionEntry<"articles">;
+type ProjectEntry = CollectionEntry<"projects">;
+
+interface Props {
+  topic: TopicHub;
+  articles: ArticleEntry[];
+  projects: ProjectEntry[];
+}
+
+export async function getStaticPaths() {
+  const [articles, projects] = await Promise.all([
+    getCollection("articles", ({ data }) => !data.draft),
+    getCollection("projects", ({ data }) => !data.draft && data.detailPage),
+  ]);
+  const selectEntries = <T extends { id: string }>(
+    entries: T[],
+    ids: readonly string[],
+    collection: string,
+  ) => {
+    const entriesById = new Map(entries.map((entry) => [entry.id, entry]));
+
+    return ids.map((id) => {
+      const entry = entriesById.get(id);
+      if (!entry) {
+        throw new Error(`Topic hub references missing ${collection} entry: ${id}`);
+      }
+      return entry;
+    });
+  };
+
+  return topicHubs.map((topic) => ({
+    params: { slug: topic.slug },
+    props: {
+      topic,
+      articles: selectEntries(articles, topic.articleSlugs, "article"),
+      projects: selectEntries(projects, topic.projectSlugs, "project"),
+    },
+  }));
+}
+
+const { topic, articles, projects } = Astro.props;
+---
+
+<BaseLayout title={topic.name} description={topic.description}>
+  <section class="page-lead topic-lead">
+    <a class="project-back-link" href="/topics/">
+      <UiIcon name="arrow-right" class="project-back-link-icon" />
+      <span>All topic hubs</span>
+    </a>
+    <p class="eyebrow">Topic hub</p>
+    <h1>{topic.name}</h1>
+    <p class="page-lead-summary">{topic.summary}</p>
+  </section>
+
+  <section class="section-block home-section topic-positioning">
+    <div class="section-heading">
+      <p class="eyebrow">Position</p>
+      <h2>{topic.thesis}</h2>
+    </div>
+    <div class="topic-copy">
+      {topic.body.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </section>
+
+  <section class="section-block home-section">
+    <div class="section-heading">
+      <p class="eyebrow">Working principles</p>
+      <h2>The filters applied to the work.</h2>
+    </div>
+    <div class="principles-grid">
+      {topic.principles.map((principle) => (
+        <article class="principle-card">
+          <div class="principle-card-head">
+            <UiIcon name={principle.icon} class="principle-icon" />
+            <h3>{principle.title}</h3>
+          </div>
+          <p>{principle.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-block home-section">
+    <div class="section-heading">
+      <p class="eyebrow">Selected writing</p>
+      <h2>Arguments that establish the point of view.</h2>
+    </div>
+    <div class="stack-grid">
+      {articles.map((entry) => <ArticleCard entry={entry} />)}
+    </div>
+  </section>
+
+  <section class="section-block home-section">
+    <div class="section-heading">
+      <p class="eyebrow">Project evidence</p>
+      <h2>Systems where the claims can be inspected.</h2>
+    </div>
+    <div class="feature-grid">
+      {projects.map((project) => <ProjectCard project={project} variant="feature" />)}
+    </div>
+  </section>
+</BaseLayout>
