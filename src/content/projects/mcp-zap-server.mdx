@@ -33,43 +33,44 @@ audience:
   - Platform engineers integrating security checks into developer tooling
   - Teams evaluating MCP beyond toy demos
 proofPoints:
+  - "v0.10.1 is a drop-in compatibility patch: Streamable HTTP responses to server-initiated requests now reach the MCP runtime instead of being rejected as methodless requests."
   - 58 GitHub stars and 8 forks as of June 30, 2026.
-  - June 26 v0.9.1 maintenance/security release refreshes runtime, Helm, MCP Registry, and install metadata without pretending to be a feature launch.
+  - "PRs #167 and #168 consume MCP Gateway Core 0.7.2, align runtime and delivery metadata, and leave tool schemas, auth settings, Helm values, and the database contract unchanged."
   - Supports API-key and JWT authentication modes, tool scopes, runtime policy bundles, URL validation, rate limits, workspace quotas, and audit events.
-  - "Security posture is visible: Jackson is pinned forward through a BOM override, Snyk scans now require org/SARIF evidence, and v0.9.0 is marked upgrade-only."
+  - "The support table marks >= 0.10.1 active and 0.10.0 upgrade-only for Streamable HTTP client compatibility."
 evidenceStats:
   - label: Public traction
     value: 58 stars
     detail: GitHub stars as recorded on June 30, 2026, with 8 forks.
     icon: github
   - label: Release track
-    value: "0.9.1"
-    detail: June 26 maintenance/security release with runtime, Helm/app, MCP Registry, and install metadata refreshed.
+    value: "0.10.1"
+    detail: July 16 compatibility patch for Streamable HTTP responses to server-initiated requests.
     icon: rocket
   - label: Guardrails
     value: Gateway
-    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries route through shared Java governance adapters now refreshed to 0.5.10.
+    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries use the 0.7.2 shared Java governance adapters.
     icon: shield
   - label: Delivery paths
     value: CI + Helm
     detail: GitHub/GitLab security-gate examples, Docker Compose, Helm, and docs are all part of the artifact.
     icon: check-circle
-  - label: Security refresh
-    value: Jackson
-    detail: Jackson 2.22.0 override, hardened Snyk workflow configuration, and support-table cleanup are part of the release.
+  - label: Compatibility fix
+    value: HTTP 202
+    detail: Cursor keepalive replies now pass through for downstream session correlation instead of failing request-shape validation.
     icon: terminal
 evidenceAssets:
   - type: repository
     label: Repository signal
     title: Public code with visible adoption and maintenance pressure
-    detail: The repo has public traction, June 26 maintenance/security release work, and enough structure to inspect beyond a README headline.
+    detail: The repo has public traction, a current compatibility patch, and enough delivery and operator material to inspect beyond a README headline.
     href: https://github.com/dtkmn/mcp-zap-server
     hrefLabel: Inspect repository
   - type: governance
     label: Release evidence
-    title: v0.9.1 maintenance/security release
-    detail: The June 26 notes document the 0.9.1 metadata bump, shared governance adapter refresh, Jackson 2.22.0 override, Snyk hardening, and archived release-note cleanup.
-    href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.9.1
+    title: v0.10.1 Streamable HTTP compatibility patch
+    detail: The release updates both gateway dependencies to 0.7.2, restores response pass-through for server-initiated requests, and aligns runtime, image, Helm, Registry, extension, and install metadata.
+    href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.10.1
     hrefLabel: Read release notes
   - type: docs
     label: Docs surface
@@ -123,19 +124,25 @@ through shared [MCP Gateway Core](/projects/mcp-gateway-core/) adapter boundarie
 local filters. The security-gate examples rejected mutable image tags, and the release notes made
 validation commands inspectable.
 
-The June 26 v0.9.1 release is the part that keeps the proof honest. It is a maintenance/security
-release, not a feature launch. Runtime, Helm, MCP Registry, and install metadata moved to `0.9.1`.
-The [MCP Gateway Core](/projects/mcp-gateway-core/) adapters moved to `0.5.10`; Spring Boot moved
-to `4.0.7`; Spring AI moved to `2.0.0`; Gradle moved to `9.6.0`; the docs stack moved to Astro
-`7.0.3`.
+The July 16 v0.10.1 release is narrower than a feature launch and more useful as evidence. A
+Streamable HTTP endpoint receives requests, notifications, and responses on the same `POST` route.
+The previous gateway adapter treated a response-shaped envelope as a request, then rejected it for
+having an `id` and `result` or `error` but no `method`. Cursor keepalive replies consequently failed
+instead of reaching Spring AI for session correlation.
 
-The security posture matters more than the version churn. The release overrides Spring Boot's Jackson
-2 BOM to `2.22.0` so the runtime no longer resolves `jackson-databind` `2.21.4`. The Snyk workflow
-now requires `SNYK_ORG`, fails when expected SARIF files are missing, and keeps monitor steps bounded
-with explicit timeouts. Historical release notes were moved under `docs/releases/`, and the support
-tables now say `>= 0.9.1` is active while `0.9.0` should be upgraded for dependency refresh. That is
-what production-adjacent maintenance looks like: the proof ages, the repo catches up, and stale
-claims get removed instead of defended.
+[PR #167](https://github.com/dtkmn/mcp-zap-server/pull/167) moved both gateway dependencies to
+`0.7.2`. [PR #168](https://github.com/dtkmn/mcp-zap-server/pull/168) packaged that correction as
+v0.10.1 and aligned runtime, OCI image, Helm chart, MCP Registry, extension-proof, and install
+metadata. Response envelopes now pass through and complete with HTTP `202`; requests that carry a
+`method` still take the existing authorization and abuse-protection path. The body, session id,
+custom headers, body-size limit, and surrounding authentication chain remain intact.
+
+This is a drop-in patch from v0.10.0, not an excuse to imply a larger redesign. Tool schemas,
+authentication settings, Helm values, and the database contract are unchanged. The release also
+expands CodeQL coverage and pins policy dry-run regression coverage, while the support table marks
+`>= 0.10.1` active and `0.10.0` upgrade-only for this client-compatibility failure. That is what
+production-adjacent maintenance looks like: a real downstream failure gets a bounded fix, a release,
+and an explicit upgrade path.
 
 That combination is exactly why this deserves a page here. The repository handles setup and usage.
 This page explains why the project matters in the first place.

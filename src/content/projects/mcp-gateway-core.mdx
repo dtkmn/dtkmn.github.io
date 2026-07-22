@@ -32,19 +32,20 @@ audience:
   - Security-runtime builders separating policy decisions from scanner behavior
   - Platform engineers evaluating MCP boundaries before choosing a proxy or runtime gateway
 proofPoints:
-  - "v0.7.0 was published on June 22, 2026 as a public-preview hardening release, not a stable API promise."
-  - "The 0.7.0 milestone is closed with 11 completed release-gate issues, including docs/release/security version sync and final release verification."
+  - "Both 0.7.2 artifacts are on Maven Central as a public-preview correctness patch, not a stable API promise."
+  - "PR #41 finalized the 0.7.2 version and release notes; the patch introduces no public API or binary deltas."
+  - "The WebFlux adapter now passes narrowly recognized response envelopes downstream while requests carrying a method remain governed."
   - "The June 29, 2026 Snyk workflow on main failed after PR #24 merged; the July 1, 2026 main run passed, which is the useful signal: the gate stays enforced after remediation."
   - "The core artifact is kept JDK-only while the Spring WebFlux adapter is separate, so downstream runtimes do not inherit Spring unless they choose it."
   - "Forbidden-coupling checks reject scanner, runtime, private-repo, and data-plane references from the shared library boundary."
 evidenceStats:
   - label: Preview line
-    value: "0.7.0"
-    detail: Published June 22, 2026 with compatibility gates and WebFlux fail-closed request-shape behavior.
+    value: "0.7.2"
+    detail: Published to Maven Central on July 16 as a narrow WebFlux response-pass-through correction.
     icon: rocket
-  - label: Hardening ledger
-    value: "11 closed"
-    detail: The 0.7.0 milestone is closed with every release-gate issue completed.
+  - label: Patch scope
+    value: No API delta
+    detail: The release changes adapter classification behavior without adding public API or binary deltas.
     icon: check-circle
   - label: Scanner signal
     value: Enforced
@@ -67,28 +68,22 @@ evidenceAssets:
     hrefLabel: Inspect repository
   - type: governance
     label: Release evidence
-    title: v0.7.0 public-preview hardening release
-    detail: The release adds compatibility gates, WebFlux fail-closed request-shape handling, invalid-request observer support, and stronger consumer smoke checks.
-    href: https://github.com/dtkmn/mcp-gateway-core/releases/tag/v0.7.0
-    hrefLabel: Read release
+    title: 0.7.2 artifacts published to Maven Central
+    detail: Maven Central lists 0.7.2 for the JDK-only core and optional Spring WebFlux adapter; that is the publication receipt.
+    href: https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-core/0.7.2/
+    hrefLabel: Inspect artifact
   - type: governance
-    label: Hardening ledger
-    title: 0.7.0 milestone is closed, not hidden
-    detail: All 11 release-gate issues are closed, including compatibility fixtures, WebFlux hardening, docs/release sync, and final verification.
-    href: https://github.com/dtkmn/mcp-gateway-core/milestone/1
-    hrefLabel: View closed milestone
+    label: Release PR
+    title: PR #41 finalizes the version, notes, and roadmap
+    detail: The three-file PR removes the snapshot suffix and frames 0.7.2 as a narrow public-preview correctness patch; it does not pretend to be implementation evidence.
+    href: https://github.com/dtkmn/mcp-gateway-core/pull/41
+    hrefLabel: Inspect release PR
   - type: security
     label: Security pressure
     title: Snyk is an enforced gate, not a badge
     detail: "The June 29 Snyk failure proved the gate can block on dependency risk; the July 1 main run passed with the same workflow still active."
     href: https://github.com/dtkmn/mcp-gateway-core/actions/runs/28506184319
     hrefLabel: Inspect latest main Snyk run
-  - type: docs
-    label: Docs sync
-    title: Docs and release state are treated as part of the artifact
-    detail: "The docs site is generated from repository Markdown and SECURITY.md, while issue #13 closed the docs, release notes, and security version sync work for 0.7.0."
-    href: https://github.com/dtkmn/mcp-gateway-core/issues/13
-    hrefLabel: Inspect closed docs sync issue
 ---
 
 ## What it is
@@ -133,7 +128,7 @@ tool behavior stay downstream.
 The repository backs that up with build gates. The core build rejects scanner, runtime, private-repo,
 and data-plane coupling. It checks JAR contents, Java 17 bytecode, `jdeps`, Maven Central bundle
 shape, checksums, and signed dry-run payloads. The compatibility work compares public API against a
-frozen `0.6.0` baseline and records accepted deltas for the `0.7.0` preview line.
+frozen `0.6.0` baseline and records accepted deltas for the public-preview line.
 
 That is not glamorous. Good. This repo should be unglamorous. Its job is to stop each MCP server
 from making up a different vocabulary for the same governance decisions.
@@ -142,16 +137,28 @@ from making up a different vocabulary for the same governance decisions.
 
 The honest status is public preview.
 
-[v0.7.0](https://github.com/dtkmn/mcp-gateway-core/releases/tag/v0.7.0) was published on
-June 22, 2026 as a hardening release. It added compatibility gates, WebFlux fail-closed
-request-shape handling when governance is active, invalid-request observer support, pass-through
-behavior tests for inactive governance, Java 17 consumer smoke checks, and documentation updates.
+The `0.7.2` [core](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-core/0.7.2/) and
+[Spring WebFlux adapter](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-spring-webflux/0.7.2/)
+artifacts were published to Maven Central on July 16, 2026. This is a correctness patch, not an API
+expansion: the release notes record no new public API or binary deltas.
 
-The release ledger is now closed too. The
-[0.7.0 milestone](https://github.com/dtkmn/mcp-gateway-core/milestone/1) has 11 closed issues and
-zero open issues, including release-grade hardening, compatibility fixtures, WebFlux request
-classification, [docs/release/security version sync](https://github.com/dtkmn/mcp-gateway-core/issues/13),
-and [final release verification](https://github.com/dtkmn/mcp-gateway-core/issues/14).
+The correction is specific. The WebFlux adapter now distinguishes response envelopes from requests
+on the shared MCP `POST` endpoint. A pass-through response has no `method`, has a string or numeric
+`id`, and has exactly one of `result` or `error`. A body carrying a `method` remains governed even if
+it also contains response fields. Duplicate fields, case-variant governance fields, batches, and
+ambiguous objects retain fail-closed handling.
+
+Recognized responses skip request context, scope extraction, authorization, and action-based abuse
+protection, then continue downstream for protocol validation and session correlation. The adapter
+still preserves the body, session headers, configured body-size limit, and surrounding security
+chain. That boundary matters: the gateway fixes its classification error without taking ownership
+of full JSON-RPC validation.
+
+[PR #41](https://github.com/dtkmn/mcp-gateway-core/pull/41) finalized `gatewayCoreVersion=0.7.2`
+and updated the release notes and roadmap. It is release-preparation evidence, not publication
+evidence; Maven Central is the actual receipt. The public trail is not perfectly synchronized: the
+repository still labels the notes “Unreleased” and has no v0.7.2 GitHub Release entry. Pretending
+otherwise would make this page cleaner and less accurate.
 
 The security signal is also live, not cosmetic. On June 29, 2026, the
 [Snyk workflow on `main`](https://github.com/dtkmn/mcp-gateway-core/actions/runs/28365344965)
@@ -165,10 +172,10 @@ That is exactly the kind of maintenance pressure a boundary library should expos
 "security scanning exists." A better proof shows what happened when the scanner found something and
 that the gate still existed afterward.
 
-The docs/release-sync work is part of the same story. The repository keeps the docs site generated
-from `docs/` and `SECURITY.md`, and issue #13 closed the work that kept README, contract reference,
-compatibility, roadmap, release notes, security policy, and docs-site state tied to the shipped
-artifact line. That is not polish. For a contract library, stale docs are a contract defect.
+The publication/docs mismatch is part of the evidence too. For a contract library, stale release
+state is a contract defect, even when the artifact itself is available and the runtime correction is
+real. The useful claim is bounded: 0.7.2 is published, its adapter behavior is documented and
+consumed by MCP ZAP Server, and the repository's post-publication release surface still needs cleanup.
 
 ## How it differs from MCP ZAP Server
 
