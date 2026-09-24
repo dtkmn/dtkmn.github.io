@@ -1,6 +1,6 @@
 ---
 title: Spring Boot Playground
-summary: An opinionated Spring service starter that turns “how should we begin?” into a reusable contract across service creation, deployment, and release discipline.
+summary: An opinionated Spring service starter with Spring Boot 4.1.0 on Java 21, two explicit service variants, and a digest-pinned, non-root distroless runtime contract.
 date: 2023-11-11
 draft: false
 featured: true
@@ -9,6 +9,7 @@ tier: flagship
 status: maintained
 order: 3
 repoUrl: https://github.com/dtkmn/spring-boot-playground
+docsUrl: https://github.com/dtkmn/spring-boot-playground/blob/main/docs/releases/version-policy.md
 heroImage: /images/projects/spring-boot-playground-hero.svg
 tags:
   - Spring Boot
@@ -18,81 +19,96 @@ tags:
   - JVM
 stack:
   - Java 21
-  - Spring Boot 3
+  - Spring Boot 4.1.0
+  - Distroless Java 21
   - PostgreSQL
   - Flyway
   - Docker Compose
   - Helm
 audience:
-  - Teams standardizing how internal services are started
-  - Platform engineers who need a starter with governance, not just code scaffolding
-  - JVM teams deciding when to stay with MVC versus move to reactive variants
+  - Platform teams evaluating a Spring service starter through controlled pilots
+  - JVM teams choosing between a blocking default and a justified reactive path
+  - Maintainers who want build, container, CI, and Helm defaults in the generated service
 proofPoints:
-  - Defines a starter contract instead of leaving service shape to convention drift.
-  - Includes CI workflow, release process, ADRs, and Helm support in the repository itself.
-  - Separates default and advanced variants rather than pretending one stack fits every service.
+  - Upgrades both starter variants and all three examples to Spring Boot 4.1.0 while retaining Java 21 as the stable baseline.
+  - Keeps `mvc-jpa` as the default and `webflux-r2dbc` as the supported advanced variant.
+  - 'Pins the distroless Java 21 runtime by digest and declares UID/GID 65532 plus `CMD ["app.jar"]` in template and example Dockerfiles.'
 evidenceStats:
-  - label: Service lanes
+  - label: Starter variants
     value: "2"
-    detail: Default MVC/JPA and advanced WebFlux/R2DBC variants are separated on purpose.
+    detail: MVC/JPA remains the default; WebFlux/R2DBC remains the advanced path for a real reactive requirement.
     icon: layers
-  - label: Platform artifacts
-    value: "4"
-    detail: CI workflow, release process, ADRs, and Helm support are part of the repo.
+  - label: Spring baseline
+    value: 4.1.0
+    detail: Both starter templates and all three examples use the exact Spring Boot 4.1.0 plugin version.
     icon: check-circle
-  - label: JVM baseline
+  - label: Java baseline
     value: Java 21
-    detail: The starter is anchored to a modern long-term JVM baseline.
+    detail: Toolchains and builders stay on Java 21; the upstream policy explicitly defers Java 25.
     icon: terminal
-  - label: Operating mode
-    value: Maintained
-    detail: The page presents this as a durable platform standard, not a novelty project.
-    icon: archive
+  - label: Runtime image
+    value: Pinned
+    detail: Distroless Java 21 on Debian 13 is digest-pinned and declares the non-root 65532 user.
+    icon: shield
 evidenceAssets:
   - type: template
-    label: Starter contract
-    title: Service shape is made explicit
-    detail: The project turns service creation into a reusable standard rather than a loose pile of examples.
-    href: https://github.com/dtkmn/spring-boot-playground
-    hrefLabel: Inspect starter
+    label: Modernized baseline
+    title: Spring Boot 4.1.0 spans both variants and three examples
+    detail: 'PR #133 moves the two starter templates plus the Kafka, Kafka Streams, and WebSocket examples from Spring Boot 3.5.15 to 4.1.0.'
+    href: https://github.com/dtkmn/spring-boot-playground/pull/133
+    hrefLabel: 'Inspect PR #133'
+  - type: security
+    label: Runtime default
+    title: Distroless Java 21 is pinned and non-root
+    detail: 'PR #135 switches five application Dockerfiles to a digest-pinned Debian 13 distroless runtime with USER 65532:65532.'
+    href: https://github.com/dtkmn/spring-boot-playground/pull/135
+    hrefLabel: 'Inspect PR #135'
   - type: governance
-    label: Governance surface
-    title: CI, release process, and ADRs are included
-    detail: These are the parts that make a starter useful to a team, not just convenient for one repo.
-    href: https://github.com/dtkmn/spring-boot-playground
-    hrefLabel: Review process
-  - type: deployment
-    label: Deployment path
-    title: Helm support connects code to delivery
-    detail: The repo is positioned around service readiness, so deployment material belongs in the proof.
-    href: https://github.com/dtkmn/spring-boot-playground
-    hrefLabel: View deployment
+    label: Repository guardrail
+    title: Template Dockerfiles are checked against the runtime contract
+    detail: The repository validator requires the pinned distroless image family, explicit non-root user, and app.jar command in both starter templates.
+    href: https://github.com/dtkmn/spring-boot-playground/blob/ccb70ff50c0ee09d7c1530e062abf28b953b64f0/.github/scripts/validate-repository.sh
+    hrefLabel: Review validator
   - type: repository
     label: Variant decision
-    title: Default and advanced paths stay separate
-    detail: Splitting MVC/JPA from WebFlux/R2DBC is a concrete architectural opinion, not vague starter boilerplate.
+    title: MVC/JPA stays default; WebFlux/R2DBC stays advanced
+    detail: The upstream README reserves the reactive path for a real reactive requirement and keeps optional integrations outside the starter contract.
+    href: https://github.com/dtkmn/spring-boot-playground/blob/ccb70ff50c0ee09d7c1530e062abf28b953b64f0/README.md
+    hrefLabel: Read the contract
 ---
 
 ## What it is
 
-This repository is less about “sample code” and more about institutionalizing good defaults. The
-core value is not the generated service itself. It is the contract around how new services begin,
-what they ship with, and what gets treated as optional instead of mandatory.
+`spring-boot-playground` is an internal starter candidate for controlled pilot adoption, not broad
+platform rollout. It keeps `mvc-jpa` as the default path, supports `webflux-r2dbc` for teams with a
+real reactive requirement, and leaves Kafka, Kafka Streams, and WebSocket integrations in examples
+outside the starter contract.
 
-## Why it matters
+## Modernized baseline
 
-Many starter repositories are honest time savers but weak platform assets. They generate code once
-and then disappear from the engineering conversation. This one is more useful because it pushes into
-governance: release readiness, CI, Helm, support expectations, and architectural decision records.
+[PR #133](https://github.com/dtkmn/spring-boot-playground/pull/133) changes the Spring Boot plugin
+from 3.5.15 to 4.1.0 in both starter templates and all three examples. The compatibility work includes
+the Boot 4 test starters and package moves, Spring Boot starter dependencies for Flyway and Kafka,
+and Jackson 3 imports where the WebSocket example needs them.
 
-## What makes it credible
+The JVM did not move with that PR. Java 21 remains the stable toolchain and builder baseline, and the
+merged version policy still lists Java 25 as a future migration tranche.
 
-The strong signal here is the explicit split between the default `mvc-jpa` path and the supported
-advanced `webflux-r2dbc` variant. That is the kind of design decision platform teams usually avoid
-writing down. Making it explicit is what turns the repo from template clutter into engineering
-positioning.
+## Hardened runtime
 
-## Where it fits
+[PR #135](https://github.com/dtkmn/spring-boot-playground/pull/135) replaces the Alpine-based
+Eclipse Temurin runtime stage in the two starter templates and three examples with a digest-pinned
+`gcr.io/distroless/java21-debian13:nonroot` image. Those Dockerfiles declare `USER 65532:65532` and
+use the distroless Java entrypoint through `CMD ["app.jar"]`.
 
-This project supports the part of my work that is less visible than a benchmark or an AI integration:
-creating service standards that keep teams moving without locking them into accidental complexity.
+The repository validator statically checks both template Dockerfiles for the distroless image family,
+explicit non-root user, and `app.jar` command. The upstream runtime guidance also records the practical
+trade-off: the production image has no shell or package manager, and services that need one require a
+documented, tested exception.
+
+## Two deliberate variants
+
+The modernization preserves the starter's central decision. Use `mvc-jpa` for the lowest-friction
+request/response path; use `webflux-r2dbc` only when non-blocking I/O provides a clear benefit and the
+team is prepared for Reactor and reactive persistence. Both templates share the Spring Boot 4.1.0 and
+digest-pinned distroless Java 21 baselines.

@@ -85,11 +85,11 @@ const visualMeta: Record<
   },
   "spring-boot-playground": {
     icon: "layers",
-    kicker: "Platform contract",
-    title: "A starter is valuable only when it encodes decisions.",
+    kicker: "Starter baseline",
+    title: "Two starter lanes. One exact baseline.",
     summary:
-      "The proof is the explicit service shape: default and advanced lanes, CI, ADRs, release process, Flyway, and deployment material.",
-    badge: "Defaults + governance",
+      "Spring Boot 4.1.0 spans the default MVC/JPA and advanced WebFlux/R2DBC templates; both use a digest-pinned, non-root distroless Java 21 runtime.",
+    badge: "Boot 4.1 + Java 21",
   },
   default: {
     icon: "terminal",
@@ -131,10 +131,10 @@ const runtimeLanes = [
 const benchmarkControls = ["Mode isolation", "Load shape", "Resource controls", "Observability"];
 
 const starterLayers = [
-  { icon: "server" as IconName, label: "Service core", detail: "MVC/JPA default lane" },
-  { icon: "flask" as IconName, label: "Advanced lane", detail: "WebFlux/R2DBC path" },
-  { icon: "check-circle" as IconName, label: "Governance", detail: "CI, release, ADRs" },
-  { icon: "cloud" as IconName, label: "Delivery", detail: "Docker Compose + Helm" },
+  { icon: "server" as IconName, label: "Default lane", detail: "MVC/JPA + Boot 4.1" },
+  { icon: "flask" as IconName, label: "Advanced lane", detail: "WebFlux/R2DBC + Boot 4.1" },
+  { icon: "cloud" as IconName, label: "Runtime", detail: "Distroless Java 21" },
+  { icon: "shield" as IconName, label: "Guardrail", detail: "Digest + UID 65532" },
 ];
 
 const loopwrightNodes = [
