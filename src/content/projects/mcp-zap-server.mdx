@@ -1,6 +1,6 @@
 ---
 title: MCP ZAP Server
-summary: Secure OWASP ZAP scanning exposed as an MCP server for AI agents, with reusable tool-governance boundaries, CI security gates, observability, and production-oriented auth.
+summary: ZAP scanning exposed as an MCP server for AI agents, with governed scanning workflows, CI security gates, and unreleased Client Spider support for authenticated browser crawling.
 date: 2025-04-20
 draft: false
 featured: true
@@ -9,8 +9,8 @@ tier: flagship
 status: active
 order: 1
 repoUrl: https://github.com/dtkmn/mcp-zap-server
-docsUrl: https://dtkmn.github.io/mcp-zap-server/
-demoUrl: https://dtkmn.github.io/mcp-zap-server/demo.html
+docsUrl: https://danieltse.org/mcp-zap-server/
+demoUrl: https://danieltse.org/mcp-zap-server/demo.html
 heroImage: /images/projects/mcp-zap-server-hero.svg
 relatedPosts:
   - demos-are-cheap-production-mcp-is-expensive
@@ -33,23 +33,24 @@ audience:
   - Platform engineers integrating security checks into developer tooling
   - Teams evaluating MCP beyond toy demos
 proofPoints:
+  - "Unreleased Client Spider support explores JavaScript-driven apps in direct and queued modes, with browser login profiles and automatic cookie or token session detection. It requires a source build and is not included in v0.12.0."
   - "v0.10.1 is a drop-in compatibility patch: Streamable HTTP responses to server-initiated requests now reach the MCP runtime instead of being rejected as methodless requests."
   - 58 GitHub stars and 8 forks as of June 30, 2026.
   - "PRs #167 and #168 consume MCP Gateway Core 0.7.2, align runtime and delivery metadata, and leave tool schemas, auth settings, Helm values, and the database contract unchanged."
   - Supports API-key and JWT authentication modes, tool scopes, runtime policy bundles, URL validation, rate limits, workspace quotas, and audit events.
-  - "The support table marks >= 0.10.1 active and 0.10.0 upgrade-only for Streamable HTTP client compatibility."
+  - "Client Spider was verified against Juice Shop with anonymous and authenticated direct and queued crawls."
 evidenceStats:
   - label: Public traction
     value: 58 stars
     detail: GitHub stars as recorded on June 30, 2026, with 8 forks.
     icon: github
   - label: Release track
-    value: "0.10.1"
-    detail: July 16 compatibility patch for Streamable HTTP responses to server-initiated requests.
+    value: "0.12.0"
+    detail: Client Spider and browser authentication profiles are unreleased and require a source build containing the feature.
     icon: rocket
   - label: Guardrails
     value: Gateway
-    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries use the 0.7.2 shared Java governance adapters.
+    detail: Tool scopes, policy enforcement, abuse protection, and audit boundaries use shared Java governance adapters.
     icon: shield
   - label: Delivery paths
     value: CI + Helm
@@ -59,35 +60,45 @@ evidenceStats:
     value: HTTP 202
     detail: Cursor keepalive replies now pass through for downstream session correlation instead of failing request-shape validation.
     icon: terminal
+  - label: Browser crawling
+    value: Client Spider
+    detail: Unreleased direct and queued crawling with scan-specific status and stop controls, plus verified browser login against Juice Shop.
+    icon: terminal
 evidenceAssets:
   - type: repository
     label: Repository signal
     title: Public code with visible adoption and maintenance pressure
-    detail: The repo has public traction, a current compatibility patch, and enough delivery and operator material to inspect beyond a README headline.
+    detail: The repo has public traction, release history, and enough delivery and operator material to inspect beyond a README headline.
     href: https://github.com/dtkmn/mcp-zap-server
     hrefLabel: Inspect repository
   - type: governance
     label: Release evidence
-    title: v0.10.1 Streamable HTTP compatibility patch
+    title: Historical release evidence — v0.10.1 compatibility patch
     detail: The release updates both gateway dependencies to 0.7.2, restores response pass-through for server-initiated requests, and aligns runtime, image, Helm, Registry, extension, and install metadata.
     href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.10.1
     hrefLabel: Read release notes
   - type: docs
     label: Docs surface
     title: Separate documentation and operator runbooks
-    detail: The project has docs for auth, tool surfaces, abuse protection, observability, scan execution, runtime policy bundles, and production checklists.
-    href: https://dtkmn.github.io/mcp-zap-server/
+    detail: The project has docs for auth, tool surfaces, Client Spider setup, scan execution, findings, operational controls, and deployment.
+    href: https://danieltse.org/mcp-zap-server/
     hrefLabel: Read docs
   - type: demo
     label: Demo path
     title: Agent-to-scanner flow is visible
     detail: The hosted demo gives the project a concrete interaction path instead of asking visitors to imagine the workflow.
-    href: https://dtkmn.github.io/mcp-zap-server/demo.html
+    href: https://danieltse.org/mcp-zap-server/demo.html
     hrefLabel: Open demo
   - type: security
     label: Operational guardrails
     title: Auth, policy, audit, rate limits, and URL boundaries
     detail: This is the proof that the project is thinking about operator risk, live remediation pressure, and failure handling, not just successful tool calls.
+  - type: docs
+    label: Unreleased feature
+    title: Client Spider and browser authentication
+    detail: Setup, direct and queued workflows, browser login requirements, and the distinction between crawl status and shared findings.
+    href: https://danieltse.org/mcp-zap-server/scanning/client-spider/
+    hrefLabel: Read Client Spider guide
 ---
 
 ## What it is
@@ -99,6 +110,32 @@ scripts.
 The reusable boundary layer now has its own site entry: [MCP Gateway Core](/projects/mcp-gateway-core/)
 is the Java contract layer for tool identity, authorization, policy, audit, abuse protection, and
 adapter behavior. This project stays responsible for the ZAP-specific runtime.
+
+## Client Spider and browser authentication
+
+The source now supports **Client Spider**, ZAP's browser crawler for JavaScript-driven applications.
+An agent can start a crawl immediately or submit it to the durable scan queue, with each crawl
+independently tracked for status and cancellation. Guided workflows select it with `strategy=client`; the
+existing `strategy=browser` still selects AJAX Spider.
+
+Operator-managed browser login profiles also let Client Spider explore pages behind a login.
+ZAP signs in through the browser and detects how the application carries its login session,
+including cookies or tokens sent in request headers. This fixes a case where login succeeded in
+Juice Shop's browser but the follow-up login check did not send the token and incorrectly reported
+that authentication failed. These browser profiles currently support Client
+Spider; the existing form-login profiles remain the path for guided authenticated active scans.
+
+**Availability:** Client Spider and browser profiles are unreleased and are not included in
+`v0.12.0`. Use a source build containing the changes. The
+[Client Spider guide](https://danieltse.org/mcp-zap-server/scanning/client-spider/) covers setup,
+required ZAP add-ons and Firefox, authentication, and both execution modes.
+
+Anonymous and authenticated crawling were verified against Juice Shop in both direct and queued
+modes. Crawl status confirms that the crawler has
+stopped; meaningful coverage still needs evidence from discovered content and authenticated
+requests. Findings feed the existing shared ZAP reports after passive analysis finishes. There is
+currently no dedicated Client Spider discovery-list tool or report isolated to one crawl, and the
+testing did not establish a coverage advantage over the other crawlers.
 
 ## Why it matters
 
