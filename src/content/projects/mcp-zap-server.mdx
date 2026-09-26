@@ -1,6 +1,6 @@
 ---
 title: MCP ZAP Server
-summary: ZAP scanning exposed as an MCP server for AI agents, with governed scanning workflows, CI security gates, and unreleased Client Spider support for authenticated browser crawling.
+summary: ZAP scanning exposed as an MCP server for AI agents, with governed scanning workflows, CI security gates, and Client Spider for authenticated browser crawling in v0.13.0.
 date: 2025-04-20
 draft: false
 featured: true
@@ -33,7 +33,7 @@ audience:
   - Platform engineers integrating security checks into developer tooling
   - Teams evaluating MCP beyond toy demos
 proofPoints:
-  - "Unreleased Client Spider support explores JavaScript-driven apps in direct and queued modes, with browser login profiles and automatic cookie or token session detection. It requires a source build and is not included in v0.12.0."
+  - "v0.13.0 adds Client Spider for JavaScript-driven apps, with direct and queued crawling, browser login profiles, and automatic cookie or token session detection."
   - "v0.10.1 is a drop-in compatibility patch: Streamable HTTP responses to server-initiated requests now reach the MCP runtime instead of being rejected as methodless requests."
   - 58 GitHub stars and 8 forks as of June 30, 2026.
   - "PRs #167 and #168 consume MCP Gateway Core 0.7.2, align runtime and delivery metadata, and leave tool schemas, auth settings, Helm values, and the database contract unchanged."
@@ -45,8 +45,8 @@ evidenceStats:
     detail: GitHub stars as recorded on June 30, 2026, with 8 forks.
     icon: github
   - label: Release track
-    value: "0.12.0"
-    detail: Client Spider and browser authentication profiles are unreleased and require a source build containing the feature.
+    value: "0.13.0"
+    detail: Published September 26, 2026, with Client Spider, browser authentication profiles, and AMD64 and ARM64 images on Docker Hub and GHCR.
     icon: rocket
   - label: Guardrails
     value: Gateway
@@ -62,7 +62,7 @@ evidenceStats:
     icon: terminal
   - label: Browser crawling
     value: Client Spider
-    detail: Unreleased direct and queued crawling with scan-specific status and stop controls, plus verified browser login against Juice Shop.
+    detail: Available in v0.13.0, with direct and queued crawling, scan-specific status and stop controls, and browser login verified against Juice Shop.
     icon: terminal
 evidenceAssets:
   - type: repository
@@ -73,9 +73,9 @@ evidenceAssets:
     hrefLabel: Inspect repository
   - type: governance
     label: Release evidence
-    title: Historical release evidence — v0.10.1 compatibility patch
-    detail: The release updates both gateway dependencies to 0.7.2, restores response pass-through for server-initiated requests, and aligns runtime, image, Helm, Registry, extension, and install metadata.
-    href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.10.1
+    title: Published v0.13.0 — Client Spider and browser authentication
+    detail: Release notes cover browser crawling, login validation, queue rollout, and shared findings and report limits.
+    href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.13.0
     hrefLabel: Read release notes
   - type: docs
     label: Docs surface
@@ -94,7 +94,7 @@ evidenceAssets:
     title: Auth, policy, audit, rate limits, and URL boundaries
     detail: This is the proof that the project is thinking about operator risk, live remediation pressure, and failure handling, not just successful tool calls.
   - type: docs
-    label: Unreleased feature
+    label: Available in v0.13.0
     title: Client Spider and browser authentication
     detail: Setup, direct and queued workflows, browser login requirements, and the distinction between crawl status and shared findings.
     href: https://danieltse.org/mcp-zap-server/scanning/client-spider/
@@ -113,7 +113,7 @@ adapter behavior. This project stays responsible for the ZAP-specific runtime.
 
 ## Client Spider and browser authentication
 
-The source now supports **Client Spider**, ZAP's browser crawler for JavaScript-driven applications.
+**v0.13.0** adds **Client Spider**, ZAP's browser crawler for JavaScript-driven applications.
 An agent can start a crawl immediately or submit it to the durable scan queue, with each crawl
 independently tracked for status and cancellation. Guided workflows select it with `strategy=client`; the
 existing `strategy=browser` still selects AJAX Spider.
@@ -125,8 +125,9 @@ Juice Shop's browser but the follow-up login check did not send the token and in
 that authentication failed. These browser profiles currently support Client
 Spider; the existing form-login profiles remain the path for guided authenticated active scans.
 
-**Availability:** Client Spider and browser profiles are unreleased and are not included in
-`v0.12.0`. Use a source build containing the changes. The
+**Availability:** [v0.13.0 is published](https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.13.0),
+with AMD64 and ARM64 images on Docker Hub and GHCR. Upgrade all workers sharing a scan queue
+before submitting Client Spider jobs. The
 [Client Spider guide](https://danieltse.org/mcp-zap-server/scanning/client-spider/) covers setup,
 required ZAP add-ons and Firefox, authentication, and both execution modes.
 
@@ -136,6 +137,13 @@ stopped; meaningful coverage still needs evidence from discovered content and au
 requests. Findings feed the existing shared ZAP reports after passive analysis finishes. There is
 currently no dedicated Client Spider discovery-list tool or report isolated to one crawl, and the
 testing did not establish a coverage advantage over the other crawlers.
+
+For a fresh ZAP session, the guide also documents a
+[pre-login visit workaround](https://danieltse.org/mcp-zap-server/scanning/client-spider/#browser-storage-alerts-missing-during-login):
+ask ZAP to visit the application's home page once before browser login. In the tested Juice Shop
+setup, this allowed ZAP to save browser-storage alerts that were otherwise dropped during login.
+It needs no full spider run and is not automatic in the guided workflow. The issue also reproduced
+with v0.12.0 and ZAP alone, before any Client Spider crawl.
 
 ## Why it matters
 
