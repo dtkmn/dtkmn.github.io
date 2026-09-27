@@ -11,7 +11,7 @@ featured: false
 draft: false
 mediumUrl: https://medium.com/@danieltse/pull-the-docker-image-from-aws-ecr-in-kubernetes-dc7280d74904
 canonicalUrl: https://medium.com/@danieltse/pull-the-docker-image-from-aws-ecr-in-kubernetes-dc7280d74904
-archiveReason: Tactical Kubernetes plumbing from the Medium era; keep it findable, but do not let it define the site.
+archiveNote: Originally published in 2020. The manually created ECR pull secret requires refresh when its authorization token expires.
 ---
 
 Normally when we want to pull images from AWS ECR to localhost, we need to log in first:
@@ -27,6 +27,8 @@ Suppose you already have access to AWS CLI. Run the following command to get the
 ```bash
 aws ecr get-login-password --region region
 ```
+
+ECR authorization tokens expire after 12 hours. A manually created pull secret must be refreshed before later image pulls can authenticate; this example does not configure automatic renewal. See [Amazon ECR's authentication documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html).
 
 According to the Kubernetes documentation, we need to create a secret that contains `.dockerconfigjson`.
 

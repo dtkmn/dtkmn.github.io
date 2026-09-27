@@ -34,16 +34,11 @@ audience:
   - Teams evaluating MCP beyond toy demos
 proofPoints:
   - "v0.13.0 adds Client Spider for JavaScript-driven apps, with direct and queued crawling, browser login profiles, and automatic cookie or token session detection."
-  - "v0.10.1 is a drop-in compatibility patch: Streamable HTTP responses to server-initiated requests now reach the MCP runtime instead of being rejected as methodless requests."
-  - 58 GitHub stars and 8 forks as of June 30, 2026.
-  - "PRs #167 and #168 consume MCP Gateway Core 0.7.2, align runtime and delivery metadata, and leave tool schemas, auth settings, Helm values, and the database contract unchanged."
+  - "The July 16, 2026 v0.10.1 release corrected Streamable HTTP response handling for server-initiated requests."
+  - "The v0.13.0 runtime consumes MCP Gateway Core 0.10.0 for shared governance behavior."
   - Supports API-key and JWT authentication modes, tool scopes, runtime policy bundles, URL validation, rate limits, workspace quotas, and audit events.
   - "Client Spider was verified against Juice Shop with anonymous and authenticated direct and queued crawls."
 evidenceStats:
-  - label: Public traction
-    value: 58 stars
-    detail: GitHub stars as recorded on June 30, 2026, with 8 forks.
-    icon: github
   - label: Release track
     value: "0.13.0"
     detail: Published September 26, 2026, with Client Spider, browser authentication profiles, and AMD64 and ARM64 images on Docker Hub and GHCR.
@@ -66,9 +61,9 @@ evidenceStats:
     icon: terminal
 evidenceAssets:
   - type: repository
-    label: Repository signal
-    title: Public code with visible adoption and maintenance pressure
-    detail: The repo has public traction, release history, and enough delivery and operator material to inspect beyond a README headline.
+    label: Source code
+    title: Scanner integration and operator controls
+    detail: Browse the implementation, release history, deployment examples, and operator documentation.
     href: https://github.com/dtkmn/mcp-zap-server
     hrefLabel: Inspect repository
   - type: governance
@@ -92,7 +87,7 @@ evidenceAssets:
   - type: security
     label: Operational guardrails
     title: Auth, policy, audit, rate limits, and URL boundaries
-    detail: This is the proof that the project is thinking about operator risk, live remediation pressure, and failure handling, not just successful tool calls.
+    detail: Configurable controls govern callers, targets, tool access, and scan capacity.
   - type: docs
     label: Available in v0.13.0
     title: Client Spider and browser authentication
@@ -107,9 +102,9 @@ This project turns OWASP ZAP into an MCP-accessible security tool so an AI agent
 schemas, run scanning workflows, and pull structured findings without falling back to brittle shell
 scripts.
 
-The reusable boundary layer now has its own site entry: [MCP Gateway Core](/projects/mcp-gateway-core/)
-is the Java contract layer for tool identity, authorization, policy, audit, abuse protection, and
-adapter behavior. This project stays responsible for the ZAP-specific runtime.
+[MCP Gateway Core](/projects/mcp-gateway-core/) supplies shared Java contracts for tool identity,
+authorization, policy, audit, abuse protection, and adapter behavior. MCP ZAP Server owns the
+scanner-specific runtime.
 
 ## Client Spider and browser authentication
 
@@ -164,13 +159,15 @@ The repository has enough surface area to show that it has moved past novelty:
 - API-key/JWT auth, tool scopes, runtime policy bundles, audit events, rate limits, workspace quotas,
   and target URL validation.
 
-The June 10 v0.9.0 release made the proof sharper: policy, audit, and abuse-protection handling moved
+## Release history
+
+The June 10, 2026 v0.9.0 release moved policy, audit, and abuse-protection handling
 through shared [MCP Gateway Core](/projects/mcp-gateway-core/) adapter boundaries instead of one-off
 local filters. The security-gate examples rejected mutable image tags, and the release notes made
 validation commands inspectable.
 
-The July 16 v0.10.1 release is narrower than a feature launch and more useful as evidence. A
-Streamable HTTP endpoint receives requests, notifications, and responses on the same `POST` route.
+The July 16, 2026 v0.10.1 release corrected response handling. A Streamable HTTP endpoint receives
+requests, notifications, and responses on the same `POST` route.
 The previous gateway adapter treated a response-shaped envelope as a request, then rejected it for
 having an `id` and `result` or `error` but no `method`. Cursor keepalive replies consequently failed
 instead of reaching Spring AI for session correlation.
@@ -182,15 +179,11 @@ metadata. Response envelopes now pass through and complete with HTTP `202`; requ
 `method` still take the existing authorization and abuse-protection path. The body, session id,
 custom headers, body-size limit, and surrounding authentication chain remain intact.
 
-This is a drop-in patch from v0.10.0, not an excuse to imply a larger redesign. Tool schemas,
-authentication settings, Helm values, and the database contract are unchanged. The release also
-expands CodeQL coverage and pins policy dry-run regression coverage, while the support table marks
-`>= 0.10.1` active and `0.10.0` upgrade-only for this client-compatibility failure. That is what
-production-adjacent maintenance looks like: a real downstream failure gets a bounded fix, a release,
-and an explicit upgrade path.
-
-That combination is exactly why this deserves a page here. The repository handles setup and usage.
-This page explains why the project matters in the first place.
+For that v0.10.1 patch, tool schemas, authentication settings, Helm values, and the database contract
+were unchanged. The release also expanded CodeQL coverage and policy dry-run regression coverage.
+Later releases have their own changes and upgrade requirements; consult the
+[current security policy](https://github.com/dtkmn/mcp-zap-server/blob/main/SECURITY.md) and
+[release notes](https://github.com/dtkmn/mcp-zap-server/releases) before selecting a version.
 
 ## How it connects to the writing
 

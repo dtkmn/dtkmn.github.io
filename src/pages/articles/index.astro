@@ -11,18 +11,17 @@ const archivedArticles = articles.filter((entry) => entry.data.canonicalUrl);
 <BaseLayout title="Articles" description="Site-canonical essays and archived technical writing by Daniel Tse.">
   <section class="page-lead">
     <p class="eyebrow">Articles</p>
-    <h1>The arguments that belong here now.</h1>
+    <h1>Technical articles and essays.</h1>
     <p class="page-lead-summary">
-      danieltse.org is the canonical home for the AI tooling, local LLM, and benchmark essays that
-      match the current positioning. The older Medium-era tutorials are still available, but they
-      are archive material, not the front door.
+      Essays on AI tooling, local models, backend performance, and platform engineering,
+      alongside earlier tutorials originally published on Medium.
     </p>
   </section>
 
   <section class="section-block">
     <div class="section-heading">
-      <p class="eyebrow">Site canonical</p>
-      <h2>Current essays with enough signal to carry the site.</h2>
+      <p class="eyebrow">Essays</p>
+      <h2>Published on danieltse.org.</h2>
     </div>
     <div class="stack-grid">
       {canonicalArticles.map((entry) => <ArticleCard entry={entry} />)}
@@ -33,10 +32,10 @@ const archivedArticles = articles.filter((entry) => entry.data.canonicalUrl);
     <section class="section-block section-block--quiet">
       <div class="section-heading">
         <p class="eyebrow">Archive</p>
-        <h2>Useful history, not flagship positioning.</h2>
+        <h2>Earlier tutorials.</h2>
         <p class="section-summary">
-          These posts can stay available for continuity, but promoting them would make the site look
-          smaller than the work is now.
+          These articles retain their original publication dates and Medium links.
+          Examples may require updates for current software; each article includes historical context.
         </p>
       </div>
       <div class="stack-grid">

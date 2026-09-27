@@ -11,7 +11,7 @@ interface Props {
   tags: string[];
   canonicalUrl?: string;
   mediumUrl?: string;
-  archiveReason?: string;
+  archiveNote?: string;
   heroImage?: string;
   headings?: { depth: number; slug: string; text: string }[];
   readingTime?: number;
@@ -25,7 +25,7 @@ const {
   tags,
   canonicalUrl,
   mediumUrl,
-  archiveReason,
+  archiveNote,
   heroImage,
   headings = [],
   readingTime = 1,
@@ -97,7 +97,7 @@ const jsonLd = {
       />
       {kind === "article" && isExternalCanonical && (
         <p class="post-canonical-note">
-          <strong>Archive call:</strong> {archiveReason ?? "This is useful historical context, not current positioning."}
+          <strong>Historical article:</strong> {archiveNote ?? "Originally published on the date shown; examples may require updates for current software."}
           {" "}The canonical publication remains on
           <a href={pageCanonical} rel="noreferrer noopener" target="_blank"> {externalCanonicalLabel}</a>.
         </p>

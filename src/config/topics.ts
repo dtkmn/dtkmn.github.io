@@ -119,7 +119,7 @@ export const topicHubs = [
       "Architecture is incomplete until the delivery, observation, and recovery paths are visible.",
     body: [
       "Cloud delivery is not a pile of YAML attached after the application is finished. A credible service contract includes how the artifact is built, released, configured, observed, secured, rolled back, and maintained when dependencies or production assumptions change.",
-      "The projects collected here expose those paths through Helm assets, CI gates, security workflows, metrics, runbooks, and explicit platform boundaries. Older tactical tutorials remain part of the archive, but this hub deliberately centers current systems that show an operating model rather than a one-time setup command.",
+      "The projects collected here document those paths through Helm assets, CI checks, security workflows, metrics, runbooks, and explicit platform boundaries. Earlier setup tutorials remain available in the article archive with their original publication dates.",
     ],
     icon: "cloud",
     principles: [

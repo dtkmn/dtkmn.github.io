@@ -10,7 +10,7 @@ featured: false
 draft: false
 mediumUrl: https://medium.com/@danieltse/kafka-quickstart-b00340dbceae
 canonicalUrl: https://medium.com/@danieltse/kafka-quickstart-b00340dbceae
-archiveReason: Old Docker quickstart; useful context, but not current Kafka architecture guidance.
+archiveNote: Originally published in 2022 for the fast-data-dev Docker environment. Commands have been corrected to use one topic and Compose service name.
 heroImage: /images/posts/kafka-quickstart/local-cluster.png
 ---
 
@@ -44,7 +44,7 @@ services:
 Launch it with:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ![Kafka cluster running locally](/images/posts/kafka-quickstart/local-cluster.png)
@@ -54,7 +54,7 @@ docker-compose up -d
 Create a topic named `test-topic-avro`:
 
 ```bash
-docker exec -it kafka bash
+docker compose exec kafka bash
 
 kafka-topics --create --topic test-topic-avro --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
 ```
@@ -80,7 +80,7 @@ Use the Avro console producer:
 
 ```bash
 kafka-avro-console-producer \
-  --topic your-topic-avro \
+  --topic test-topic-avro \
   --bootstrap-server localhost:9092 \
   --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
 ```
@@ -96,9 +96,9 @@ The producer waits for input. Each line is one Avro record:
 In another terminal, run the consumer:
 
 ```bash
-docker-compose exec -it kafka bash
+docker compose exec kafka bash
 
-kafka-avro-console-consumer --topic my-topic-avro --bootstrap-server localhost:9092
+kafka-avro-console-consumer --topic test-topic-avro --bootstrap-server localhost:9092 --from-beginning
 ```
 
 At that point you have a fast local feedback loop: broker, schema-aware producer, and consumer all running with minimal setup.

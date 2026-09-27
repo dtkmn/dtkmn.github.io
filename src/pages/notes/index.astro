@@ -11,7 +11,7 @@ const notes = await getPublishedNotes();
     <p class="eyebrow">Notes</p>
     <h1>Shorter field notes and implementation fragments.</h1>
     <p class="page-lead-summary">
-      The structure is ready. Notes will appear here once there is enough signal to publish them.
+      Brief observations and examples from implementation work.
     </p>
   </section>
 
@@ -21,12 +21,11 @@ const notes = await getPublishedNotes();
     </div>
   ) : (
     <section class="empty-state">
-      <h2>Notes are coming.</h2>
+      <h2>No notes published yet.</h2>
       <p>
-        v1 prioritizes the essay archive and the site rebuild. Short-form technical notes are wired
-        in, but intentionally not padded with filler.
+        Browse the <a href="/articles/">articles</a> and <a href="/projects/">project guides</a>
+        for published work.
       </p>
     </section>
   )}
 </BaseLayout>
-

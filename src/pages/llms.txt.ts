@@ -77,7 +77,7 @@ export async function GET() {
       "## Archive Articles",
       ...archivedArticles.map(
         (article) =>
-          `- ${article.data.title}: ${articleUrl(article.id)} -- ${article.data.archiveReason ?? article.data.summary}`,
+          `- ${article.data.title}: ${articleUrl(article.id)} -- ${article.data.summary} (${article.data.archiveNote ?? "Historical article."})`,
       ),
     );
   }

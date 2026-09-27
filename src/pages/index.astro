@@ -58,7 +58,7 @@ const proofIconBySlug = {
 const proofLedger = featuredProjects.map((project) => ({
   title: project.data.title,
   href: `/projects/${project.id}/`,
-  proof: project.data.proofPoints[0] ?? "Curated because the project has enough surface area to prove the point.",
+  proof: project.data.proofPoints[0] ?? project.data.summary,
   stack: project.data.stack.slice(0, 3).join(" / "),
   icon: proofIconBySlug[project.id as keyof typeof proofIconBySlug] ?? "terminal",
 }));
@@ -155,7 +155,7 @@ const archiveWriting = recentArticles
         </a>
       </div>
       <p class="hero-install-note">
-        If there is no code, benchmark, deployment path, or hard tradeoff, it does not belong here.
+        Source code, documentation, and benchmarks are linked throughout the project guides.
       </p>
     </div>
     <aside class="hero-console" aria-label="Evidence console">
@@ -261,8 +261,7 @@ const archiveWriting = recentArticles
     <div class="section-heading">
       <h2>The work has to carry the claim.</h2>
       <p class="section-summary">
-        Assertions are cheap. These projects are here because they have enough implementation
-        surface to be judged.
+        Selected features and implementation details from the projects below.
       </p>
     </div>
     <div class="proof-ledger">
@@ -331,7 +330,7 @@ const archiveWriting = recentArticles
       <div class="section-heading section-heading--inline">
         <div>
           <p class="eyebrow">Archive</p>
-          <h2>Older writeups kept for continuity, not pretending to be current.</h2>
+          <h2>Earlier technical tutorials.</h2>
         </div>
         <a class="section-link" href="/articles/">
           <span>Browse archive</span>

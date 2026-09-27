@@ -16,7 +16,7 @@ const href =
     : `/notes/${entry.id}/`;
 const description = entry.data.summary ?? "";
 const canonicalUrl = entry.collection === "articles" ? entry.data.canonicalUrl : undefined;
-const archiveReason = entry.collection === "articles" ? entry.data.archiveReason : undefined;
+const archiveNote = entry.collection === "articles" ? entry.data.archiveNote : undefined;
 const isArchived = Boolean(canonicalUrl && !canonicalUrl.startsWith("https://danieltse.org"));
 const kindIcon = entry.collection === "articles" ? "file-text" : "notes";
 const kindLabel = entry.collection === "notes" ? "Note" : isArchived ? "Archive" : "Essay";
@@ -31,7 +31,7 @@ const kindLabel = entry.collection === "notes" ? "Note" : isArchived ? "Archive"
       </p>
       <h3>{entry.data.title}</h3>
       {description && <p class="article-card-summary">{description}</p>}
-      {archiveReason && <p class="article-card-archive">{archiveReason}</p>}
+      {archiveNote && <p class="article-card-archive">{archiveNote}</p>}
     </div>
   </a>
   <ArticleMeta

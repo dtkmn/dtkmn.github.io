@@ -48,8 +48,8 @@ function externalCanonicalPostUrls() {
         );
       }
 
-      if (!frontmatterValue(frontmatter, "archiveReason")) {
-        throw new Error(`${filename} uses an external canonicalUrl without an archiveReason.`);
+      if (!frontmatterValue(frontmatter, "archiveNote")) {
+        throw new Error(`${filename} uses an external canonicalUrl without an archiveNote.`);
       }
 
       const mediumUrl = frontmatterValue(frontmatter, "mediumUrl");

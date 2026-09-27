@@ -13,7 +13,7 @@ const articles = defineCollection({
     draft: z.boolean().default(false),
     canonicalUrl: z.url().optional(),
     mediumUrl: z.url().optional(),
-    archiveReason: z.string().optional(),
+    archiveNote: z.string().optional(),
     heroImage: z.string().optional(),
   }),
 });

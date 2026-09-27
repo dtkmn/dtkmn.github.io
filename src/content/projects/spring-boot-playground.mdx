@@ -1,6 +1,6 @@
 ---
 title: Spring Boot Playground
-summary: An opinionated Spring service starter with Spring Boot 4.1.0 on Java 21, two explicit service variants, and a digest-pinned, non-root distroless runtime contract.
+summary: An opinionated Spring service starter with Spring Boot 4.1.1 on Java 21, two explicit service variants, and a digest-pinned, non-root distroless runtime contract.
 date: 2023-11-11
 draft: false
 featured: true
@@ -19,7 +19,7 @@ tags:
   - JVM
 stack:
   - Java 21
-  - Spring Boot 4.1.0
+  - Spring Boot 4.1.1
   - Distroless Java 21
   - PostgreSQL
   - Flyway
@@ -30,7 +30,7 @@ audience:
   - JVM teams choosing between a blocking default and a justified reactive path
   - Maintainers who want build, container, CI, and Helm defaults in the generated service
 proofPoints:
-  - Upgrades both starter variants and all three examples to Spring Boot 4.1.0 while retaining Java 21 as the stable baseline.
+  - Uses Spring Boot 4.1.1 and Java 21 across both starter variants and the examples.
   - Keeps `mvc-jpa` as the default and `webflux-r2dbc` as the supported advanced variant.
   - 'Pins the distroless Java 21 runtime by digest and declares UID/GID 65532 plus `CMD ["app.jar"]` in template and example Dockerfiles.'
 evidenceStats:
@@ -39,8 +39,8 @@ evidenceStats:
     detail: MVC/JPA remains the default; WebFlux/R2DBC remains the advanced path for a real reactive requirement.
     icon: layers
   - label: Spring baseline
-    value: 4.1.0
-    detail: Both starter templates and all three examples use the exact Spring Boot 4.1.0 plugin version.
+    value: 4.1.1
+    detail: The September 2, 2026 version policy and current starter templates specify Spring Boot 4.1.1.
     icon: check-circle
   - label: Java baseline
     value: Java 21
@@ -52,8 +52,8 @@ evidenceStats:
     icon: shield
 evidenceAssets:
   - type: template
-    label: Modernized baseline
-    title: Spring Boot 4.1.0 spans both variants and three examples
+    label: Boot 4 migration
+    title: Historical upgrade to Spring Boot 4.1.0
     detail: 'PR #133 moves the two starter templates plus the Kafka, Kafka Streams, and WebSocket examples from Spring Boot 3.5.15 to 4.1.0.'
     href: https://github.com/dtkmn/spring-boot-playground/pull/133
     hrefLabel: 'Inspect PR #133'
@@ -79,20 +79,22 @@ evidenceAssets:
 
 ## What it is
 
-`spring-boot-playground` is an internal starter candidate for controlled pilot adoption, not broad
-platform rollout. It keeps `mvc-jpa` as the default path, supports `webflux-r2dbc` for teams with a
+`spring-boot-playground` provides service templates for controlled pilot adoption. It keeps `mvc-jpa`
+as the default path, supports `webflux-r2dbc` for teams with a
 real reactive requirement, and leaves Kafka, Kafka Streams, and WebSocket integrations in examples
 outside the starter contract.
 
-## Modernized baseline
+## Baseline and migration history
 
-[PR #133](https://github.com/dtkmn/spring-boot-playground/pull/133) changes the Spring Boot plugin
-from 3.5.15 to 4.1.0 in both starter templates and all three examples. The compatibility work includes
+[PR #133](https://github.com/dtkmn/spring-boot-playground/pull/133) changed the Spring Boot plugin
+from 3.5.15 to 4.1.0 in both starter templates and all three examples. The compatibility work included
 the Boot 4 test starters and package moves, Spring Boot starter dependencies for Flyway and Kafka,
 and Jackson 3 imports where the WebSocket example needs them.
 
-The JVM did not move with that PR. Java 21 remains the stable toolchain and builder baseline, and the
-merged version policy still lists Java 25 as a future migration tranche.
+That PR records the historical move to Boot 4. The
+[current version policy](https://github.com/dtkmn/spring-boot-playground/blob/main/docs/releases/version-policy.md),
+updated September 2, 2026, specifies Spring Boot 4.1.1. Java 21 remains the stable toolchain and
+builder baseline; Java 25 is a future migration tranche.
 
 ## Hardened runtime
 
@@ -110,5 +112,5 @@ documented, tested exception.
 
 The modernization preserves the starter's central decision. Use `mvc-jpa` for the lowest-friction
 request/response path; use `webflux-r2dbc` only when non-blocking I/O provides a clear benefit and the
-team is prepared for Reactor and reactive persistence. Both templates share the Spring Boot 4.1.0 and
+team is prepared for Reactor and reactive persistence. Both templates share the Spring Boot 4.1.1 and
 digest-pinned distroless Java 21 baselines.
