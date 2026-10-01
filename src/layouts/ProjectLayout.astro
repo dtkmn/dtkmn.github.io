@@ -66,6 +66,7 @@ interface Props {
   title: string;
   summary: string;
   date: Date;
+  updated?: Date;
   status: "active" | "maintained" | "experimental";
   repoUrl: string;
   docsUrl?: string;
@@ -87,6 +88,7 @@ const {
   title,
   summary,
   date,
+  updated,
   status,
   repoUrl,
   docsUrl,
@@ -150,7 +152,7 @@ const jsonLd = {
   url: pageCanonical,
   codeRepository: repoUrl,
   dateCreated: date.toISOString(),
-  dateModified: date.toISOString(),
+  dateModified: (updated ?? date).toISOString(),
   keywords: tags.join(", "),
   author: {
     "@type": "Person",

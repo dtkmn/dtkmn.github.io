@@ -35,6 +35,7 @@ const projects = defineCollection({
     title: z.string(),
     summary: z.string(),
     date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
     detailPage: z.boolean().default(true),

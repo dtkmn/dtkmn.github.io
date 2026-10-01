@@ -2,6 +2,7 @@
 title: MCP Gateway Core
 summary: "Embeddable Java governance contracts for MCP tool runtimes: tool identity, access rules, governance decisions, audit events, abuse protection, URL scoping, rate limits, and a separate Spring WebFlux adapter."
 date: 2026-06-22
+updated: 2026-10-01
 draft: false
 featured: false
 detailPage: true
@@ -106,12 +107,25 @@ optional adapter. Repository checks cover tests, module-owned JAR contents, core
 Java 17 compatibility, and staged-publication consumer smoke tests. The release process also
 validates signed Maven Central bundles.
 
+## Get started
+
+Use the JDK-only core in an existing Java 17+ MCP runtime. Add the optional adapter when
+your MCP endpoint uses Spring WebFlux. The current adapter targets Spring Framework 7,
+Spring Security 7 and Jackson 3; older application stacks can use the core with their
+own transport integration.
+
+Follow the [Getting Started guide](https://danieltse.org/mcp-gateway-core/guides/getting-started/)
+for dependency coordinates and wiring examples. Check the
+[compatibility guidance](https://danieltse.org/mcp-gateway-core/reference/compatibility/) and
+[security support policy](https://danieltse.org/mcp-gateway-core/project/security/)
+before choosing an adapter version.
+
 ## Current public preview
 
-As of September 27, 2026, the latest published release is `0.10.0` for both the
+As of October 1, 2026, the latest published release is `0.10.0` for both the
 [core](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-core/0.10.0/) and
 [Spring WebFlux adapter](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-spring-webflux/0.10.0/).
-The development version is separate from the published consumer release. See the
+The development version is `0.11.0-SNAPSHOT`, separate from the published consumer release. See the
 [release notes](https://github.com/dtkmn/mcp-gateway-core/blob/main/docs/RELEASE_NOTES.md)
 for changes and migration requirements.
 
@@ -124,6 +138,16 @@ before the governance filter; upgrading the dependency alone does not enable thi
 The core also adds `TokenBucketRateLimiter.attempt(String, Policy)`. Its result contains the
 allow/deny decision and retry delay from the same consumption attempt. Existing rate-limiter
 methods remain available.
+
+### Unreleased development
+
+Development toward `0.11.0` adds a strict authorization shortcut, active-tool catalog
+selection, opt-in recursive metadata snapshots, optional adapter diagnostics and audit
+helpers, and safer rate-limit bucket management. These changes are unreleased and are
+absent from the published `0.10.0` artifacts. The
+[development release notes](https://github.com/dtkmn/mcp-gateway-core/blob/dev/docs/RELEASE_NOTES.md)
+describe their behavior and compatibility limits. MCP ZAP Server still consumes Gateway
+`0.10.0`; it has not adopted these unreleased helpers.
 
 ### Response handling introduced in 0.7.2
 

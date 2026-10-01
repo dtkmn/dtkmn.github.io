@@ -2,6 +2,7 @@
 title: MCP ZAP Server
 summary: ZAP scanning exposed as an MCP server for AI agents, with governed scanning workflows, CI security gates, and Client Spider for authenticated browser crawling in v0.13.0.
 date: 2025-04-20
+updated: 2026-10-01
 draft: false
 featured: true
 detailPage: true
@@ -105,6 +106,21 @@ scripts.
 [MCP Gateway Core](/projects/mcp-gateway-core/) supplies shared Java contracts for tool identity,
 authorization, policy, audit, abuse protection, and adapter behavior. MCP ZAP Server owns the
 scanner-specific runtime.
+
+## Get started
+
+As of October 1, 2026, the latest published release is
+[v0.13.0](https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.13.0).
+Use the [Self-Serve First Run guide](https://danieltse.org/mcp-zap-server/getting-started/self-serve-first-run/)
+to start the local Docker Compose stack and produce a findings summary and report from a
+bundled demo target. The
+[MCP Client Setup guide](https://danieltse.org/mcp-zap-server/getting-started/mcp-client-authentication/)
+covers connecting a client with the required authentication.
+
+This release consumes MCP Gateway Core and its WebFlux adapter at `0.10.0`.
+Gateway's `0.11.0-SNAPSHOT` additions are still unreleased and are not part of this
+published ZAP runtime. See the [Gateway project page](/projects/mcp-gateway-core/)
+for the library's integration choices and development status.
 
 ## Client Spider and browser authentication
 
