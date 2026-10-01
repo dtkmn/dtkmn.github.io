@@ -33,14 +33,14 @@ audience:
   - Security-runtime builders separating policy decisions from scanner behavior
   - Platform engineers evaluating governance boundaries for MCP runtimes
 proofPoints:
-  - "The core and optional Spring WebFlux adapter are published to Maven Central; the current public-preview release is 0.10.0."
+  - "The core and optional Spring WebFlux adapter are published to Maven Central; the current public-preview release is 0.11.0."
   - "The 0.10.0 adapter can check an operator-supplied active-tool registry before authorization and abuse protection."
   - "The core rate limiter offers one result containing both the consumption decision and retry delay."
   - "The core artifact has no runtime dependencies; the optional adapter keeps Spring dependencies separate."
   - "Snyk reports scan health separately from its vulnerability commit status."
 evidenceStats:
   - label: Published preview
-    value: "0.10.0"
+    value: "0.11.0"
     detail: Both artifacts are on Maven Central. Public-preview APIs remain subject to compatibility changes.
     icon: rocket
   - label: Tool availability
@@ -68,9 +68,9 @@ evidenceAssets:
     hrefLabel: Browse repository
   - type: governance
     label: Published artifact
-    title: Core 0.10.0 on Maven Central
+    title: Core 0.11.0 on Maven Central
     detail: Inspect the published core artifact, POM, checksums, and signatures.
-    href: https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-core/0.10.0/
+    href: https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-core/0.11.0/
     hrefLabel: Inspect artifact
   - type: docs
     label: Release history
@@ -122,32 +122,34 @@ before choosing an adapter version.
 
 ## Current public preview
 
-As of October 1, 2026, the latest published release is `0.10.0` for both the
-[core](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-core/0.10.0/) and
-[Spring WebFlux adapter](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-spring-webflux/0.10.0/).
-The development version is `0.11.0-SNAPSHOT`, separate from the published consumer release. See the
+As of October 1, 2026, the latest published release is `0.11.0` for both the
+[core](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-core/0.11.0/) and
+[Spring WebFlux adapter](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-spring-webflux/0.11.0/).
+Use these published coordinates for integration; development snapshots are separate. See the
 [release notes](https://github.com/dtkmn/mcp-gateway-core/blob/main/docs/RELEASE_NOTES.md)
 for changes and migration requirements.
 
-The `0.10.0` adapter adds an optional `toolRegistry(McpToolRegistry)` setting. When configured,
+Since `0.10.0`, the adapter supports an optional `toolRegistry(McpToolRegistry)` setting. When configured,
 it checks well-formed calls against the runtime's registered, enabled tools before evaluating
 permissions or abuse protection. Unknown and disabled tools receive the same generic response.
 Hosts must supply the active registry, keep permission mappings consistent, and run authentication
 before the governance filter; upgrading the dependency alone does not enable this integration.
 
-The core also adds `TokenBucketRateLimiter.attempt(String, Policy)`. Its result contains the
+Since `0.10.0`, the core provides `TokenBucketRateLimiter.attempt(String, Policy)`. Its result contains the
 allow/deny decision and retry delay from the same consumption attempt. Existing rate-limiter
 methods remain available.
 
-### Unreleased development
+<a id="unreleased-development"></a>
 
-Development toward `0.11.0` adds a strict authorization shortcut, active-tool catalog
+### Additions in 0.11.0
+
+The `0.11.0` release adds a strict authorization shortcut, active-tool catalog
 selection, opt-in recursive metadata snapshots, optional adapter diagnostics and audit
-helpers, and safer rate-limit bucket management. These changes are unreleased and are
-absent from the published `0.10.0` artifacts. The
-[development release notes](https://github.com/dtkmn/mcp-gateway-core/blob/dev/docs/RELEASE_NOTES.md)
-describe their behavior and compatibility limits. MCP ZAP Server still consumes Gateway
-`0.10.0`; it has not adopted these unreleased helpers.
+helpers, resolver validation, and safer rate-limit bucket management. The
+[release notes](https://github.com/dtkmn/mcp-gateway-core/blob/main/docs/RELEASE_NOTES.md)
+describe their behavior and compatibility limits. Both published artifacts passed
+fresh Java 17 consumer checks using only Maven Central. MCP ZAP Server's `v0.13.0`
+release consumes Gateway `0.10.0`; it does not include the `0.11.0` additions.
 
 ### Response handling introduced in 0.7.2
 
