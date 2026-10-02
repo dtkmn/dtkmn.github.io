@@ -8,7 +8,7 @@ featured: true
 detailPage: true
 tier: flagship
 status: active
-order: 1
+order: 0
 repoUrl: https://github.com/dtkmn/mcp-zap-server
 docsUrl: https://danieltse.org/mcp-zap-server/
 demoUrl: https://danieltse.org/mcp-zap-server/demo.html
@@ -99,9 +99,9 @@ evidenceAssets:
 
 ## What it is
 
-This project turns OWASP ZAP into an MCP-accessible security tool so an AI agent can import API
-schemas, run scanning workflows, and pull structured findings without falling back to brittle shell
-scripts.
+MCP ZAP Server lets AI agents import API schemas, run OWASP ZAP scanning workflows, and retrieve
+structured findings. API-key/JWT authentication, tool scopes, policy, URL validation, quotas, limits,
+and audit events govern those workflows; Docker Compose, Helm, and CI security-gate examples support deployment.
 
 [MCP Gateway Core](/projects/mcp-gateway-core/) supplies shared Java contracts for tool identity,
 authorization, policy, audit, abuse protection, and adapter behavior. MCP ZAP Server owns the
@@ -112,10 +112,9 @@ scanner-specific runtime.
 As of October 1, 2026, the latest published release is
 [v0.13.0](https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.13.0).
 Use the [Self-Serve First Run guide](https://danieltse.org/mcp-zap-server/getting-started/self-serve-first-run/)
-to start the local Docker Compose stack and produce a findings summary and report from a
-bundled demo target. The
+for the Docker Compose demo scan, and the
 [MCP Client Setup guide](https://danieltse.org/mcp-zap-server/getting-started/mcp-client-authentication/)
-covers connecting a client with the required authentication.
+for authenticated client connections.
 
 This release consumes MCP Gateway Core and its WebFlux adapter at `0.10.0`.
 Gateway `0.11.0` is now published separately; its additions are not part of this
@@ -124,90 +123,25 @@ for the library's integration choices and release details.
 
 ## Client Spider and browser authentication
 
-**v0.13.0** adds **Client Spider**, ZAP's browser crawler for JavaScript-driven applications.
-An agent can start a crawl immediately or submit it to the durable scan queue, with each crawl
-independently tracked for status and cancellation. Guided workflows select it with `strategy=client`; the
-existing `strategy=browser` still selects AJAX Spider.
-
-Operator-managed browser login profiles also let Client Spider explore pages behind a login.
-ZAP signs in through the browser and detects how the application carries its login session,
-including cookies or tokens sent in request headers. This fixes a case where login succeeded in
-Juice Shop's browser but the follow-up login check did not send the token and incorrectly reported
-that authentication failed. These browser profiles currently support Client
-Spider; the existing form-login profiles remain the path for guided authenticated active scans.
-
-**Availability:** [v0.13.0 is published](https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.13.0),
-with AMD64 and ARM64 images on Docker Hub and GHCR. Upgrade all workers sharing a scan queue
-before submitting Client Spider jobs. The
+**v0.13.0** adds **Client Spider** for JavaScript-driven applications, with direct and queued crawls,
+status and cancellation, and operator-managed browser login profiles. These profiles currently support
+Client Spider; form-login profiles remain the path for guided authenticated active scans. Upgrade all
+workers sharing a scan queue before submitting Client Spider jobs. The
 [Client Spider guide](https://danieltse.org/mcp-zap-server/scanning/client-spider/) covers setup,
-required ZAP add-ons and Firefox, authentication, and both execution modes.
+authentication, and execution modes.
 
-Anonymous and authenticated crawling were verified against Juice Shop in both direct and queued
-modes. Crawl status confirms that the crawler has
-stopped; meaningful coverage still needs evidence from discovered content and authenticated
-requests. Findings feed the existing shared ZAP reports after passive analysis finishes. There is
-currently no dedicated Client Spider discovery-list tool or report isolated to one crawl, and the
-testing did not establish a coverage advantage over the other crawlers.
+Juice Shop validation covered anonymous and authenticated crawls in both modes. Crawl completion does
+not establish coverage; inspect discovered content and authenticated requests. Findings enter shared
+ZAP reports after passive analysis. There is no dedicated Client Spider discovery-list tool or isolated
+per-crawl report, and testing did not establish a coverage advantage over other crawlers. In the tested
+Juice Shop setup, a documented
+[pre-login visit workaround](https://danieltse.org/mcp-zap-server/scanning/client-spider/#browser-storage-alerts-missing-during-login)
+recovered browser-storage alerts in fresh sessions; it is not automatic.
 
-For a fresh ZAP session, the guide also documents a
-[pre-login visit workaround](https://danieltse.org/mcp-zap-server/scanning/client-spider/#browser-storage-alerts-missing-during-login):
-ask ZAP to visit the application's home page once before browser login. In the tested Juice Shop
-setup, this allowed ZAP to save browser-storage alerts that were otherwise dropped during login.
-It needs no full spider run and is not automatic in the guided workflow. The issue also reproduced
-with v0.12.0 and ZAP alone, before any Client Spider crawl.
+## Releases and support
 
-## Why it matters
-
-Many MCP demos stop at convenience. This one is stronger because it sits on a real operational
-boundary: security automation. The interesting question is not whether an agent can call a tool. It
-is whether that tool can be exposed in a way that is safe enough, observable enough, and packaged
-well enough to fit into actual engineering workflows.
-
-## What makes it credible
-
-The repository has enough surface area to show that it has moved past novelty:
-
-- a documentation site with security, deployment, observability, and operator runbooks,
-- a demo path that shows the workflow end to end,
-- release notes and changelog discipline,
-- GitHub Actions and GitLab security-gate examples,
-- Docker Compose and Helm deployment material,
-- API-key/JWT auth, tool scopes, runtime policy bundles, audit events, rate limits, workspace quotas,
-  and target URL validation.
-
-## Release history
-
-The June 10, 2026 v0.9.0 release moved policy, audit, and abuse-protection handling
-through shared [MCP Gateway Core](/projects/mcp-gateway-core/) adapter boundaries instead of one-off
-local filters. The security-gate examples rejected mutable image tags, and the release notes made
-validation commands inspectable.
-
-The July 16, 2026 v0.10.1 release corrected response handling. A Streamable HTTP endpoint receives
-requests, notifications, and responses on the same `POST` route.
-The previous gateway adapter treated a response-shaped envelope as a request, then rejected it for
-having an `id` and `result` or `error` but no `method`. Cursor keepalive replies consequently failed
-instead of reaching Spring AI for session correlation.
-
-[PR #167](https://github.com/dtkmn/mcp-zap-server/pull/167) moved both gateway dependencies to
-`0.7.2`. [PR #168](https://github.com/dtkmn/mcp-zap-server/pull/168) packaged that correction as
-v0.10.1 and aligned runtime, OCI image, Helm chart, MCP Registry, extension-proof, and install
-metadata. Response envelopes now pass through and complete with HTTP `202`; requests that carry a
-`method` still take the existing authorization and abuse-protection path. The body, session id,
-custom headers, body-size limit, and surrounding authentication chain remain intact.
-
-For that v0.10.1 patch, tool schemas, authentication settings, Helm values, and the database contract
-were unchanged. The release also expanded CodeQL coverage and policy dry-run regression coverage.
-Later releases have their own changes and upgrade requirements; consult the
-[current security policy](https://github.com/dtkmn/mcp-zap-server/blob/main/SECURITY.md) and
-[release notes](https://github.com/dtkmn/mcp-zap-server/releases) before selecting a version.
-
-## How it connects to the writing
-
-This is the practical counterpart to the production argument in [Demos Are Cheap. Production MCP Is
-Expensive.](/posts/demos-are-cheap-production-mcp-is-expensive/), the protocol explainer in
-[MCP: the USB-C of AI integrations](/posts/mcp-the-usb-c-of-ai-integrations/), and the reusable
-boundary layer in [MCP Gateway Core](/projects/mcp-gateway-core/).
-
-The protocol article explains why a common integration layer matters. The production article explains
-why the protocol is not enough. This project shows what happens when the tool on the other side has
-real security, deployment, observability, and remediation pressure.
+Check the [security policy](https://github.com/dtkmn/mcp-zap-server/blob/main/SECURITY.md) and
+[release notes](https://github.com/dtkmn/mcp-zap-server/releases) for supported versions and upgrade
+requirements. The historical response-handling correction is documented in
+[PR #167](https://github.com/dtkmn/mcp-zap-server/pull/167) and
+[PR #168](https://github.com/dtkmn/mcp-zap-server/pull/168).

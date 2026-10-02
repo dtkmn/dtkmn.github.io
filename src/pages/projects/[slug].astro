@@ -12,8 +12,9 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { Content, headings } = await render(project);
-const readingTime = Math.max(1, Math.round((project.body ?? "").split(/\s+/u).filter(Boolean).length / 220));
+const { Content } = await render(project);
+const bodyReferenceUrls = [...(project.body ?? "").matchAll(/\]\((https?:\/\/[^\s)]+)\)/gu)]
+  .map((match) => match[1]);
 const relatedArticles = await getArticlesBySlugs(project.data.relatedPosts);
 ---
 
@@ -30,13 +31,9 @@ const relatedArticles = await getArticlesBySlugs(project.data.relatedPosts);
   heroImage={project.data.heroImage}
   tags={project.data.tags}
   stack={project.data.stack}
-  audience={project.data.audience}
-  proofPoints={project.data.proofPoints}
-  evidenceStats={project.data.evidenceStats}
   evidenceAssets={project.data.evidenceAssets}
   relatedArticles={relatedArticles}
-  headings={headings}
-  readingTime={readingTime}
+  bodyReferenceUrls={bodyReferenceUrls}
 >
   <Content />
 </ProjectLayout>

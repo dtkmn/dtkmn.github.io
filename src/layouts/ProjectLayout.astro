@@ -1,64 +1,17 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import ArticleCard from "@/components/ArticleCard.astro";
 import ProjectProofVisual from "@/components/ProjectProofVisual.astro";
 import UiIcon from "@/components/UiIcon.astro";
 import { analyticsEvents, type ProjectResourceKind } from "@/config/analytics";
 import { siteConfig } from "@/config/site";
-import { absoluteUrl, canonicalUrl as normalizeCanonicalUrl, formatDate } from "@/lib/format";
-
-type IconName =
-  | "archive"
-  | "arrow-right"
-  | "book-open"
-  | "calendar"
-  | "check-circle"
-  | "cloud"
-  | "external"
-  | "file-text"
-  | "flask"
-  | "gauge"
-  | "github"
-  | "layers"
-  | "rocket"
-  | "server"
-  | "shield"
-  | "spark"
-  | "terminal";
-
-type EvidenceType =
-  | "automation"
-  | "benchmark"
-  | "demo"
-  | "deployment"
-  | "docs"
-  | "governance"
-  | "repository"
-  | "security"
-  | "template";
-
-interface EvidenceStat {
-  label: string;
-  value: string;
-  detail?: string;
-  icon?: IconName;
-}
+import { absoluteUrl, canonicalUrl as normalizeCanonicalUrl } from "@/lib/format";
 
 interface EvidenceAsset {
-  type: EvidenceType;
+  type: string;
   label: string;
-  title: string;
-  detail: string;
   href?: string;
   hrefLabel?: string;
-}
-
-interface ProjectResource {
-  kind: ProjectResourceKind;
-  label: string;
-  href: string;
-  icon: IconName;
 }
 
 interface Props {
@@ -74,13 +27,9 @@ interface Props {
   heroImage?: string;
   tags: string[];
   stack: string[];
-  audience: string[];
-  proofPoints: string[];
-  evidenceStats: EvidenceStat[];
   evidenceAssets: EvidenceAsset[];
   relatedArticles: CollectionEntry<"articles">[];
-  headings?: { depth: number; slug: string; text: string }[];
-  readingTime?: number;
+  bodyReferenceUrls: string[];
 }
 
 const {
@@ -96,47 +45,24 @@ const {
   heroImage,
   tags,
   stack,
-  audience,
-  proofPoints,
-  evidenceStats,
   evidenceAssets,
   relatedArticles,
-  headings = [],
-  readingTime = 1,
+  bodyReferenceUrls,
 } = Astro.props;
 
 const pageCanonical = normalizeCanonicalUrl(Astro.url.pathname);
 const authorId = absoluteUrl("/about/#author");
-const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
-const sectionCount = headings.filter((heading) => heading.depth === 2).length;
-const projectResources: ProjectResource[] = [
+const projectResources = [
   { kind: "repository", label: "Repository", href: repoUrl, icon: "github" },
-];
-if (docsUrl) {
-  projectResources.push({ kind: "documentation", label: "Documentation", href: docsUrl, icon: "book-open" });
-}
-if (demoUrl) {
-  projectResources.push({ kind: "demo", label: "Demo", href: demoUrl, icon: "rocket" });
-}
-const projectSignals = [
-  { label: "Estimated read", value: `${readingTime} min`, icon: "book-open" as IconName },
-  { label: "Sections", value: sectionCount > 0 ? `${sectionCount}` : "Brief", icon: "layers" as IconName },
-  { label: "Proof points", value: String(proofPoints.length), icon: "check-circle" as IconName },
-  { label: "Evidence assets", value: String(evidenceAssets.length), icon: "spark" as IconName },
-];
-
-const evidenceIconByType: Record<EvidenceType, IconName> = {
-  automation: "terminal",
-  benchmark: "gauge",
-  demo: "rocket",
-  deployment: "cloud",
-  docs: "book-open",
-  governance: "check-circle",
-  repository: "github",
-  security: "shield",
-  template: "layers",
-};
-
+  ...(docsUrl ? [{ kind: "documentation", label: "Documentation", href: docsUrl, icon: "book-open" }] : []),
+  ...(demoUrl ? [{ kind: "demo", label: "Demo", href: demoUrl, icon: "rocket" }] : []),
+] as { kind: ProjectResourceKind; label: string; href: string; icon: "github" | "book-open" | "rocket" }[];
+const shownUrls = new Set([...projectResources.map((resource) => resource.href), ...bodyReferenceUrls]);
+const references = evidenceAssets.filter((asset): asset is EvidenceAsset & { href: string } => {
+  if (!asset.href || shownUrls.has(asset.href)) return false;
+  shownUrls.add(asset.href);
+  return true;
+});
 const statusLabel = {
   active: "Active",
   maintained: "Maintained",
@@ -187,243 +113,131 @@ const jsonLd = {
 
       <div class="project-meta">
         <span class:list={["status-pill", `status-pill--${status}`]}>{statusLabel}</span>
-        <span>Curated on danieltse.org</span>
+        {stack.length > 0 && <span class="project-stack">{stack.join(" / ")}</span>}
       </div>
 
       <div class="project-actions">
-        <a
-          class="button button--primary"
-          href={repoUrl}
-          rel="noreferrer noopener"
-          target="_blank"
-          data-goatcounter-click={analyticsEvents.projectResource(slug, "repository")}
-          data-goatcounter-title={`${title}: repository conversion`}
-        >
-          <UiIcon name="github" class="button-icon" />
-          <span>Repository</span>
-        </a>
-        {docsUrl && (
+        {projectResources.map((resource) => (
           <a
-            class="button button--ghost"
-            href={docsUrl}
+            class:list={["button", resource.kind === "repository" ? "button--primary" : "button--ghost"]}
+            href={resource.href}
             rel="noreferrer noopener"
             target="_blank"
-            data-goatcounter-click={analyticsEvents.projectResource(slug, "documentation")}
-            data-goatcounter-title={`${title}: documentation conversion`}
+            data-goatcounter-click={analyticsEvents.projectResource(slug, resource.kind)}
+            data-goatcounter-title={`${title}: ${resource.kind} conversion`}
           >
-            <UiIcon name="book-open" class="button-icon" />
-            <span>Documentation</span>
+            <UiIcon name={resource.icon} class="button-icon" />
+            <span>{resource.label}</span>
           </a>
-        )}
-        {demoUrl && (
-          <a
-            class="button button--ghost"
-            href={demoUrl}
-            rel="noreferrer noopener"
-            target="_blank"
-            data-goatcounter-click={analyticsEvents.projectResource(slug, "demo")}
-            data-goatcounter-title={`${title}: demo conversion`}
-          >
-            <UiIcon name="rocket" class="button-icon" />
-            <span>Demo</span>
-          </a>
-        )}
+        ))}
       </div>
     </div>
 
-    <dl class="project-signal-grid">
-      {projectSignals.map((signal) => (
-        <div>
-          <dt>
-            <UiIcon name={signal.icon} class="project-signal-icon" />
-            <span>{signal.label}</span>
-          </dt>
-          <dd>{signal.value}</dd>
-        </div>
-      ))}
-    </dl>
+    <ProjectProofVisual variant={slug} title={title} stack={stack} />
 
-    {heroImage && (
-      <figure class="project-hero-media">
-        <img src={heroImage} alt={`${title} editorial visual`} loading="eager" />
-      </figure>
-    )}
+    <div class="prose project-copy">
+      <slot />
+    </div>
 
-    {(evidenceStats.length > 0 || evidenceAssets.length > 0) && (
-      <section class="project-evidence-lab" aria-labelledby="project-evidence-heading">
-        <div class="section-heading section-heading--inline">
-          <div>
-            <p class="eyebrow">Project references</p>
-            <h2 id="project-evidence-heading">Implementation and documentation.</h2>
-          </div>
-          <p>
-            Explore the source code, release notes, and technical documentation behind this project.
-          </p>
-        </div>
-
-        <div class="project-evidence-layout">
-          <ProjectProofVisual variant={slug} title={title} stack={stack} />
-
-          <div class="project-evidence-side">
-            {evidenceStats.length > 0 && (
-              <dl class="project-proof-stats">
-                {evidenceStats.map((stat) => (
-                  <div>
-                    <dt>
-                      <UiIcon name={stat.icon ?? "spark"} class="project-proof-stat-icon" />
-                      <span>{stat.label}</span>
-                    </dt>
-                    <dd>{stat.value}</dd>
-                    {stat.detail && <p>{stat.detail}</p>}
-                  </div>
-                ))}
-              </dl>
-            )}
-
-            {evidenceAssets.length > 0 && (
-              <div class="project-evidence-cards" aria-label="Inspectable project evidence">
-                {evidenceAssets.map((asset) => (
-                  <article class="project-evidence-card">
-                    <div class="project-evidence-card-head">
-                      <span class="project-evidence-card-icon">
-                        <UiIcon name={evidenceIconByType[asset.type]} />
-                      </span>
-                      <span>{asset.label}</span>
-                    </div>
-                    <h3>{asset.title}</h3>
-                    <p>{asset.detail}</p>
-                    {asset.href && (
-                      <a
-                        class="project-evidence-card-link"
-                        href={asset.href}
-                        rel="noreferrer noopener"
-                        target="_blank"
-                        data-goatcounter-click={analyticsEvents.projectEvidence(slug, asset.type)}
-                        data-goatcounter-title={`${title}: ${asset.label} engagement`}
-                      >
-                        <span>{asset.hrefLabel ?? "Inspect artifact"}</span>
-                        <UiIcon name="arrow-right" />
-                      </a>
-                    )}
-                  </article>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+    {references.length > 0 && (
+      <section class="project-links-section" aria-labelledby="project-references-heading">
+        <h2 id="project-references-heading">References</h2>
+        <ul class="project-link-list">
+          {references.map((reference) => (
+            <li>
+              <a
+                href={reference.href}
+                rel="noreferrer noopener"
+                target="_blank"
+                data-goatcounter-click={analyticsEvents.projectEvidence(slug, reference.type)}
+                data-goatcounter-title={`${title}: ${reference.label} engagement`}
+              >
+                {reference.hrefLabel ?? reference.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
     )}
 
-    <div class="project-body">
-      <aside class="project-sidebar">
-        <div class="reading-panel">
-          <p class="eyebrow">Project snapshot</p>
-          <ul class="reading-panel-list">
-            <li>
-              <span>Status</span>
-              <strong>{statusLabel}</strong>
-            </li>
-            <li>
-              <span>Published</span>
-              <strong>{formatDate(date)}</strong>
-            </li>
-            {tags.length > 0 && (
-              <li>
-                <span>Topics</span>
-                <strong>{tags.slice(0, 3).join(" / ")}</strong>
-              </li>
-            )}
-            <li>
-              <span>Materials</span>
-              <strong>{projectResources.map((resource) => resource.label).join(" / ")}</strong>
-            </li>
-          </ul>
-        </div>
-
-        {projectResources.length > 0 && (
-          <div class="reading-panel">
-            <p class="eyebrow">Project links</p>
-            <div class="project-rail-links">
-              {projectResources.map((resource) => (
-                <a
-                  class="project-rail-link"
-                  href={resource.href}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                  data-goatcounter-click={analyticsEvents.projectResource(slug, resource.kind)}
-                  data-goatcounter-title={`${title}: ${resource.label.toLowerCase()} conversion`}
-                >
-                  <UiIcon name={resource.icon} class="project-rail-link-icon" />
-                  <span>{resource.label}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {tocItems.length > 0 && (
-          <nav class="reading-panel" aria-label="Project sections">
-            <p class="eyebrow">On this page</p>
-            <div class="post-toc">
-              {tocItems.map((heading) => (
-                <a
-                  class:list={["post-toc-link", heading.depth === 3 && "post-toc-link--nested"]}
-                  href={`#${heading.slug}`}
-                >
-                  {heading.text}
-                </a>
-              ))}
-            </div>
-          </nav>
-        )}
-      </aside>
-
-      <div class="project-main">
-        <div class="project-facts">
-          {proofPoints.length > 0 && (
-            <section class:list={["project-fact", "project-fact--proof"]}>
-              <h2>Proof</h2>
-              <ul>
-                {proofPoints.map((item) => <li>{item}</li>)}
-              </ul>
-            </section>
-          )}
-
-          {audience.length > 0 && (
-            <section class="project-fact">
-              <h2>For</h2>
-              <ul>
-                {audience.map((item) => <li>{item}</li>)}
-              </ul>
-            </section>
-          )}
-
-          {stack.length > 0 && (
-            <section class="project-fact">
-              <h2>Stack</h2>
-              <ul>
-                {stack.map((item) => <li>{item}</li>)}
-              </ul>
-            </section>
-          )}
-        </div>
-
-        <div class="prose">
-          <slot />
-        </div>
-      </div>
-    </div>
+    {relatedArticles.length > 0 && (
+      <section class="project-links-section" aria-labelledby="project-writing-heading">
+        <h2 id="project-writing-heading">Related writing</h2>
+        <ul class="project-link-list">
+          {relatedArticles.slice(0, 3).map((entry) => (
+            <li><a href={`/posts/${entry.id}/`}>{entry.data.title}</a></li>
+          ))}
+        </ul>
+      </section>
+    )}
   </article>
-
-  {relatedArticles.length > 0 && (
-    <section class="section-block">
-      <div class="section-heading">
-        <p class="eyebrow">Related writing</p>
-        <h2>Articles that expand the reasoning behind the project.</h2>
-      </div>
-      <div class="stack-grid">
-        {relatedArticles.map((entry) => <ArticleCard entry={entry} />)}
-      </div>
-    </section>
-  )}
 </BaseLayout>
+
+<style>
+  .project-copy {
+    order: 0;
+  }
+
+  .project-meta {
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+  }
+
+  .project-stack {
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .project-links-section {
+    width: min(100%, 72ch);
+  }
+
+  .project-links-section h2 {
+    margin: 0 0 1rem;
+    color: var(--ink-strong);
+    font-family: "Newsreader Variable", serif;
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  .project-link-list {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding-left: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .project-link-list a {
+    color: var(--accent-strong);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 720px) {
+    .project-shell {
+      gap: 1.5rem;
+      padding: 1.35rem;
+    }
+
+    .project-intro {
+      gap: 0.75rem;
+      padding-bottom: 1.25rem;
+    }
+
+    .project-intro .post-summary {
+      max-width: 100%;
+    }
+
+    .project-actions {
+      display: flex;
+      padding-right: 0;
+      gap: 0.6rem;
+    }
+
+    .project-actions .button {
+      width: auto;
+    }
+  }
+</style>

@@ -7,7 +7,7 @@ featured: true
 detailPage: true
 tier: flagship
 status: maintained
-order: 3
+order: 4
 repoUrl: https://github.com/dtkmn/spring-boot-playground
 docsUrl: https://github.com/dtkmn/spring-boot-playground/blob/main/docs/releases/version-policy.md
 heroImage: /images/projects/spring-boot-playground-hero.svg
@@ -84,33 +84,25 @@ as the default path, supports `webflux-r2dbc` for teams with a
 real reactive requirement, and leaves Kafka, Kafka Streams, and WebSocket integrations in examples
 outside the starter contract.
 
-## Baseline and migration history
+## Baseline
 
-[PR #133](https://github.com/dtkmn/spring-boot-playground/pull/133) changed the Spring Boot plugin
-from 3.5.15 to 4.1.0 in both starter templates and all three examples. The compatibility work included
-the Boot 4 test starters and package moves, Spring Boot starter dependencies for Flyway and Kafka,
-and Jackson 3 imports where the WebSocket example needs them.
-
-That PR records the historical move to Boot 4. The
+[PR #133](https://github.com/dtkmn/spring-boot-playground/pull/133) records the historical migration to
+Spring Boot 4.1.0. The
 [current version policy](https://github.com/dtkmn/spring-boot-playground/blob/main/docs/releases/version-policy.md),
 updated September 2, 2026, specifies Spring Boot 4.1.1. Java 21 remains the stable toolchain and
-builder baseline; Java 25 is a future migration tranche.
+builder baseline; Java 25 remains a future migration.
 
 ## Hardened runtime
 
-[PR #135](https://github.com/dtkmn/spring-boot-playground/pull/135) replaces the Alpine-based
-Eclipse Temurin runtime stage in the two starter templates and three examples with a digest-pinned
-`gcr.io/distroless/java21-debian13:nonroot` image. Those Dockerfiles declare `USER 65532:65532` and
-use the distroless Java entrypoint through `CMD ["app.jar"]`.
+[PR #135](https://github.com/dtkmn/spring-boot-playground/pull/135) uses digest-pinned
+`gcr.io/distroless/java21-debian13:nonroot` images in both templates and three examples, with
+`USER 65532:65532` and `CMD ["app.jar"]`.
 
-The repository validator statically checks both template Dockerfiles for the distroless image family,
-explicit non-root user, and `app.jar` command. The upstream runtime guidance also records the practical
-trade-off: the production image has no shell or package manager, and services that need one require a
-documented, tested exception.
+The validator statically checks the template Dockerfiles for that image family, non-root user, and
+command. The runtime has no shell or package manager; services that need one require a documented,
+tested exception.
 
 ## Two deliberate variants
 
-The modernization preserves the starter's central decision. Use `mvc-jpa` for the lowest-friction
-request/response path; use `webflux-r2dbc` only when non-blocking I/O provides a clear benefit and the
-team is prepared for Reactor and reactive persistence. Both templates share the Spring Boot 4.1.1 and
-digest-pinned distroless Java 21 baselines.
+Use `mvc-jpa` for the lowest-friction request/response path. Choose `webflux-r2dbc` only when
+non-blocking I/O provides a clear benefit and the team is prepared for Reactor and reactive persistence.

@@ -56,7 +56,7 @@ const visualMeta: Record<
     kicker: "Flight recorder",
     title: "Agent loops need replayable evidence.",
     summary:
-      "The proof is the report shape: context, evidence, checks, verifier decisions, retries, refusals, redaction, and exports captured as a reviewable artifact.",
+      "The report captures context, evidence, checks, verifier decisions, retries, refusals, public projections, and exports for review.",
     badge: "Trace + replay",
   },
   "mcp-gateway-core": {
@@ -125,7 +125,7 @@ const runtimeLanes = [
   { label: "Quarkus native", modes: "HTTP / Kafka" },
   { label: "Go", modes: "HTTP / Kafka" },
   { label: "Rust", modes: "HTTP / Kafka" },
-  { label: "Python / Node", modes: "Receiver variants" },
+  { label: "Spring / Python / Node", modes: "Receiver variants" },
 ];
 
 const benchmarkControls = ["Mode isolation", "Load shape", "Resource controls", "Observability"];
@@ -141,10 +141,10 @@ const loopwrightNodes = [
   { icon: "layers" as IconName, label: "Context", detail: "Route evidence before drafting." },
   { icon: "file-text" as IconName, label: "Draft", detail: "Keep prompt-facing evidence visible." },
   { icon: "check-circle" as IconName, label: "Verify", detail: "Record checks, retry, or refusal." },
-  { icon: "archive" as IconName, label: "Report", detail: "Export redacted run artifacts." },
+  { icon: "archive" as IconName, label: "Report", detail: "Export run reports for review." },
 ];
 
-const loopwrightGuardrails = ["LoopReport", "JSONL export", "public redaction", "framework-shaped adapters"];
+const loopwrightGuardrails = ["LoopReport", "JSONL export", "review before sharing", "framework-shaped adapters"];
 ---
 
 <figure class:list={["project-proof-visual", `project-proof-visual--${projectKey}`]}>
@@ -273,3 +273,58 @@ const loopwrightGuardrails = ["LoopReport", "JSONL export", "public redaction", 
     </div>
   )}
 </figure>
+
+<style>
+  .project-proof-visual {
+    min-height: 0;
+  }
+
+  .project-proof-visual-title {
+    max-width: 100%;
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  .proof-flow-node {
+    min-height: 0;
+  }
+
+  @media (max-width: 960px) {
+    .proof-flow-nodes {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .proof-flow-node {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      padding: 0.75rem;
+    }
+
+    .proof-flow-node:not(:last-child)::after {
+      display: block;
+      top: auto;
+      right: auto;
+      bottom: -0.75rem;
+      left: calc(50% - 0.25rem);
+      transform: rotate(135deg);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .project-proof-visual-head {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .project-proof-visual-title {
+      font-size: 1.75rem;
+    }
+
+    .project-proof-visual-summary {
+      line-height: 1.5;
+    }
+  }
+</style>

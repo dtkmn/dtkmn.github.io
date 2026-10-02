@@ -67,7 +67,7 @@ export const topicHubs = [
       "mcp-the-usb-c-of-ai-integrations",
       "why-local-llms-matter-in-2025",
     ],
-    projectSlugs: ["loopwright", "mcp-gateway-core", "mcp-zap-server"],
+    projectSlugs: ["mcp-zap-server", "mcp-gateway-core", "loopwright"],
   },
   {
     slug: "backend-performance",
@@ -105,7 +105,7 @@ export const topicHubs = [
       "what-microservice-benchmarks-actually-measure-in-2026",
       "java-strikes-back-benchmarking-quarkus-native-vs-go-for-high-throughput-adtech",
     ],
-    projectSlugs: ["rtb-ingress-benchmark", "spring-boot-playground", "mcp-gateway-core"],
+    projectSlugs: ["mcp-gateway-core", "rtb-ingress-benchmark", "spring-boot-playground"],
   },
   {
     slug: "cloud-delivery",

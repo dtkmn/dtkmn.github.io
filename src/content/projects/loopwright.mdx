@@ -3,11 +3,11 @@ title: Loopwright
 summary: "Flight recorder for AI answer loops: evidence routing, verification, retries, refusals, durable local run reports, JSONL inspection, evals, and trace exports."
 date: 2026-07-08
 draft: false
-featured: true
+featured: false
 detailPage: true
 tier: flagship
 status: active
-order: 0
+order: 3
 repoUrl: https://github.com/dtkmn/loopwright
 heroImage: /images/projects/loopwright-hero.svg
 relatedPosts:
@@ -121,21 +121,12 @@ The OpenAI trace-shaped and LangGraph manifest adapters export JSON without impo
 those framework SDKs. Microsoft Agent Framework remains a future export target. See the
 [adapter guide](https://github.com/dtkmn/loopwright#framework-adapter-strategy) for supported mappings.
 
-The repository declares dependencies in `pyproject.toml`, locks them in `uv.lock`, and installs with
-`uv sync --locked`. Weekly Dependabot updates and lockfile audits maintain that baseline. See the
-[maintenance guide](https://github.com/dtkmn/loopwright#security-and-dependency-maintenance) for the
-current commands.
+Dependencies are locked in `uv.lock`, installed with `uv sync --locked`, and maintained through weekly
+Dependabot updates and lockfile audits. The
+[maintenance guide](https://github.com/dtkmn/loopwright#security-and-dependency-maintenance) covers the commands.
 
 ## Scope
 
 Loopwright focuses on recording and inspecting bounded answer loops. Saved recipes and report
 exports do not grant tool permissions or provide scheduling. It is not a general multi-agent
 orchestration framework.
-
-## Related writing
-
-[Loop Engineering Needs a Flight Recorder](/posts/loop-engineering-needs-a-flight-recorder/) explains
-why evidence should survive each iteration of an agent loop.
-[Why Local LLMs Matter in 2025](/posts/why-local-llms-matter-in-2025/) discusses local runtime boundaries,
-and [Test Customer Outcomes, Not AI Agents](/posts/simulate-customer-outcomes-before-shipping-ai-agents/)
-examines how AI behavior interacts with user workflows.
