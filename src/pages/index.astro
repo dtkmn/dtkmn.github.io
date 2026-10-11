@@ -49,6 +49,23 @@ const selectedArticles = featuredArticles.slice(0, 3);
     </section>
   )}
 
+  <section class="section-block home-section" aria-labelledby="currently-building">
+    <div class="section-heading section-heading--inline">
+      <div>
+        <p class="eyebrow">Currently building</p>
+        <h2 id="currently-building">Astraform</h2>
+      </div>
+      <a class="section-link" href="https://astraform.ai/">
+        <span>Explore Astraform</span>
+        <UiIcon name="arrow-right" class="section-link-icon" />
+      </a>
+    </div>
+    <p class="section-summary">
+      I’m building Astraform to help teams test how customer-facing AI decisions
+      affect customer outcomes before launch. Still in development.
+    </p>
+  </section>
+
   {selectedArticles.length > 0 && (
     <section class="section-block home-section">
       <div class="section-heading section-heading--inline">
