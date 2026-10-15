@@ -54,7 +54,7 @@ evidenceStats:
     icon: check-circle
   - label: Compatibility fix
     value: HTTP 202
-    detail: Cursor keepalive replies now pass through for downstream session correlation instead of failing request-shape validation.
+    detail: MCP client keepalive replies now pass through for downstream session correlation instead of failing request-shape validation.
     icon: terminal
   - label: Browser crawling
     value: Client Spider
@@ -115,6 +115,12 @@ Use the [Self-Serve First Run guide](https://danieltse.org/mcp-zap-server/gettin
 for the Docker Compose demo scan, and the
 [MCP Client Setup guide](https://danieltse.org/mcp-zap-server/getting-started/mcp-client-authentication/)
 for authenticated client connections.
+
+Codex users can manually install the optional, skills-only
+[MCP ZAP Connect plugin](https://github.com/dtkmn/mcp-zap-server/tree/main/plugins/mcp-zap-connect#codex-local-installation).
+The setup workflow has been tested locally. With Docker Engine already running and Docker Compose
+installed, ask the agent to check prerequisites, run the release setup, configure your private local
+MCP connection, and verify it with a status call. Scans require a separate request for an authorized target.
 
 This release consumes MCP Gateway Core and its WebFlux adapter at `0.11.0`.
 See the [Gateway project page](/projects/mcp-gateway-core/)
