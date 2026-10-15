@@ -2,7 +2,7 @@
 title: MCP Gateway Core
 summary: "Embeddable Java governance contracts for MCP tool runtimes: tool identity, access rules, governance decisions, audit events, abuse protection, URL scoping, rate limits, and a separate Spring WebFlux adapter."
 date: 2026-06-22
-updated: 2026-10-01
+updated: 2026-10-15
 draft: false
 featured: true
 detailPage: true
@@ -110,7 +110,7 @@ before choosing an adapter version.
 
 ## Current public preview
 
-As of October 1, 2026, the latest published release is `0.11.0` for both the
+As of October 15, 2026, the latest published release is `0.11.0` for both the
 [core](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-core/0.11.0/) and
 [Spring WebFlux adapter](https://repo1.maven.org/maven2/io/github/dtkmn/mcp-gateway-spring-webflux/0.11.0/).
 These are public-preview APIs subject to compatibility changes; development snapshots are separate. See the
@@ -121,7 +121,8 @@ for API additions, protocol corrections, and migration requirements.
 
 Active-tool availability checks are opt-in: hosts must supply the registry, keep permission mappings
 consistent, and authenticate before the governance filter. Upgrading the dependency alone does not
-enable that integration. MCP ZAP Server `v0.13.0` consumes Gateway `0.10.0`, without the `0.11.0` additions.
+enable that integration. MCP ZAP Server `v0.16.0` consumes Gateway `0.11.0` and supplies its
+active-tool registry and permission mappings to the shared WebFlux adapter.
 
 ## Security verification
 

@@ -1,8 +1,8 @@
 ---
 title: MCP ZAP Server
-summary: ZAP scanning exposed as an MCP server for AI agents, with governed scanning workflows, CI security gates, and Client Spider for authenticated browser crawling in v0.13.0.
+summary: Self-hosted ZAP workflows for AI agents, with authenticated crawling, finding comparisons that account for scanner changes, and governed report access.
 date: 2025-04-20
-updated: 2026-10-01
+updated: 2026-10-15
 draft: false
 featured: true
 detailPage: true
@@ -34,15 +34,15 @@ audience:
   - Platform engineers integrating security checks into developer tooling
   - Teams evaluating MCP beyond toy demos
 proofPoints:
-  - "v0.13.0 adds Client Spider for JavaScript-driven apps, with direct and queued crawling, browser login profiles, and automatic cookie or token session detection."
-  - "The July 16, 2026 v0.10.1 release corrected Streamable HTTP response handling for server-initiated requests."
-  - "The v0.13.0 runtime consumes MCP Gateway Core 0.10.0 for shared governance behavior."
+  - "v0.16.0 reports new or resolved findings only when measured ZAP and add-on inventories match; changed or unknown inventories fail enforced CI baseline gates."
+  - "Automation Framework validates whole-plan durations and runtime capabilities before dispatch, and no longer infers success from a finish timestamp alone."
+  - "The v0.16.0 runtime consumes MCP Gateway Core 0.11.0 for shared governance behavior."
   - Supports API-key and JWT authentication modes, tool scopes, runtime policy bundles, URL validation, rate limits, workspace quotas, and audit events.
   - "Client Spider was verified against Juice Shop with anonymous and authenticated direct and queued crawls."
 evidenceStats:
   - label: Release track
-    value: "0.13.0"
-    detail: Published September 26, 2026, with Client Spider, browser authentication profiles, and AMD64 and ARM64 images on Docker Hub and GHCR.
+    value: "0.16.0"
+    detail: Published with scanner-aware finding comparisons, Automation Framework checks, scoped report corrections, and AMD64 and ARM64 images on Docker Hub and GHCR.
     icon: rocket
   - label: Guardrails
     value: Gateway
@@ -58,7 +58,7 @@ evidenceStats:
     icon: terminal
   - label: Browser crawling
     value: Client Spider
-    detail: Available in v0.13.0, with direct and queued crawling, scan-specific status and stop controls, and browser login verified against Juice Shop.
+    detail: Introduced in v0.13.0, with direct and queued crawling, scan-specific status and stop controls, and browser login verified against Juice Shop.
     icon: terminal
 evidenceAssets:
   - type: repository
@@ -69,9 +69,9 @@ evidenceAssets:
     hrefLabel: Inspect repository
   - type: governance
     label: Release evidence
-    title: Published v0.13.0 — Client Spider and browser authentication
-    detail: Release notes cover browser crawling, login validation, queue rollout, and shared findings and report limits.
-    href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.13.0
+    title: Published v0.16.0 — scanner-aware findings and safer automation
+    detail: Release notes cover scanner comparability, CI baseline migration, Automation Framework limits and status, and scoped report corrections.
+    href: https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.16.0
     hrefLabel: Read release notes
   - type: docs
     label: Docs surface
@@ -90,7 +90,7 @@ evidenceAssets:
     title: Auth, policy, audit, rate limits, and URL boundaries
     detail: Configurable controls govern callers, targets, tool access, and scan capacity.
   - type: docs
-    label: Available in v0.13.0
+    label: Available since v0.13.0
     title: Client Spider and browser authentication
     detail: Setup, direct and queued workflows, browser login requirements, and the distinction between crawl status and shared findings.
     href: https://danieltse.org/mcp-zap-server/scanning/client-spider/
@@ -109,21 +109,34 @@ scanner-specific runtime.
 
 ## Get started
 
-As of October 1, 2026, the latest published release is
-[v0.13.0](https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.13.0).
+As of October 15, 2026, the latest published release is
+[v0.16.0](https://github.com/dtkmn/mcp-zap-server/releases/tag/v0.16.0).
 Use the [Self-Serve First Run guide](https://danieltse.org/mcp-zap-server/getting-started/self-serve-first-run/)
 for the Docker Compose demo scan, and the
 [MCP Client Setup guide](https://danieltse.org/mcp-zap-server/getting-started/mcp-client-authentication/)
 for authenticated client connections.
 
-This release consumes MCP Gateway Core and its WebFlux adapter at `0.10.0`.
-Gateway `0.11.0` is now published separately; its additions are not part of this
-ZAP release. See the [Gateway project page](/projects/mcp-gateway-core/)
+This release consumes MCP Gateway Core and its WebFlux adapter at `0.11.0`.
+See the [Gateway project page](/projects/mcp-gateway-core/)
 for the library's integration choices and release details.
+
+## What v0.16.0 changes
+
+Findings snapshots record the running ZAP engine and installed add-ons. New or resolved finding
+counts require matching complete scanner inventories; changed or unknown inventories remain
+informational and fail enforced CI baseline gates. Matching inventory still does not prove equal
+scan coverage or application remediation.
+
+Automation Framework validates whole-plan durations and runtime capabilities before dispatch,
+and leaves success unknown when native status cannot prove it. Duration limits are cooperative,
+not a hard traffic cutoff. Target-scoped MCP reports also retain alerts recorded at an origin's
+empty root path. Upgrade the server and CI gate together, and review the
+[release and upgrade guide](https://danieltse.org/mcp-zap-server/releases/0.16.0/)
+for baseline migration and plan requirements.
 
 ## Client Spider and browser authentication
 
-**v0.13.0** adds **Client Spider** for JavaScript-driven applications, with direct and queued crawls,
+**v0.13.0** introduced **Client Spider** for JavaScript-driven applications, with direct and queued crawls,
 status and cancellation, and operator-managed browser login profiles. These profiles currently support
 Client Spider; form-login profiles remain the path for guided authenticated active scans. Upgrade all
 workers sharing a scan queue before submitting Client Spider jobs. The
